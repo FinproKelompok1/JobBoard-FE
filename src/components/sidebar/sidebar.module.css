@@ -1,0 +1,19 @@
+.sideContainer{
+  @apply flex flex-col
+  mb-4
+}
+
+.sideContainer a {
+  @apply my-1
+}
+
+.sideContainer a div{
+  @apply flex items-center
+  py-2 transition-all pl-2
+  hover:pl-4
+}
+
+.sideContainer a.active{
+  @apply bg-lightBlue
+}
+

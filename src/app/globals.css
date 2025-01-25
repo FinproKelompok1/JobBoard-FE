@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.sidebar.open{
+  width: 350px;
+}
+
+.sidebar.closed{
+  width: 60px;
+}

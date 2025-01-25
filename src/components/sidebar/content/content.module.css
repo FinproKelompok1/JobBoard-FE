@@ -1,0 +1,234 @@
+/* title */
+.mainTitle{
+    @apply text-2xl font-semibold border-b-2 p-5
+}
+
+/* form */
+.txtInput{
+    @apply w-full p-2 border-b border-zinc-400 outline-none
+}
+
+.formResponsive{
+    @apply flex flex-col
+}
+
+.formLabel{
+    @apply my-3
+}
+
+.saveChanges{
+    @apply flex flex-col items-end
+    py-[1rem] w-full
+}
+
+.saveChangesBtn{
+    @apply flex 
+    w-fit p-[1rem] 
+    rounded-lg 
+    text-zinc-100 bg-lightBlue font-bold
+}
+
+/* MEMBER PART */
+
+.memberBioContainerInner{
+    @apply py-[1.5rem]
+}
+
+.memberBioFormContainer{
+    @apply py-[1.25rem]
+}
+
+.memberBioForm{
+    @apply w-[95%]
+    mx-auto my-2
+    lg:w-[75%]
+    md:w-[85%]
+}
+
+.memberFormContent{
+    @apply py-[1rem]
+}
+
+
+/* ORGANISER PART */
+
+/* mission */
+
+.missionContainer{
+    @apply w-[90%] mx-auto mt-5 p-3 rounded-lg
+    bg-blue-200
+}
+
+.missionContent{
+    @apply grid grid-cols-1 my-3 gap-4
+    lg:grid-cols-3 
+    md:grid-cols-3 
+}
+
+.missions{
+    @apply  grid grid-cols-1 lg:grid-cols-2 gap-3 
+    p-3 rounded-xl
+    bg-white
+}
+
+.missionInner{
+    @apply flex items-center text-center
+}
+
+.missionIcon{
+    @apply text-3xl mr-2
+}
+
+.missionBtn{
+    @apply bg-blue-600 text-white my-1 p-2 rounded-xl
+}
+
+/* record */
+
+.recordContainer{
+    @apply w-[90%] mx-auto my-[2.5rem] grid 
+    lg:grid-cols-3 lg:gap-[1.5rem]
+    md:grid-cols-2 
+}
+
+.recordContent{
+    @apply border-2 p-3
+}
+
+.recordContentTop{
+    @apply flex items-center border-b-2 py-2
+}
+
+.recordIcon{
+    @apply mx-0
+}
+
+.recordTitle{
+    @apply flex-[1] mx-3
+}
+
+.recordDetailBtn{
+    @apply flex-[0.25] text-red-400 font-semibold
+}
+
+.recordTotal{
+    @apply flex items-end pt-2
+}
+
+.recordTotalNum{
+    @apply text-[2.75rem] mr-2
+}
+
+.recordTotalPlaceholder{
+    @apply text-zinc-400
+}
+
+/* event */
+
+.eventContainer{
+    @apply w-[90%] mx-auto my-3
+}
+
+.eventContainerTop{
+    @apply flex justify-between items-center w-full
+}
+
+.eventSearch{
+    @apply my-3 w-[600px]
+}
+
+.eventSearchBar{
+    @apply w-[75%] p-2 border
+}
+
+.eventSearchBtn{
+    @apply text-center text-white bg-blue-600 p-3 h-fit
+}
+
+.eventSortDropdown{
+    @apply cursor-pointer p-2 w-[160px] text-center border border-zinc-200 ml-3
+}
+
+.tabContainer{
+    @apply w-full flex 
+    border-b border-zinc-200
+}
+
+.eventTab{
+    @apply w-[300px]
+
+}
+
+.eventContent{
+    @apply h-[60vh] p-5 flex justify-center items-center
+}
+
+/* bio */
+
+.bioContainer{
+    @apply w-[95%] mx-auto
+}
+
+.innerBioContainer{
+    @apply w-full mx-auto my-[2rem]
+    lg:w-[80%]
+}
+
+.bioBanner{
+    @apply my-[2rem] h-[600px] p-3
+    flex flex-col justify-center items-center 
+    cursor-pointer
+    border border-zinc-900 
+}
+
+.bioInfoContainer{
+    @apply flex flex-col  
+    lg:flex-row 
+    md:flex-row
+}
+
+.bioLogoImg{
+    @apply w-[200px] mx-auto py-5
+    flex flex-col justify-center items-center 
+    text-center
+    lg:p-0
+}
+
+.bioLogoImgPlaceholder{
+    @apply flex flex-col justify-center items-center 
+    rounded-full cursor-pointer 
+    border border-zinc-400
+    w-[150px] h-[150px] mb-3
+}
+
+.bioInfoFormContainer{
+    @apply grow-[2] ml-4
+}
+
+.bioEventSlugForm{
+    @apply border border-zinc-500 p-3 mb-3
+}
+/* NON-TAILWIND CSS */
+/* animation */
+
+.dashboardSection,
+.eventSection,
+.bioSection {
+  animation: slideLeft 0.25s ease-out; 
+}
+
+.missionContent,
+.recordContent {
+  overflow: hidden;
+}
+
+@keyframes slideLeft{
+    0%{
+        transform: translateX(10%);
+        opacity: 0;
+    }
+    100%{
+        transform: translateX(0%);
+        opacity: 1;
+    }
+}

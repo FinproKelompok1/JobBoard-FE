@@ -1,0 +1,30 @@
+.dashboardNavbar{
+    @apply relative 
+    flex justify-between items-center
+    py-5 px-4
+    border-b-2 border-zinc-200 
+}
+
+.titleNavbar{
+    @apply text-2xl font-semibold
+}
+
+.navMenu{
+    @apply 
+    absolute top-[80%] right-2 z-10
+    flex flex-col w-[250px] 
+    p-3 
+    rounded-xl
+    bg-white
+    shadow-lg
+    border
+}
+
+.navMenu a{
+    @apply flex items-center
+    my-2
+}
+
+.navBtn{
+    @apply cursor-pointer text-3xl
+}
