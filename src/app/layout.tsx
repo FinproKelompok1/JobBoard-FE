@@ -15,9 +15,12 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Talent Bridge - Connecting Talent with Opportunity",
+  title: "Talent Bridge - Bridging Dreams to Reality",
   description:
     "Discover the perfect match for your career or hiring needs on Talent Bridge. Empowering job seekers and employers with a seamless platform for posting jobs, browsing opportunities, and building professional connections.",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({

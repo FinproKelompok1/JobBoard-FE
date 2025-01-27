@@ -1,4 +1,5 @@
 import DeveloperDashboardSideBar from "@/components/developer/developerSideBar";
+import { IoClose, IoMenu } from "react-icons/io5";
 
 export default function DeveloperDashboard() {
   return (
@@ -6,6 +7,7 @@ export default function DeveloperDashboard() {
       <div>
         <DeveloperDashboardSideBar />
       </div>
+
       <div className="text-primary p-10">
         <h1 className="text-3xl font-bold">
           Welcome Back, <span className="text-accent">Developer</span>.

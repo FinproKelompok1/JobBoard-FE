@@ -1,3 +1,3 @@
 export function stringToArray(string: string) {
-  return string.split(", ");
+  return string.split(",");
 }

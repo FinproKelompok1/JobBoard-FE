@@ -9,3 +9,23 @@ export async function getSubscriptions() {
     console.log("Error get subscriptions:", error);
   }
 }
+
+export async function getSubscriptionById(id: number) {
+  try {
+    const response = await axios.get(`/subscriptions/${id}`);
+
+    return response.data.subscription;
+  } catch (error) {
+    console.log("Error get subscriptions:", error);
+  }
+}
+
+export async function deleteSubscription(id: number) {
+  try {
+    const response = await axios.delete(`/subscriptions/${id}`);
+
+    return response.data.message;
+  } catch (error) {
+    console.log("Error get subscriptions:", error);
+  }
+}

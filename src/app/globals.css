@@ -9,3 +9,7 @@
 .dashboard-sidebar-button-active {
   @apply bg-accent w-fit list-none rounded-md px-2 py-1 font-semibold text-white;
 }
+
+.table-head {
+  @apply text-primary px-6 py-3 text-left text-sm font-medium uppercase tracking-wider;
+}

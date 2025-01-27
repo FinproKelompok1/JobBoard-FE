@@ -3,6 +3,7 @@
 import DeveloperSideBar from "@/components/developer/developerSideBar";
 import axios from "@/helpers/axios";
 import { ErrorMessage, Field, Form, Formik } from "formik";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
@@ -13,22 +14,23 @@ interface ISubscription {
   feature: string;
 }
 
+const initialValues: ISubscription = {
+  category: "",
+  price: 0,
+  feature: "",
+};
+
+const validationSchema = Yup.object({
+  category: Yup.string().required("Category is required"),
+  price: Yup.number()
+    .required("Price is required")
+    .min(1, "Price must be greater than 0"),
+  feature: Yup.string().required("Feature is required"),
+});
+
 export default function CreateSubscription() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const initialValues: ISubscription = {
-    category: "",
-    price: 0,
-    feature: "",
-  };
-
-  const validationSchema = Yup.object({
-    category: Yup.string().required("Category is required"),
-    price: Yup.number()
-      .required("Price is required")
-      .min(1, "Price must be greater than 0"),
-    feature: Yup.string().required("Feature is required"),
-  });
+  const router = useRouter();
 
   const handleCreateSubscription = async (
     values: ISubscription,
@@ -40,6 +42,8 @@ export default function CreateSubscription() {
 
       toast.success(data.message);
       resetForm();
+      router.push("/developer/subscription");
+      router.refresh();
     } catch (error) {
       console.log("Error create subscription:", error);
       toast.error("Error create subscription");
@@ -52,22 +56,22 @@ export default function CreateSubscription() {
     <main className="flex">
       <DeveloperSideBar />
 
-      <div className="p-10">
+      <div className="w-screen p-5 md:p-10">
         <h1 className="text-primary text-3xl font-bold">Create Subscription</h1>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={handleCreateSubscription}
         >
-          <Form className="mt-5 flex w-96 flex-col gap-5 rounded-lg border p-5 shadow-md">
+          <Form className="border-primary/20 mt-5 flex w-full flex-col gap-5 rounded-lg border p-5 shadow-md md:w-96">
             <div className="flex flex-col">
               <label htmlFor="category" className="text-lg font-semibold">
                 Category
               </label>
               <Field
-                as="select"
-                name="category"
                 id="category"
+                name="category"
+                as="select"
                 className="mt-2 rounded-md border p-2"
               >
                 <option value="" label="Select Category" />
@@ -83,15 +87,15 @@ export default function CreateSubscription() {
 
             <div className="flex flex-col">
               <label htmlFor="price" className="text-lg font-semibold">
-                Price
+                Price (IDR){" "}
+                <span className="text-sm text-gray-500">for 30 days</span>
               </label>
               <Field
+                id="price"
+                name="price"
                 as="input"
                 type="number"
-                name="price"
-                id="price"
                 className="mt-2 rounded-md border p-2"
-                placeholder="Please input subscription's price"
               />
               <ErrorMessage
                 name="price"
@@ -105,23 +109,27 @@ export default function CreateSubscription() {
                 Feature
               </label>
               <Field
-                as="input"
-                name="feature"
                 id="feature"
+                name="feature"
+                as="textarea"
+                placeholder="Enter feature"
                 className="mt-2 rounded-md border p-2"
-                placeholder="Please seperate feature with comma"
               />
               <ErrorMessage
                 name="feature"
                 component="p"
                 className="text-red-500"
               />
+              <p className="text-gray-500">
+                If there are multiple features, separate with commas without
+                spaces.
+              </p>
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="bg-accent hover:bg-accent/80 mt-5 rounded-md px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out disabled:cursor-not-allowed"
+              className="bg-accent hover:bg-accent/80 mt-2 rounded-md px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out disabled:cursor-not-allowed"
             >
               {isLoading ? "Creating..." : "Create Subscription"}
             </button>
