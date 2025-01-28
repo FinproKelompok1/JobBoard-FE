@@ -10,7 +10,12 @@
   width: 60px;
 }
 
-.sidebar a.active {
+/* .sidebar a.active {
   background-color: red;
   padding-left: 1rem;
+} */
+
+.jobs_table th, .jobs_table td{
+  padding: 0.5rem 1rem;
+  border: 1px black solid;
 }
