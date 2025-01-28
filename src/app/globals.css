@@ -9,3 +9,8 @@
 .sidebar.closed{
   width: 60px;
 }
+
+.sidebar a.active {
+  background-color: red;
+  padding-left: 1rem;
+}
