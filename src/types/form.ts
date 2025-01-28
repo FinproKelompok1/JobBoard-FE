@@ -8,4 +8,5 @@ export interface FormValueJob {
   category: string;
   salary: string;
   description: string;
+  tags: string;
 }

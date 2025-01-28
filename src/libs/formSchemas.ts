@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-export const eventSchema = Yup.object().shape({
+export const jobSchema = Yup.object().shape({
   title: Yup.string().required("Job title is required"),
   role: Yup.string().required("Job role is required"),
   banner: Yup.mixed()
@@ -19,7 +19,8 @@ export const eventSchema = Yup.object().shape({
           ["image/jpeg", "image/png", "image/jpg", "image/webp"].includes(
             value.type
           ))
-    ),
+    )
+    .nullable(),
   endDate: Yup.date().required("Deadline is required"),
   province: Yup.string().required("Province is required"),
   city: Yup.string().required("Name of city is required"),
@@ -38,4 +39,5 @@ export const eventSchema = Yup.object().shape({
     ])
     .required("Category is required"),
   description: Yup.string().required("Enter your job detail"),
+  tags: Yup.string().required("Tags is required"),
 });

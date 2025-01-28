@@ -5,13 +5,12 @@ import Image from "next/image";
 import { FormikProps } from "formik";
 import { FormValueJob } from "@/types/form";
 
-interface FieldThumbnailProps {
+interface BannerUploader {
   name: string;
   formik: FormikProps<FormValueJob>;
-  className?: string;
 }
 
-export const FieldThumbnail: React.FC<FieldThumbnailProps> = ({
+export const BannerUploader: React.FC<BannerUploader> = ({
   name,
   formik,
 }) => {
