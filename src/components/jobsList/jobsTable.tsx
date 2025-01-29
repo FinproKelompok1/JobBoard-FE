@@ -1,9 +1,14 @@
 import { getJobs } from "@/libs/jobs"
 import { IJob } from "@/types/jobs"
-import { useEffect, useState } from "react"
+import { useMemo } from "react"
 import { FaPencilAlt, FaTrash } from "react-icons/fa"
 import { MdMoreHoriz } from "react-icons/md"
 import TableSekeleton from "./tableSekeleton"
+import Link from "next/link"
+import { toastErrAxios } from "@/helpers/toast"
+import axios from "@/helpers/axios"
+import { toast } from "react-toastify"
+import useSWR, { mutate } from "swr"
 
 interface IProps {
   sort: string
@@ -11,21 +16,23 @@ interface IProps {
 }
 
 export default function JobsTable({ sort, search }: IProps) {
-  const [jobs, setJobs] = useState<IJob[]>([])
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const { data: jobs = [], isLoading } = useSWR<IJob[]>(`/jobs?${sort}&${search}`, getJobs);
+  const skeletons = useMemo(() => Array.from({ length: 5 }), []);
 
-  useEffect(() => {
-    setIsLoading(true)
-    const getData = async () => {
-      const data = await getJobs(sort, search)
-      setJobs(data)
-      setIsLoading(false)
+  const handleDelete = async (jobId: string) => {
+    try {
+      const { data } = await axios.patch(`/jobs/${jobId}`)
+      mutate(`/jobs?${sort}&${search}`)
+      mutate('/jobs/total')
+      toast.success(data.message)
+    } catch (err) {
+      toastErrAxios(err)
     }
-    getData()
-  }, [sort, search])
-  return (
-    <>
-      <table className="border w-full mt-10 text-left jobs_table">
+  }
+
+  if (isLoading || jobs.length > 0) {
+    return (
+      <table className="w-full mt-10 text-left jobs_table">
         <thead>
           <tr>
             <th>Status</th>
@@ -37,11 +44,11 @@ export default function JobsTable({ sort, search }: IProps) {
         </thead>
         <tbody>
           {isLoading ? (
-            Array.from({ length: 5 }).map((_, idx) => <TableSekeleton key={idx}/>)
+            skeletons.map((_, idx) => <TableSekeleton key={idx} />)
           ) : (
-            jobs && jobs.map((item, idx) => {
+            jobs.map((item) => {
               return (
-                <tr key={idx}>
+                <tr key={item.id}>
                   <td>{String(item.isPublished)}</td>
                   <td>
                     <div className="font-medium border-b border-b-black w-fit">{item.title}</div>
@@ -51,9 +58,9 @@ export default function JobsTable({ sort, search }: IProps) {
                   <td>{String(item.isTestActive)}</td>
                   <td>
                     <div className="flex items-center gap-4">
-                      <button><FaPencilAlt className="text-lightBlue" /></button>
-                      <button><FaTrash className="text-red-500" /></button>
-                      <button><MdMoreHoriz className="text-xl" /></button>
+                      <Link href={'/'}><FaPencilAlt className="text-lightBlue" /></Link>
+                      <button onClick={() => handleDelete(item.id)}><FaTrash className="text-red-500" /></button>
+                      <Link href={`/job/${item.id}`}><MdMoreHoriz className="text-xl" /></Link>
                     </div>
                   </td>
                 </tr>
@@ -62,6 +69,11 @@ export default function JobsTable({ sort, search }: IProps) {
           )}
         </tbody>
       </table>
-    </>
+    )
+  }
+  return (
+    <div className="mt-10">
+      <h1 className="font-medium text-2xl text-center">THERE IS NO JOB CREATED</h1>
+    </div>
   )
 }

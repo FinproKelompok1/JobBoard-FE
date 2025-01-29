@@ -1,7 +1,5 @@
 import JobsList from "@/components/jobsList/jobList";
-import JobsTable from "@/components/jobsList/jobsTable";
 import TotalJobs from "@/components/jobsList/totalJobs";
-import Link from "next/link";
 
 export default function JobPage() {
   return (

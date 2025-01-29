@@ -1,16 +1,9 @@
 'use client'
 
 import { getTotalJobs } from "@/libs/jobs"
-import { useEffect, useState } from "react"
+import useSWR from "swr";
 
 export default function TotalJobs() {
-  const [total, setTotal] = useState<number>(0)
-  useEffect(() => {
-    const getData = async () => {
-      const data = await getTotalJobs()
-      setTotal(data)
-    }
-    getData()
-  }, [])
+  const { data: total = 0 } = useSWR('/jobs/total', getTotalJobs);
   return (total)
 }
