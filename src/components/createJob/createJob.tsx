@@ -42,9 +42,7 @@ export default function CreateJob() {
           formData.append(key, value)
         }
       }
-      formData.entries().forEach((item) => console.log(item))
       const { data } = await axios.post('/jobs', formData)
-
       toast.success(data.message)
     } catch (err: unknown) {
       toastErrAxios(err)
@@ -59,7 +57,6 @@ export default function CreateJob() {
         initialValues={initialValue}
         validationSchema={jobSchema}
         onSubmit={(values, action) => {
-          // console.log(values)
           action.resetForm()
           handleAdd(values)
         }}

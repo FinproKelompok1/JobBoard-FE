@@ -1,5 +1,3 @@
-'use client'
-
 import { getJobs } from "@/libs/jobs"
 import { IJob } from "@/types/jobs"
 import { useEffect, useState } from "react"
@@ -7,19 +5,24 @@ import { FaPencilAlt, FaTrash } from "react-icons/fa"
 import { MdMoreHoriz } from "react-icons/md"
 import TableSekeleton from "./tableSekeleton"
 
-export default function JobsTable() {
+interface IProps {
+  sort: string
+  search: string
+}
+
+export default function JobsTable({ sort, search }: IProps) {
   const [jobs, setJobs] = useState<IJob[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
     setIsLoading(true)
     const getData = async () => {
-      const data = await getJobs()
+      const data = await getJobs(sort, search)
       setJobs(data)
       setIsLoading(false)
     }
     getData()
-  }, [])
+  }, [sort, search])
   return (
     <>
       <table className="border w-full mt-10 text-left jobs_table">
@@ -34,9 +37,9 @@ export default function JobsTable() {
         </thead>
         <tbody>
           {isLoading ? (
-            Array.from({ length: 5 }).map(() => <TableSekeleton />)
+            Array.from({ length: 5 }).map((_, idx) => <TableSekeleton key={idx}/>)
           ) : (
-            jobs.length > 0 && jobs.map((item, idx) => {
+            jobs && jobs.map((item, idx) => {
               return (
                 <tr key={idx}>
                   <td>{String(item.isPublished)}</td>
