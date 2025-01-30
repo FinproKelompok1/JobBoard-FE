@@ -2,19 +2,14 @@
 
 import DeveloperSideBar from "@/components/developer/developerSideBar";
 import axios from "@/helpers/axios";
+import { ISubscriptionForm } from "@/types/types";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 
-interface ISubscription {
-  category: string;
-  price: number;
-  feature: string;
-}
-
-const initialValues: ISubscription = {
+const initialValues: ISubscriptionForm = {
   category: "",
   price: 0,
   feature: "",
@@ -33,7 +28,7 @@ export default function CreateSubscription() {
   const router = useRouter();
 
   const handleCreateSubscription = async (
-    values: ISubscription,
+    values: ISubscriptionForm,
     { resetForm }: { resetForm: () => void },
   ) => {
     try {
@@ -88,7 +83,9 @@ export default function CreateSubscription() {
             <div className="flex flex-col">
               <label htmlFor="price" className="text-lg font-semibold">
                 Price (IDR){" "}
-                <span className="text-sm text-gray-500">for 30 days</span>
+                <span className="text-sm font-medium text-gray-500">
+                  for 30 days
+                </span>
               </label>
               <Field
                 id="price"
@@ -120,7 +117,7 @@ export default function CreateSubscription() {
                 component="p"
                 className="text-red-500"
               />
-              <p className="text-gray-500">
+              <p className="mt-1 text-sm text-gray-500">
                 If there are multiple features, separate with commas without
                 spaces.
               </p>

@@ -9,3 +9,13 @@ export async function getTransactions() {
     console.log("Error get transactions:", error);
   }
 }
+
+export async function getTransactionsById(id: string) {
+  try {
+    const response = await axios.get(`/transactions/${id}`);
+
+    return response.data.transaction;
+  } catch (error) {
+    console.log("Error get transactions:", error);
+  }
+}

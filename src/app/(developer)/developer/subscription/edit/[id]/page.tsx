@@ -3,17 +3,12 @@
 import DeveloperSideBar from "@/components/developer/developerSideBar";
 import axios from "@/helpers/axios";
 import { getSubscriptionById } from "@/libs/subscription";
+import { ISubscription, ISubscriptionForm } from "@/types/types";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
-
-interface ISubscription {
-  category: string;
-  price: number;
-  feature: string;
-}
 
 const validationSchema = Yup.object({
   category: Yup.string(),
@@ -26,7 +21,9 @@ export default function EditSubscriptionDetail({
 }: {
   params: { id: number };
 }) {
-  const [subscription, setSubscription] = useState<ISubscription | null>(null);
+  const [subscription, setSubscription] = useState<ISubscriptionForm | null>(
+    null,
+  );
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const router = useRouter();
 
@@ -45,19 +42,19 @@ export default function EditSubscriptionDetail({
     fetchSubscription();
   }, [params.id]);
 
-  const initialValues: ISubscription = {
+  const initialValues: ISubscriptionForm = {
     category: subscription?.category || "",
     price: subscription?.price || 0,
     feature: subscription?.feature || "",
   };
 
-  const handleEditSubscription = async (values: ISubscription) => {
+  const handleEditSubscription = async (values: ISubscriptionForm) => {
     try {
       const response = await axios.patch(`/subscriptions/${params.id}`, values);
 
       toast.success(response.data.message);
       router.push("/developer/subscription");
-      router.refresh;
+      router.refresh();
     } catch (error) {
       console.log("Error edit subscription:", error);
       toast.error("Error edit subscription");
@@ -140,7 +137,7 @@ export default function EditSubscriptionDetail({
                   <Field
                     id="feature"
                     name="feature"
-                    as="input"
+                    as="textarea"
                     className="mt-2 rounded-md border p-2"
                     placeholder="Please seperate feature with comma"
                   />

@@ -11,5 +11,9 @@
 }
 
 .table-head {
-  @apply text-primary px-6 py-3 text-left text-sm font-medium uppercase tracking-wider;
+  @apply text-primary px-4 py-2 text-left text-sm font-semibold uppercase tracking-wider;
+}
+
+.table-data {
+  @apply text-primary whitespace-nowrap border-r border-gray-300 px-4 py-2 text-left text-sm;
 }
