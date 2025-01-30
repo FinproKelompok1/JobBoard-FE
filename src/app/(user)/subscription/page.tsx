@@ -1,11 +1,54 @@
+"use client";
+
+import axios from "@/helpers/axios";
 import { CurrencyFormatter } from "@/helpers/currencryFormatter";
 import { stringToArray } from "@/helpers/stringToArray";
 import { getSubscriptions } from "@/libs/subscription";
 import { ISubscription } from "@/types/types";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
-export default async function SubscriptionPage() {
-  const subscriptions: ISubscription[] = await getSubscriptions();
+export default function SubscriptionPage() {
+  const [subscriptions, setSubscriptions] = useState<ISubscription[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [subscriptionId, setSubscriptionId] = useState<number | null>(null);
+  const [subscriptionPrice, setSubcriprionPrice] = useState<number | null>(
+    null,
+  );
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchSubscriptions = async () => {
+      try {
+        const subscriptions = await getSubscriptions();
+        setSubscriptions(subscriptions);
+      } catch (error) {
+        console.log("Error get subscription:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSubscriptions();
+  }, []);
+
+  const handleSubscribe = async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await axios.post("/transactions", {
+        subscriptionId: subscriptionId,
+        amount: subscriptionPrice,
+      });
+
+      toast.success(data.message);
+      router.push(`/transaction/${data.transactionId}`);
+    } catch (error) {
+      console.log("Error subscribe:", error);
+      toast.error("Error subscribe");
+    }
+  };
 
   return (
     <main className="flex">
@@ -15,15 +58,14 @@ export default async function SubscriptionPage() {
         </h1>
 
         <div className="mt-5 flex flex-col items-start justify-center text-gray-700 md:items-center">
-          <p className="text-left text-xl md:text-center">
-            Boost your career with the right subscription!
+          <p className="text-left text-lg md:text-center md:text-xl">
+            Take your career to the next level with the right plan!
           </p>
-          <p className="mt-2 text-left text-lg md:text-center">
-            Choose a plan and unlock 30 days of powerful tools. Get features
-            tailored for success.
+          <p className="mt-2 text-left text-lg md:text-center md:text-xl">
+            Unlock exclusive features for 30 days and gain a competitive edge.
           </p>
-          <p className="mt-3 text-left text-xl font-semibold md:text-center">
-            Subscribe now and level up!
+          <p className="mt-3 text-left text-lg font-semibold md:text-center md:text-xl">
+            Get started today—your future awaits!{" "}
           </p>
         </div>
 
@@ -32,7 +74,7 @@ export default async function SubscriptionPage() {
             {subscriptions.map((subscription, index) => (
               <div
                 key={index}
-                className="flex h-[300px] w-full flex-col justify-between rounded-lg border border-primary/20 p-5 shadow-md md:w-80"
+                className="flex min-h-[300px] w-full flex-col justify-between rounded-lg border border-primary/20 p-5 shadow-md md:w-80"
               >
                 <div className="flex flex-col gap-y-2">
                   <h1 className="text-3xl font-bold text-accent">
@@ -58,12 +100,16 @@ export default async function SubscriptionPage() {
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  <Link
-                    href={`/subscription/${subscription.id}`}
+                  <button
+                    onClick={() => {
+                      setSubscriptionId(subscription.id);
+                      setSubcriprionPrice(subscription.price);
+                      handleSubscribe();
+                    }}
                     className="rounded-md bg-accent py-2 text-center font-semibold tracking-wide text-white transition-all duration-300 ease-in-out hover:bg-accent/80 hover:text-white"
                   >
                     Subscribe
-                  </Link>
+                  </button>
                 </div>
               </div>
             ))}

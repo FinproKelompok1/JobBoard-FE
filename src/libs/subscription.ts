@@ -29,3 +29,13 @@ export async function deleteSubscription(id: number) {
     console.log("Error get subscriptions:", error);
   }
 }
+
+export async function getSubscriptionUsers(id: number) {
+  try {
+    const response = await axios.get(`/subscriptions/${id}/users`);
+
+    return response.data.subscriptionUsers;
+  } catch (error) {
+    console.log("Error get subscription users:", error);
+  }
+}

@@ -19,3 +19,19 @@ export async function getTransactionsById(id: string) {
     console.log("Error get transactions:", error);
   }
 }
+
+export async function getTransactionToken(
+  id: string,
+  amount: number,
+) {
+  try {
+    const { data } = await axios.post("/transactions/payment", {
+      order_id: id,
+      gross_amount: +amount,
+    });
+
+    return data.transactionToken;
+  } catch (error) {
+    console.log("Error get transaction token:", error);
+  }
+}

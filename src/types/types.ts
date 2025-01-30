@@ -11,6 +11,15 @@ export interface ISubscriptionForm {
   feature: string;
 }
 
+export interface ISubscriptionUsers {
+  startDate: string;
+  endDate: string;
+  isActive: boolean;
+  assessmentCount: string;
+  user: { email: string };
+  subscription: { category: string };
+}
+
 export interface ITransaction {
   id: string;
   userId: number;

@@ -16,7 +16,7 @@ export default function DeveloperSideBar() {
   return (
     <>
       <div
-        className={`bg-primary fixed bottom-0 left-0 top-0 z-40 flex h-screen min-w-[250px] transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${
+        className={`fixed bottom-0 left-0 top-0 z-40 flex h-screen min-w-[250px] bg-primary transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${
           isSideBarOpen ? "translate-x-0" : "-translate-x-[400px]"
         } `}
       >
@@ -29,12 +29,12 @@ export default function DeveloperSideBar() {
               height={200}
             />
             <Link href={"/developer"}>
-              <h1 className="hover:text-accent mt-5 text-xl font-bold text-white">
+              <h1 className="mt-10 text-xl font-bold text-white hover:text-accent">
                 Developer Dashboard
               </h1>
             </Link>
 
-            <div className="mt-5 flex flex-col gap-5">
+            <div className="mt-8 flex flex-col gap-5">
               <div className="flex flex-col gap-y-3">
                 <h1 className="text-lg font-bold">Subscription</h1>
                 <Link
@@ -92,7 +92,7 @@ export default function DeveloperSideBar() {
           </div>
 
           <div>
-            <button className="bg-accent/90 hover:bg-accent rounded-md px-4 py-2 font-semibold text-white/90 transition-all duration-500 ease-in-out hover:text-white">
+            <button className="rounded-md bg-accent/90 px-4 py-2 font-semibold text-white/90 transition-all duration-500 ease-in-out hover:bg-accent hover:text-white">
               Logout
             </button>
           </div>
