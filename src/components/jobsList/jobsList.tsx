@@ -1,5 +1,3 @@
-'use client'
-
 import Link from "next/link";
 import JobsTable from "./jobsTable";
 import React, { useState } from "react";

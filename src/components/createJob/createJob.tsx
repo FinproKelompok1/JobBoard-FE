@@ -63,10 +63,14 @@ export default function CreateJob() {
       >
         {(props: FormikProps<FormValueJob>) => {
           const { handleChange, values, errors } = props
+          let imageUrl: string | null | File = values.banner
+          if (imageUrl instanceof File) {
+            imageUrl = URL.createObjectURL(imageUrl)
+          }
           return (
             <Form className='flex flex-col gap-4 mt-4'>
               <div className='overflow-hidden aspect-[16/9]'>
-                <BannerUploader name="banner" formik={props} />
+                <BannerUploader name="banner" formik={props} value={imageUrl} />
               </div>
               <div className={`${errors.banner && 'hidden'} text-xs ml-2 text-blue-400`}>Optional</div>
               <ErrorMessage name='banner'>{msg => <div className='text-red-500 text-xs mt-1 ml-1'><sup>*</sup>{msg}</div>}</ErrorMessage>

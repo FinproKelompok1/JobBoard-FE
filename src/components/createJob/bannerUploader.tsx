@@ -8,14 +8,16 @@ import { FormValueJob } from "@/types/form";
 interface BannerUploader {
   name: string;
   formik: FormikProps<FormValueJob>;
+  value: string | null
 }
 
 export const BannerUploader: React.FC<BannerUploader> = ({
   name,
   formik,
+  value
 }) => {
   const imgRef = useRef<HTMLInputElement | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(value);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.currentTarget.files?.[0];

@@ -1,7 +1,7 @@
 export interface FormValueJob {
   title: string;
   role: string;
-  banner: File | null;
+  banner: File | null | string;
   endDate: string;
   province: string;
   city: string;
