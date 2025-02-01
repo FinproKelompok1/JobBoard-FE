@@ -2,11 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-.sidebar.open{
+.sidebar.open {
   width: 350px;
 }
 
-.sidebar.closed{
+.sidebar.closed {
   width: 60px;
 }
 
@@ -15,7 +15,23 @@
   padding-left: 1rem;
 } */
 
-.jobs_table th, .jobs_table td{
+.jobs_table th,
+.jobs_table td {
   padding: 0.5rem 1rem;
   border: 1px black solid;
+}
+.dashboard-sidebar-button {
+  @apply hover:bg-accent w-fit list-none rounded-md px-2 py-1 font-medium text-white/70 transition-all duration-300 ease-in-out hover:font-semibold hover:text-white;
+}
+
+.dashboard-sidebar-button-active {
+  @apply bg-accent w-fit list-none rounded-md px-2 py-1 font-semibold text-white;
+}
+
+.table-head {
+  @apply text-primary px-4 py-2 text-left text-sm font-semibold uppercase tracking-wider;
+}
+
+.table-data {
+  @apply text-primary whitespace-nowrap border-r border-gray-300 px-4 py-2 text-left text-sm;
 }
