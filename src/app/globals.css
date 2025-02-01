@@ -15,6 +15,8 @@
   padding-left: 1rem;
 } */
 
+.applicants_table th,
+.applicants_table td,
 .jobs_table th,
 .jobs_table td {
   padding: 0.5rem 1rem;

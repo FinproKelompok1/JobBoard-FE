@@ -32,9 +32,9 @@ export default function Sidebar() {
       <div className="flex justify-center mb-4">
         <Link href={"/admin/dashboard"}>
           {contentOpen ? (
-            <Image src='https://assets.loket.com/images/logo-loket-white.png' alt="Loket" className="w-28" width={150} height={150} />
+            <Image src='/logo-title-white.png' alt="Loket" className="w-44" width={250} height={250} />
           ) : (
-            <Image src='https://assets.loket.com/images/favicon/favicon.ico' alt="Loket" className="bg-white" width={30} height={30} />
+            <Image src='/favico-white.png' alt="Loket" width={40} height={40} />
           )}
         </Link>
       </div>

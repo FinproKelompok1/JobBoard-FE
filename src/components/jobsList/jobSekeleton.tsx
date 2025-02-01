@@ -1,4 +1,4 @@
-export default function TableSekeleton() {
+export default function JobSekeleton() {
   return (
     <tr className="animate-pulse">
       <td>
