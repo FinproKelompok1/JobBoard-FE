@@ -16,6 +16,9 @@ import SelectWage from './selectWage'
 import { BannerUploader } from './bannerUploader'
 
 export default function CreateJob() {
+  const [isLoading, SetIsLoading] = useState<boolean>(false);
+  const [provinceId, setProvinceId] = useState<string>('')
+
   const initialValue: FormValueJob = {
     title: '',
     role: '',
@@ -28,8 +31,6 @@ export default function CreateJob() {
     description: '',
     tags: '',
   }
-  const [isLoading, SetIsLoading] = useState<boolean>(false);
-  const [provinceId, setProvinceId] = useState<string>('')
 
   const handleAdd = async (job: FormValueJob) => {
     try {

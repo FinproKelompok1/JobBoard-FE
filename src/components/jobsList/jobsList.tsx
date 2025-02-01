@@ -1,8 +1,17 @@
+'use client'
+
 import Link from "next/link";
 import JobsTable from "./jobsTable";
-import React, { useState } from "react";
+import React, { createContext, useState } from "react";
 import { createQueryString } from "@/helpers/createQuery";
 import { useDebounce } from "use-debounce";
+
+export interface IQueryContext {
+  search: string
+  sort: string
+}
+
+export const QueryContext = createContext<IQueryContext | null>(null)
 
 export default function JobsList() {
   const [sort, setSort] = useState<string>('')
@@ -37,7 +46,9 @@ export default function JobsList() {
         </select>
       </div>
       <div>
-        <JobsTable sort={sort} search={search} />
+        <QueryContext.Provider value={{search, sort}}>
+          <JobsTable />
+        </QueryContext.Provider>
       </div>
     </>
   )

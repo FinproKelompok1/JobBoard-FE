@@ -20,13 +20,18 @@ export default function SetLocation({ formikProps, setProvinceId }: IProps) {
   useEffect(() => {
     const getProvince = async () => {
       try {
-        const { data } = await axios.get('https://muhammadwildansapoetro.github.io/api-wilayah-indonesia/api/provinces.json')
+        const { data }: { data: IProvince[] } = await axios.get('https://muhammadwildansapoetro.github.io/api-wilayah-indonesia/api/provinces.json')
+        if (formikProps.values.province) {
+          const selectedProvince = data.find((item) => item.name === formikProps.values.province)
+          if (selectedProvince) setProvinceId(selectedProvince.id)
+        }
         setProvince(data)
       } catch (err) {
         toastErrAxios(err)
       }
     }
     getProvince()
+
   }, [])
   return (
     <>
@@ -46,7 +51,7 @@ export default function SetLocation({ formikProps, setProvinceId }: IProps) {
           Select Province
         </option>
         {province.map((item) => (
-          <option key={item.id} value={item.name} onClick={() => setProvinceId(item.id)}>
+          <option key={item.id} value={item.name} >
             {item.name}
           </option>
         ))}

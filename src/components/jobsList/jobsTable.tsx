@@ -1,7 +1,7 @@
 import { getJobs } from "@/libs/jobs"
 import { IJob } from "@/types/jobs"
-import { useMemo } from "react"
-import { FaPencilAlt, FaTrash } from "react-icons/fa"
+import { useContext, useMemo } from "react"
+import { FaTrash } from "react-icons/fa"
 import { MdMoreHoriz } from "react-icons/md"
 import TableSekeleton from "./tableSekeleton"
 import Link from "next/link"
@@ -10,13 +10,14 @@ import axios from "@/helpers/axios"
 import { toast } from "react-toastify"
 import useSWR, { mutate } from "swr"
 import EditJob from "./editJob"
+import { QueryContext } from "./jobsList"
 
-interface IProps {
-  sort: string
-  search: string
-}
-
-export default function JobsTable({ sort, search }: IProps) {
+export default function JobsTable() {
+  const context = useContext(QueryContext)
+  if (!context) {
+    throw new Error('There is no context')
+  }
+  const { sort, search } = context
   const { data: jobs = [], isLoading, isValidating } = useSWR<IJob[]>(`/jobs?${sort}&${search}`, getJobs, { revalidateOnFocus: false, revalidateIfStale: false, revalidateOnReconnect: false, revalidateOnMount: true });
   const skeletons = useMemo(() => Array.from({ length: 5 }), []);
 
@@ -77,8 +78,7 @@ export default function JobsTable({ sort, search }: IProps) {
                   <td>{String(item.isTestActive)}</td>
                   <td>
                     <div className="flex items-center gap-4">
-                      {/* <button ><FaPencilAlt className="text-lightBlue" /></button> */}
-                      <EditJob jobId={item.id}/>
+                      <EditJob job={item} />
                       <button onClick={() => handleDelete(item.id)}><FaTrash className="text-red-500" /></button>
                       <Link href={`/job/${item.id}`}><MdMoreHoriz className="text-xl" /></Link>
                     </div>

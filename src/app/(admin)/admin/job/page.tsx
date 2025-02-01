@@ -1,5 +1,3 @@
-'use client'
-
 import JobsList from "@/components/jobsList/jobsList";
 import TotalJobs from "@/components/jobsList/totalJobs";
 

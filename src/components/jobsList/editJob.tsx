@@ -2,10 +2,9 @@ import axios from "@/helpers/axios"
 import { toastErrAxios } from "@/helpers/toast"
 import UseOpen from "@/hooks/useOpen"
 import { jobSchema } from "@/libs/formSchemas"
-import { getJobId } from "@/libs/jobs"
 import { FormValueJob } from "@/types/form"
 import { ErrorMessage, Field, Form, Formik, FormikProps } from "formik"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { FaPencilAlt } from "react-icons/fa"
 import { IoMdClose } from "react-icons/io"
 import { toast } from "react-toastify"
@@ -16,25 +15,32 @@ import SelectCategory from "../createJob/selectCategory"
 import SelectWage from "../createJob/selectWage"
 import SelectDate from "../createJob/selectDate"
 import RichTextEditor from "../createJob/textEditor"
-import { IJobEdit } from "@/types/jobs"
+import { IJob } from "@/types/jobs"
+import { QueryContext } from "./jobsList"
+import { mutate } from "swr"
 
-export default function EditJob({ jobId }: { jobId: string }) {
-  const [initialValue, setInitialValue] = useState<FormValueJob>({
-    title: '',
-    role: '',
-    banner: null,
-    endDate: '',
-    province: '',
-    salary: '',
-    city: '',
-    category: '',
-    description: '',
-    tags: '',
-  })
-
+export default function EditJob({ job }: { job: IJob }) {
+  const context = useContext(QueryContext)
+  if (!context) {
+    throw new Error('There is no context')
+  }
+  const {sort, search} = context
   const { open, hidden, menuHandler } = UseOpen()
   const [isLoading, SetIsLoading] = useState<boolean>(false);
   const [provinceId, setProvinceId] = useState<string>('')
+
+  const initialValue: FormValueJob = {
+    title: job.title,
+    role: job.role,
+    banner: job.banner,
+    endDate: job.endDate.split('T')[0],
+    province: job.location.province,
+    salary: job.salary,
+    city: job.location.city,
+    category: job.category,
+    description: job.description,
+    tags: job.tags.join(','),
+  }
 
   useEffect(() => {
     if (open) {
@@ -47,46 +53,34 @@ export default function EditJob({ jobId }: { jobId: string }) {
     };
   }, [open])
 
-  const handleUpdate = async (job: FormValueJob) => {
+  const handleUpdate = async (values: FormValueJob) => {
     try {
       SetIsLoading(true)
       const formData = new FormData()
-      for (const key in job) {
-        let value = job[key as keyof FormValueJob]
-        if (key.includes('endDate')) value = `${value}T00:00:00Z`
-        if (value) {
-          formData.append(key, value)
+      for (const key in values) {
+        if (values[key as keyof FormValueJob] instanceof File) {
+          formData.append(key, values[key as keyof FormValueJob]!)
+        } else {
+          let newValue = values[key as keyof FormValueJob]
+          let oldValue = initialValue[key as keyof FormValueJob]
+          if (key.includes('endDate')) {
+            newValue = `${newValue}T00:00:00Z`
+            oldValue = `${oldValue}T00:00:00Z`
+          }
+          if (newValue !== oldValue) {
+            formData.append(key, newValue!)
+          }
         }
       }
-      const { data } = await axios.put(`/jobs/${jobId}`, formData)
+      const { data } = await axios.patch(`/jobs/${job.id}`, formData)
       toast.success(data.message)
+      mutate(`/jobs?${sort}&${search}`)
     } catch (err: unknown) {
       toastErrAxios(err)
     } finally {
       SetIsLoading(false)
     }
   }
-
-  useEffect(() => {
-    const getJob = async () => {
-      const data: IJobEdit = await getJobId(jobId)
-      console.log('data', data)
-      setInitialValue({
-        title: data.title,
-        role: data.role,
-        banner: data.banner,
-        endDate: data.endDate,
-        province: data.location.province,
-        salary: data.salary,
-        city: data.location.city,
-        category: data.category,
-        description: data.description,
-        tags: data.tags.join(','),
-      })
-    }
-    getJob()
-    console.log('initialValue', initialValue)
-  }, [])
 
   return (
     <>
@@ -97,7 +91,7 @@ export default function EditJob({ jobId }: { jobId: string }) {
         <Formik
           initialValues={initialValue}
           validationSchema={jobSchema}
-          enableReinitialize={true} 
+          enableReinitialize={true}
           onSubmit={(values, action) => {
             action.resetForm()
             handleUpdate(values)
@@ -180,8 +174,8 @@ export default function EditJob({ jobId }: { jobId: string }) {
                     />
                     <ErrorMessage name="tags" >{msg => <div className='text-red-500 text-xs mt-1 ml-1'><sup>*</sup>{msg}</div>}</ErrorMessage>
                   </div>
-                  <button disabled={isLoading || !dirty} type='submit' className={`${isLoading ? 'disabled:opacity-[0.5] disabled:bg-lightBlue text-white' : 'hover:opacity-90'} py-2 px-4 transition ease-linear font-semibold text-white bg-lightBlue self-end`}>
-                    {isLoading ? 'Loading ...' : 'Edit'}
+                  <button disabled={isLoading || !dirty} type='submit' className={`${isLoading || !dirty ? 'disabled:opacity-[0.5] disabled:bg-lightBlue text-white' : 'hover:opacity-90'} py-2 px-4 transition ease-linear font-semibold text-white bg-lightBlue self-end`}>
+                    {isLoading ? 'Loading ...' : !dirty ? "You haven't made change yet" : 'Edit'}
                   </button>
                 </div>
               </Form>
