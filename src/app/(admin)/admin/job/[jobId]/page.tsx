@@ -1,7 +1,7 @@
 export default function JobDetailPage() {
   return (
     <main>
-      <h1>JOB DETAIL</h1>
+      <h1>APPLICANT LIST</h1>
     </main>
   )
 }
