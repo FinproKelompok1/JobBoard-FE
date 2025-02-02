@@ -22,7 +22,7 @@ export default function MobileNav() {
   // };
 
   return (
-    <div className='relative flex justify-between border-b items-center py-2 px-4 md:hidden'>
+    <div className='relative flex justify-between border-b items-center py-2 px-4 tablet:hidden'>
       <h1 className='text-2xl font-semibold'>Employer</h1>
       <div className="flex items-center gap-2">
         {/* <div className="sm:flex flex-col text-end hidden">

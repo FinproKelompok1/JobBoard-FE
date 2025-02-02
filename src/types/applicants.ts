@@ -1,15 +1,16 @@
 export interface IApplicants {
-  createdAt: string
-  expectedSalary: number
-  resume: string
-  status: string
-  user: IUser
+  userId: number;
+  createdAt: string;
+  expectedSalary: number;
+  resume: string;
+  status: string;
+  user: IUser;
 }
 
 interface IUser {
-  avatar: string
-  fullname: string
-  dob: string
-  lastEdu: string
-  email: string
+  avatar: string;
+  fullname: string;
+  dob: string;
+  lastEdu: string;
+  email: string;
 }

@@ -45,11 +45,11 @@ export default function JobsList() {
           <option value="desc">Desc</option>
         </select>
       </div>
-      <div>
-        <QueryContext.Provider value={{search, sort}}>
+      <QueryContext.Provider value={{ search, sort }}>
+        <div className="overflow-x-auto">
           <JobsTable />
-        </QueryContext.Provider>
-      </div>
+        </div>
+      </QueryContext.Provider>
     </>
   )
 }

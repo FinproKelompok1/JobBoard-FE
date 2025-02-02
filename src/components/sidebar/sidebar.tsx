@@ -28,7 +28,7 @@ export default function Sidebar() {
   const isActive = (path: string) => pathname === path
 
   return (
-    <nav className={`sidebar sticky top-0 hidden flex-col h-screen overflow-hidden border-r py-4 transition-all duration-150 md:flex bg-blueNavy text-white ${SidebarOpen ? 'open' : 'closed'}`}>
+    <nav className={`sidebar sticky top-0 hidden flex-col h-screen overflow-hidden border-r py-4 transition-all duration-150 tablet:flex bg-blueNavy text-white ${SidebarOpen ? 'min-w-[250px]' : 'min-w-[50px]'}`}>
       <div className="flex justify-center mb-4">
         <Link href={"/admin/dashboard"}>
           {contentOpen ? (

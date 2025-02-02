@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        tablet: '960px'
+      },
       colors: {
         lightBlue: "#0049cc",
         blueNavy: "#0D3880",
