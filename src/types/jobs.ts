@@ -4,7 +4,7 @@ export interface IJob {
   role: string;
   banner: null | string;
   endDate: string;
-  salary: string;
+  salary: number;
   category: string;
   isPublished: boolean;
   isTestActive: boolean;

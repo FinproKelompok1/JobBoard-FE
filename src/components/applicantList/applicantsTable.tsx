@@ -25,7 +25,7 @@ export default function ApplicantsTable() {
 
   if (isValidating || isLoading || applicants.length > 0) {
     return (
-      <table className="w-[1000px] mt-10 text-left applicants_table overflow-x-scroll">
+      <table className="w-[1000px] mt-4 text-left applicants_table overflow-x-scroll">
         <thead>
           <tr>
             <th>APPLICANT</th>

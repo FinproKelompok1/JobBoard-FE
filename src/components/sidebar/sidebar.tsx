@@ -32,9 +32,9 @@ export default function Sidebar() {
       <div className="flex justify-center mb-4">
         <Link href={"/admin/dashboard"}>
           {contentOpen ? (
-            <Image src='/logo-title-white.png' alt="Loket" className="w-44" width={250} height={250} />
+            <Image src='/logo-title-white.png' alt="TalentBridge" className="w-44" width={250} height={250} />
           ) : (
-            <Image src='/favico-white.png' alt="Loket" width={40} height={40} />
+            <Image src='/favico-white.png' alt="TalentBridge" width={40} height={40} />
           )}
         </Link>
       </div>

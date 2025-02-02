@@ -28,7 +28,7 @@ export default function CreateJob() {
     salary: '',
     city: '',
     category: '',
-    description: '',
+    description: '<h1>Requirements</h1><br/><h1>Responsibilities</h1>',
     tags: '',
   }
 

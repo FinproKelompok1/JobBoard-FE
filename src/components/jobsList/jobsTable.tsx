@@ -50,11 +50,11 @@ export default function JobsTable() {
       <table className="w-full mt-10 text-left jobs_table">
         <thead>
           <tr>
-            <th>Published</th>
-            <th>Job</th>
-            <th>Candidates</th>
-            <th>Pre Selection Test</th>
-            <th>Job Actions</th>
+            <th>PUBLISH</th>
+            <th>JOB</th>
+            <th>APPLICANTS</th>
+            <th>PRE SELECTION TEST</th>
+            <th>JOB ACTIONS</th>
           </tr>
         </thead>
         <tbody>
