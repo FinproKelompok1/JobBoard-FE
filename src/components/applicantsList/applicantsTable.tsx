@@ -9,6 +9,8 @@ import { formatRupiahTanpaDesimal } from "@/helpers/formatCurrency";
 import { formatDate } from "@/helpers/dateFormatter";
 import { eduFormatter } from "@/helpers/educationFormatter";
 import SetStatusApplicant from "./setStatusApplicant";
+import PreviewPdf from "./previewPdf";
+import Link from "next/link";
 
 interface IProps {
   search: string
@@ -85,7 +87,8 @@ export default function ApplicantsTable({
                   <td>{formatDate(item.createdAt.split('T')[0])}</td>
                   <td>{formatRupiahTanpaDesimal(item.expectedSalary)}</td>
                   <td><SetStatusApplicant {...props} /></td>
-                  <td><button>{item.resume}</button></td>
+                  {/* <td><PreviewPdf resume={item.resume} /></td> */}
+                  <td><Link href={item.resume} className="px-2 py-1 font-medium text-white bg-pink">Preview</Link></td>
                 </tr>
               )
             })

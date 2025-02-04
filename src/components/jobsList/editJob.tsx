@@ -24,7 +24,7 @@ export default function EditJob({ job }: { job: IJob }) {
   if (!context) {
     throw new Error('There is no context')
   }
-  const {sort, search} = context
+  const { sort, search } = context
   const { open, hidden, menuHandler } = UseOpen()
   const [isLoading, SetIsLoading] = useState<boolean>(false);
   const [provinceId, setProvinceId] = useState<string>('')
@@ -35,7 +35,7 @@ export default function EditJob({ job }: { job: IJob }) {
     banner: job.banner,
     endDate: job.endDate.split('T')[0],
     province: job.location.province,
-    salary: job.salary,
+    salary: String(job.salary),
     city: job.location.city,
     category: job.category,
     description: job.description,
