@@ -5,6 +5,7 @@ import ApplicantFilter from "./applicantsFilter";
 import ApplicantsTable from "./applicantsTable";
 
 export default function ApplicantsList() {
+  const [sort, setSort] = useState<string>('')
   const [search, setSearch] = useState<string>('')
   const [edu, setEdu] = useState<string>('')
   const [minAge, setMinAge] = useState<string>('')
@@ -16,6 +17,7 @@ export default function ApplicantsList() {
       <ApplicantFilter
         setSearch={setSearch}
         setEdu={setEdu}
+        setSort={setSort}
         setMinAge={setMinAge}
         setMaxAge={setMaxAge}
         setMinSalary={setMinSalary}
@@ -25,6 +27,7 @@ export default function ApplicantsList() {
         <ApplicantsTable
           search={search}
           edu={edu}
+          sort={sort}
           min_age={minAge}
           max_age={maxAge}
           min_salary={minSalary}

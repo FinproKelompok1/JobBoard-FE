@@ -5,6 +5,7 @@ import { useDebounce } from "use-debounce"
 interface IProps {
   setSearch: (param: string) => void
   setEdu: (param: string) => void
+  setSort: (param: string) => void
   setMinAge: (param: string) => void
   setMaxAge: (param: string) => void
   setMinSalary: (param: string) => void
@@ -14,6 +15,7 @@ interface IProps {
 export default function ApplicantFilter({
   setSearch,
   setEdu,
+  setSort,
   setMinAge,
   setMaxAge,
   setMinSalary,
@@ -36,6 +38,11 @@ export default function ApplicantFilter({
     setTempEdu(e.target.value)
     const query = createQueryString('last_edu', e.target.value)
     setEdu(query)
+  }
+
+  const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const query = createQueryString('sort', e.target.value)
+    setSort(query)
   }
 
   const applyAge = () => {
@@ -134,6 +141,13 @@ export default function ApplicantFilter({
         <option value="doctoral">Doctoral</option>
         <option value="master">Master</option>
       </select>
+      <div>
+        <label htmlFor="sort">Sort : </label>
+        <select onChange={handleSort} name="sort" id="sort" className="border mt-2">
+          <option value="asc">Asc</option>
+          <option value="desc">Desc</option>
+        </select>
+      </div>
     </div>
   )
 }

@@ -13,6 +13,7 @@ import SetStatusApplicant from "./setStatusApplicant";
 interface IProps {
   search: string
   edu: string
+  sort: string
   min_age: string
   max_age: string
   min_salary: string
@@ -22,6 +23,7 @@ interface IProps {
 export default function ApplicantsTable({
   search,
   edu,
+  sort,
   min_age,
   max_age,
   min_salary,
@@ -39,7 +41,7 @@ export default function ApplicantsTable({
     isLoading,
     isValidating
   } = useSWR<IApplicants[]>(
-    `/applicants/${jobId}?${search}&${edu}&${min_age}&${max_age}&${min_salary}&${max_salary}`,
+    `/applicants/${jobId}?${sort}&${search}&${edu}&${min_age}&${max_age}&${min_salary}&${max_salary}`,
     getApplicants,
     opt
   );
