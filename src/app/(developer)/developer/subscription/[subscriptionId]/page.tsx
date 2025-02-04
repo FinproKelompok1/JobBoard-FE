@@ -19,18 +19,18 @@ export default async function SubscriptionUsers({
     <main className="flex">
       <DeveloperSideBar />
 
-      <div className="w-screen p-5 md:p-10">
+      <div className="w-full overflow-x-auto p-5 md:p-10">
         <h1 className="w-full text-3xl font-bold text-primary">
           Subscription Users
         </h1>
         <h2 className="mt-3 text-xl font-semibold text-accent">
-          Category{" "}
           {subscription.category === "professional"
             ? "Professional"
-            : "Standard"}
+            : "Standard"}{" "}
+          Category
         </h2>
 
-        <div className="mt-5">
+        <div className="mt-5 w-fit max-w-full overflow-x-auto rounded-lg border border-gray-300">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-primary/10">
               <tr>
@@ -44,7 +44,7 @@ export default async function SubscriptionUsers({
                   End Date
                 </th>
                 <th className="table-head border-b border-r border-gray-300">
-                  Assessment Count
+                  Assessment
                 </th>
                 <th className="table-head border-b border-r border-gray-300">
                   Status

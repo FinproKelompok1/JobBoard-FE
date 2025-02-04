@@ -55,7 +55,7 @@ export default function EditSubscription() {
       <main className="flex">
         <DeveloperSideBar />
         <div className="w-screen p-5 md:p-10">
-          <h1 className="text-primary w-full text-3xl font-bold">Loading...</h1>
+          <h1 className="w-full text-3xl font-bold text-primary">Loading...</h1>
         </div>
       </main>
     );
@@ -66,12 +66,12 @@ export default function EditSubscription() {
       <DeveloperSideBar />
 
       <div className="w-screen p-5 md:p-10">
-        <h1 className="text-primary text-3xl font-bold">Edit Subscription</h1>
+        <h1 className="text-3xl font-bold text-primary">Edit Subscription</h1>
 
         <div className="mt-5">
           {subscriptions.length === 0 ? (
             <div>
-              <p className="text-primary text-xl">
+              <p className="text-xl text-primary">
                 There is no subscription package yet, please create a
                 subscription{" "}
                 <Link
@@ -88,11 +88,11 @@ export default function EditSubscription() {
               {subscriptions.map((subscription, index) => (
                 <div
                   key={index}
-                  className="border-primary/20 flex min-h-[360px] w-full flex-col justify-between rounded-lg border p-5 shadow-md md:w-80"
+                  className="flex min-h-[360px] w-full flex-col justify-between rounded-lg border border-primary/20 p-5 shadow-md md:w-80"
                 >
                   <div className="flex flex-col gap-y-2">
                     <div className="flex items-baseline gap-2">
-                      <h1 className="text-accent text-3xl font-bold">
+                      <h1 className="text-3xl font-bold text-accent">
                         {subscription.category === "professional"
                           ? "Professional"
                           : "Standard"}
@@ -100,15 +100,15 @@ export default function EditSubscription() {
                       <p className="text-accent">ID: {subscription.id}</p>
                     </div>
 
-                    <p className="text-primary text-2xl font-medium">
+                    <p className="text-2xl font-medium text-primary">
                       {CurrencyFormatter(subscription.price)}{" "}
                       <span className="text-base font-normal">for 30 days</span>
                     </p>
-                    <div className="text-primary text-lg">
+                    <div className="text-lg text-primary">
                       Features:
                       {stringToArray(subscription.feature).map(
                         (feature, index) => (
-                          <ol key={index} className="text-primary pl-4 text-lg">
+                          <ol key={index} className="pl-4 text-lg text-primary">
                             <li className="list-disc">{feature}</li>
                           </ol>
                         ),
@@ -119,7 +119,7 @@ export default function EditSubscription() {
                   <div className="mt-3 flex flex-col gap-3">
                     <Link
                       href={`/developer/subscription/edit/${subscription.id}`}
-                      className="border-primary hover:bg-primary/80 bg-primary rounded-md border py-2 text-center font-semibold tracking-wide text-white transition-all duration-300 ease-in-out"
+                      className="rounded-md border border-primary bg-primary py-2 text-center font-semibold tracking-wide text-white transition-all duration-300 ease-in-out hover:bg-primary/80"
                     >
                       Edit
                     </Link>
@@ -146,7 +146,7 @@ export default function EditSubscription() {
             <div className="mt-4 flex flex-col justify-center gap-3">
               <button
                 onClick={() => setSubscriptionId(null)}
-                className="border-primary bg-primary hover:bg-primary/80 rounded-md border py-2 font-semibold tracking-wide text-white transition-all duration-300 ease-in-out"
+                className="rounded-md border border-primary bg-primary py-2 font-semibold tracking-wide text-white transition-all duration-300 ease-in-out hover:bg-primary/80"
               >
                 No, Cancel
               </button>

@@ -11,15 +11,6 @@ export interface ISubscriptionForm {
   feature: string;
 }
 
-export interface ISubscriptionUsers {
-  startDate: string;
-  endDate: string;
-  isActive: boolean;
-  assessmentCount: string;
-  user: { email: string };
-  subscription: { category: string };
-}
-
 export interface ITransaction {
   id: string;
   userId: number;
@@ -34,4 +25,22 @@ export interface ITransaction {
   subscription: {
     category: string;
   };
+}
+
+export interface ISubscriptionUsers {
+  startDate: string;
+  endDate: string;
+  isActive: boolean;
+  assessmentCount: string;
+  user: { email: string };
+  subscription: { category: string };
+}
+
+export interface IUserSubscription {
+  subscriptionId: number;
+  startDate: string;
+  endDate: string;
+  isActive: boolean;
+  assessmentCount: number;
+  subscription: { category: string; price: number };
 }

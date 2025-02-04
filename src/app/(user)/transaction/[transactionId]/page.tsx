@@ -77,47 +77,70 @@ export default function TransactionDetail({
           Transaction Detail
         </h1>{" "}
         {transaction && (
-          <div className="mt-5 rounded-lg border border-primary/20 p-5 shadow-lg">
-            <p>ID: {transaction.id}</p>
-            <p>
-              Status:{" "}
-              <span
-                className={`font-bold ${
-                  transaction.status === "pending"
-                    ? "font-bold text-yellow-500"
-                    : transaction.status === "settlement"
-                      ? "text-green-600"
-                      : "text-red-500"
-                }`}
-              >
-                {transaction.status === "pending"
-                  ? "Unpaid"
-                  : transaction.status === "settlement"
-                    ? "Paid"
-                    : "Canceled"}
-              </span>
-            </p>
-            <p>
-              Subscription Category:{" "}
-              {transaction.subscription.category === "professional"
-                ? "Professional"
-                : "Standard"}
-            </p>
-            <p>Price: {CurrencyFormatter(transaction.amount)}</p>
-            <p>Created at: {DateFormatter(transaction.createdAt)}</p>
+          <div className="mt-5 w-screen overflow-x-auto rounded-lg border border-primary/20 p-5 shadow-lg sm:w-fit">
+            <table>
+              <tbody>
+                <tr>
+                  <th className="pr-2 text-left">Created At</th>
+                  <td>: {DateFormatter(transaction.createdAt)}</td>
+                </tr>
+                <tr>
+                  <th className="pr-2 text-left">Transaction ID</th>
+                  <td>: {transaction.id}</td>
+                </tr>
+                <tr>
+                  <th className="pr-2 text-left">User Email</th>
+                  <td>: {transaction.user.email}</td>
+                </tr>
+                <tr>
+                  <th className="pr-2 text-left">Subscription</th>
+                  <td className="font-semibold">
+                    {transaction.subscription.category === "professional"
+                      ? ": Professional"
+                      : ": Standard"}{" "}
+                    Category
+                  </td>
+                </tr>
+                <tr>
+                  <th className="pr-2 text-left">Status</th>
+                  <td
+                    className={`font-bold ${
+                      transaction.status === "pending"
+                        ? "font-bold text-yellow-500"
+                        : transaction.status === "settlement"
+                          ? "text-green-600"
+                          : "text-red-500"
+                    }`}
+                  >
+                    {" "}
+                    {transaction.status === "pending"
+                      ? ": Unpaid"
+                      : transaction.status === "settlement"
+                        ? ": Paid"
+                        : ": Canceled"}
+                  </td>
+                </tr>
+                <tr>
+                  <th className="pr-2 text-left">Price</th>
+                  <td className="font-bold">
+                    : {CurrencyFormatter(transaction.amount)}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
             {transaction.status !== "settlement" && timeLeft && (
-              <div className="mt-3 text-red-500">
+              <div className="mt-5 text-center text-red-500">
                 {timeLeft === "Expired"
                   ? "Transaction expired"
                   : `Expires in: ${timeLeft}`}
               </div>
             )}
-
             {transaction.status !== "settlement" && timeLeft !== "Expired" && (
               <button
                 onClick={handlePaySubscribe}
                 disabled={isLoading}
-                className="mt-5 w-full rounded-md bg-accent px-4 py-2 text-center font-semibold tracking-wide text-white transition-all duration-300 ease-in-out hover:bg-accent/80 hover:text-white disabled:cursor-not-allowed disabled:bg-accent/70"
+                className="mt-1 w-full rounded-md bg-accent px-4 py-2 text-center font-semibold tracking-wide text-white transition-all duration-300 ease-in-out hover:bg-accent/80 hover:text-white disabled:cursor-not-allowed disabled:bg-accent/70"
               >
                 {isLoading ? "Loading..." : "Pay Subscription"}
               </button>

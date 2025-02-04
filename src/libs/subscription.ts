@@ -10,9 +10,9 @@ export async function getSubscriptions() {
   }
 }
 
-export async function getSubscriptionById(id: number) {
+export async function getSubscriptionById(subscriptionId: number) {
   try {
-    const response = await axios.get(`/subscriptions/${id}`);
+    const response = await axios.get(`/subscriptions/${subscriptionId}`);
 
     return response.data.subscription;
   } catch (error) {

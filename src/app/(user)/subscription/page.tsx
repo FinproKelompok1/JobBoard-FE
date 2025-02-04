@@ -5,12 +5,11 @@ import { CurrencyFormatter } from "@/helpers/currencryFormatter";
 import { stringToArray } from "@/helpers/stringToArray";
 import { getSubscriptions } from "@/libs/subscription";
 import { ISubscription } from "@/types/types";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-export default function SubscriptionPage() {
+export default function Subscription() {
   const [subscriptions, setSubscriptions] = useState<ISubscription[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [subscriptionId, setSubscriptionId] = useState<number | null>(null);
@@ -51,7 +50,7 @@ export default function SubscriptionPage() {
   };
 
   return (
-    <main className="flex">
+    <main>
       <div className="flex w-screen flex-col items-center p-5 md:p-10">
         <h1 className="w-full text-center text-3xl font-bold text-primary">
           Subscription List

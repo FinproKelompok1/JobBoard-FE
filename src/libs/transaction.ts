@@ -10,9 +10,9 @@ export async function getTransactions() {
   }
 }
 
-export async function getTransactionsById(id: string) {
+export async function getTransactionsById(transactionId: string) {
   try {
-    const response = await axios.get(`/transactions/${id}`);
+    const response = await axios.get(`/transactions/${transactionId}`);
 
     return response.data.transaction;
   } catch (error) {
@@ -20,10 +20,7 @@ export async function getTransactionsById(id: string) {
   }
 }
 
-export async function getTransactionToken(
-  id: string,
-  amount: number,
-) {
+export async function getTransactionToken(id: string, amount: number) {
   try {
     const { data } = await axios.post("/transactions/payment", {
       order_id: id,
