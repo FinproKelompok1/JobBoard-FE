@@ -1,4 +1,4 @@
-import ApplicantsTable from "@/components/applicantList/applicantsTable";
+import ApplicantsList from "@/components/applicantsList/applicantsList";
 import { formatDate } from "@/helpers/dateFormatter";
 import { formatRupiahTanpaDesimal } from "@/helpers/formatCurrency";
 import { getJobDetail } from "@/libs/jobs";
@@ -39,9 +39,9 @@ export default async function JobDetailPage({ params }: { params: { jobId: strin
           </div>
           <div dangerouslySetInnerHTML={{ __html: jobDetail.description }} className="description flex-1" />
         </div>
-        <div className="overflow-x-auto">
+        <div>
           <h1 className="text-2xl font-medium px-4 tablet:px-0">Applicants List</h1>
-          <ApplicantsTable />
+          <ApplicantsList />
         </div>
       </div>
     </main>

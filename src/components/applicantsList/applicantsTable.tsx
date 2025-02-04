@@ -1,5 +1,3 @@
-'use client'
-
 import { getApplicants } from "@/libs/applicants";
 import { IApplicants } from "@/types/applicants";
 import { useMemo } from "react";
@@ -12,7 +10,23 @@ import { formatDate } from "@/helpers/dateFormatter";
 import { eduFormatter } from "@/helpers/educationFormatter";
 import SetStatusApplicant from "./setStatusApplicant";
 
-export default function ApplicantsTable() {
+interface IProps {
+  search: string
+  edu: string
+  min_age: string
+  max_age: string
+  min_salary: string
+  max_salary: string
+}
+
+export default function ApplicantsTable({
+  search,
+  edu,
+  min_age,
+  max_age,
+  min_salary,
+  max_salary
+}: IProps) {
   const { jobId } = useParams()
   const opt = {
     revalidateOnFocus: false,
@@ -20,7 +34,15 @@ export default function ApplicantsTable() {
     revalidateOnReconnect: false,
     revalidateOnMount: true
   }
-  const { data: applicants = [], isLoading, isValidating } = useSWR<IApplicants[]>(`/applicants/${jobId}`, getApplicants, opt);
+  const {
+    data: applicants = [],
+    isLoading,
+    isValidating
+  } = useSWR<IApplicants[]>(
+    `/applicants/${jobId}?${search}&${edu}&${min_age}&${max_age}&${min_salary}&${max_salary}`,
+    getApplicants,
+    opt
+  );
   const skeletons = useMemo(() => Array.from({ length: 5 }), []);
 
   if (isValidating || isLoading || applicants.length > 0) {
@@ -51,7 +73,7 @@ export default function ApplicantsTable() {
                       <div className="flex flex-col">
                         <div className="flex gap-2">
                           <p>{item.user.fullname}</p>
-                          <span>{age}</span>
+                          <span className="text-blueNavy font-medium">{age}</span>
                         </div>
                         <p className="text-sm font-medium text-black/50">{item.user.email}</p>
                       </div>
