@@ -47,7 +47,7 @@ export default function JobsTable() {
 
   if (isValidating || isLoading || jobs.length > 0) {
     return (
-      <table className="w-full mt-10 text-left jobs_table">
+      <table className="w-full mt-2text-left jobs_table">
         <thead>
           <tr>
             <th>PUBLISH</th>

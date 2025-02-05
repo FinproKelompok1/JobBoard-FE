@@ -1,4 +1,5 @@
 import ApplicantsList from "@/components/applicantsList/applicantsList";
+import GoBack from "@/components/applicantsList/goBack";
 import { formatDate } from "@/helpers/dateFormatter";
 import { formatRupiahTanpaDesimal } from "@/helpers/formatCurrency";
 import { getJobDetail } from "@/libs/jobs";
@@ -6,13 +7,15 @@ import { IJob } from "@/types/jobs";
 import Image from "next/image";
 import { FaMoneyBillWave } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
+import { IoArrowBack } from "react-icons/io5";
 import { SlCalender } from "react-icons/sl";
 
 export default async function JobDetailPage({ params }: { params: { jobId: string } }) {
   const jobDetail: IJob = await getJobDetail(params.jobId)
   return (
     <main>
-      <div className="max-w-[940px] mx-auto pb-20">
+      <div className="max-w-[940px] mx-auto pb-20 mt-2">
+        <GoBack />
         {jobDetail.banner && (
           <div className="relative xl:rounded-xl overflow-hidden aspect-[16/9] min-h-[15rem] xl:w-[70%] flex-1">
             <Image src={jobDetail.banner} alt={jobDetail.title} fill />

@@ -9,7 +9,7 @@ import { formatRupiahTanpaDesimal } from "@/helpers/formatCurrency";
 import { formatDate } from "@/helpers/dateFormatter";
 import { eduFormatter } from "@/helpers/educationFormatter";
 import SetStatusApplicant from "./setStatusApplicant";
-import PreviewPdf from "./previewPdf";
+// import PreviewPdf from "./previewPdf";
 import Link from "next/link";
 
 interface IProps {

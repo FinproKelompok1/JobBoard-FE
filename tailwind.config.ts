@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import daisyui from "daisyui";
 
 const config: Config = {
   content: [
@@ -9,12 +10,12 @@ const config: Config = {
   theme: {
     extend: {
       screens: {
-        tablet: '960px'
+        tablet: "960px",
       },
       colors: {
         lightBlue: "#0049cc",
         blueNavy: "#0D3880",
-        pink: '#E60278',
+        pink: "#E60278",
         background: "var(--background)",
         foreground: "var(--foreground)",
         primary: "#0D3880",
@@ -22,6 +23,9 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [daisyui],
+  daisyui: {
+    themes: ["light"],
+  },
 };
 export default config;
