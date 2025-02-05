@@ -50,10 +50,10 @@ export default function DeveloperSideBar() {
                   Create Subscription
                 </Link>
                 <Link
-                  href={"/developer/subscription/edit"}
-                  className={`${isActive("/developer/subscription/edit") ? "dashboard-sidebar-button-active" : "dashboard-sidebar-button"}`}
+                  href={"/developer/subscription/delete"}
+                  className={`${isActive("/developer/subscription/delete") ? "dashboard-sidebar-button-active" : "dashboard-sidebar-button"}`}
                 >
-                  Edit Subscription
+                  Delete Subscription
                 </Link>
               </div>
 
@@ -93,7 +93,7 @@ export default function DeveloperSideBar() {
 
           <div className="mt-10">
             <button className="rounded-md bg-accent/90 px-4 py-2 font-semibold text-white/90 transition-all duration-500 ease-in-out hover:bg-accent hover:text-white">
-              Logout
+              Log out
             </button>
           </div>
         </nav>

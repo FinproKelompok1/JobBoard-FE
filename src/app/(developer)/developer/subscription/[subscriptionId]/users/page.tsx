@@ -30,10 +30,13 @@ export default async function SubscriptionUsers({
           Category
         </h2>
 
-        <div className="mt-5 w-fit max-w-full overflow-x-auto rounded-lg border border-gray-300">
+        <div className="mt-5 max-w-full overflow-x-auto rounded-lg border border-gray-300">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-primary/10">
               <tr>
+                <th className="table-head border-b border-r border-gray-300">
+                  Full Name
+                </th>
                 <th className="table-head border-b border-r border-gray-300">
                   User Email
                 </th>
@@ -54,6 +57,9 @@ export default async function SubscriptionUsers({
             <tbody className="divide-y divide-gray-200 bg-white">
               {subscriptionUsers.map((item, index) => (
                 <tr key={index}>
+                  <td className="table-data border-b border-r border-gray-300">
+                    {item.user.fullname}
+                  </td>
                   <td className="table-data border-b border-r border-gray-300">
                     {item.user.email}
                   </td>

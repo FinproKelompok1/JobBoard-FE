@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-export default function EditSubscription() {
+export default function DeletetSubscription() {
   const [subscriptions, setSubscriptions] = useState<ISubscription[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
@@ -55,7 +55,10 @@ export default function EditSubscription() {
       <main className="flex">
         <DeveloperSideBar />
         <div className="w-screen p-5 md:p-10">
-          <h1 className="w-full text-3xl font-bold text-primary">Loading...</h1>
+          <h1 className="text-3xl font-bold text-primary">
+            Delete Subscription
+          </h1>
+          <p className="mt-5 text-xl text-primary">Loading...</p>
         </div>
       </main>
     );
@@ -66,7 +69,7 @@ export default function EditSubscription() {
       <DeveloperSideBar />
 
       <div className="w-screen p-5 md:p-10">
-        <h1 className="text-3xl font-bold text-primary">Edit Subscription</h1>
+        <h1 className="text-3xl font-bold text-primary">Delete Subscription</h1>
 
         <div className="mt-5">
           {subscriptions.length === 0 ? (
@@ -88,7 +91,7 @@ export default function EditSubscription() {
               {subscriptions.map((subscription, index) => (
                 <div
                   key={index}
-                  className="flex min-h-[360px] w-full flex-col justify-between rounded-lg border border-primary/20 p-5 shadow-md md:w-80"
+                  className="flex w-full flex-col justify-between rounded-lg border border-primary/20 p-5 shadow-md md:w-80"
                 >
                   <div className="flex flex-col gap-y-2">
                     <div className="flex items-baseline gap-2">
@@ -116,16 +119,10 @@ export default function EditSubscription() {
                     </div>
                   </div>
 
-                  <div className="mt-3 flex flex-col gap-3">
-                    <Link
-                      href={`/developer/subscription/edit/${subscription.id}`}
-                      className="rounded-md border border-primary bg-primary py-2 text-center font-semibold tracking-wide text-white transition-all duration-300 ease-in-out hover:bg-primary/80"
-                    >
-                      Edit
-                    </Link>
+                  <div className="mt-5 flex flex-col gap-3">
                     <button
                       onClick={() => setSubscriptionId(subscription.id)}
-                      className="rounded-md border border-red-600 py-2 text-center font-semibold tracking-wide text-red-500 transition-all duration-300 ease-in-out hover:bg-red-600 hover:text-white"
+                      className="text-whtie rounded-md bg-red-600 py-2 text-center font-semibold tracking-wide text-white transition-all duration-300 ease-in-out hover:bg-red-700"
                     >
                       Delete
                     </button>

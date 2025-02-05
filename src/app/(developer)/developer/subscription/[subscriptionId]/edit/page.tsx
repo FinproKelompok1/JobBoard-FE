@@ -16,10 +16,10 @@ const validationSchema = Yup.object({
   feature: Yup.string(),
 });
 
-export default function EditSubscriptionDetail({
+export default function EditSubscription({
   params,
 }: {
-  params: { id: number };
+  params: { subscriptionId: number };
 }) {
   const [subscription, setSubscription] = useState<ISubscriptionForm | null>(
     null,
@@ -30,7 +30,7 @@ export default function EditSubscriptionDetail({
   useEffect(() => {
     const fetchSubscription = async () => {
       try {
-        const subscription = await getSubscriptionById(params.id);
+        const subscription = await getSubscriptionById(params.subscriptionId);
         setSubscription(subscription);
       } catch (error) {
         console.log("Error get subscription:", error);
@@ -40,7 +40,7 @@ export default function EditSubscriptionDetail({
     };
 
     fetchSubscription();
-  }, [params.id]);
+  }, []);
 
   const initialValues: ISubscriptionForm = {
     category: subscription?.category || "",
@@ -50,7 +50,10 @@ export default function EditSubscriptionDetail({
 
   const handleEditSubscription = async (values: ISubscriptionForm) => {
     try {
-      const response = await axios.patch(`/subscriptions/${params.id}`, values);
+      const response = await axios.patch(
+        `/subscriptions/${params.subscriptionId}`,
+        values,
+      );
 
       toast.success(response.data.message);
       router.push("/developer/subscription");
@@ -61,14 +64,12 @@ export default function EditSubscriptionDetail({
     }
   };
 
-  console.log("subscription", subscription);
-
   if (isLoading) {
     return (
       <main className="flex">
         <DeveloperSideBar />
         <div className="w-4/5 border p-10">
-          <h1 className="text-primary w-full text-3xl font-bold">Loading...</h1>
+          <h1 className="w-full text-3xl font-bold text-primary">Loading...</h1>
         </div>
       </main>
     );
@@ -79,8 +80,8 @@ export default function EditSubscriptionDetail({
       <DeveloperSideBar />
 
       <div className="w-screen p-5 md:p-10">
-        <h1 className="text-primary w-full text-3xl font-bold">
-          Edit Subscription ID {params.id}
+        <h1 className="w-full text-3xl font-bold text-primary">
+          Edit Subscription ID {params.subscriptionId}
         </h1>
 
         <div className="mt-5">
@@ -90,7 +91,7 @@ export default function EditSubscriptionDetail({
             onSubmit={handleEditSubscription}
           >
             {({ values }) => (
-              <Form className="border-primary/20 mt-5 flex w-full flex-col gap-5 rounded-lg border p-5 shadow-md md:w-96">
+              <Form className="mt-5 flex w-full flex-col gap-5 rounded-lg border border-primary/20 p-5 shadow-md md:w-96">
                 <div className="flex flex-col">
                   <label htmlFor="category" className="text-lg font-semibold">
                     Category
@@ -155,7 +156,7 @@ export default function EditSubscriptionDetail({
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="bg-accent hover:bg-accent/80 mt-2 rounded-md px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out disabled:cursor-not-allowed"
+                  className="mt-2 rounded-md bg-accent px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed"
                 >
                   {isLoading ? "Saving..." : "Save Changes"}
                 </button>

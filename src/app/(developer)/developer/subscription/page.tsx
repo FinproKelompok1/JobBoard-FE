@@ -64,13 +64,20 @@ export default async function SubscriptionList() {
                       )}
                     </div>
                   </div>
-
-                  <Link
-                    href={`/developer/subscription/${subscription.id}`}
-                    className="rounded-md border border-primary bg-primary py-2 text-center font-semibold tracking-wide text-white transition-all duration-300 ease-in-out hover:bg-primary/80"
-                  >
-                    Users
-                  </Link>
+                  <div className="mt-5 flex flex-col gap-2">
+                    <Link
+                      href={`/developer/subscription/${subscription.id}/users`}
+                      className="rounded-md border border-primary bg-primary py-2 text-center font-semibold tracking-wide text-white transition-all duration-300 ease-in-out hover:bg-primary/80"
+                    >
+                      Users
+                    </Link>
+                    <Link
+                      href={`/developer/subscription/${subscription.id}/edit`}
+                      className="rounded-md bg-accent py-2 text-center font-semibold tracking-wide text-white transition-all duration-300 ease-in-out hover:bg-accent/80"
+                    >
+                      Edit
+                    </Link>
+                  </div>
                 </div>
               ))}
             </div>

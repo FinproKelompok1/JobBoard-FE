@@ -32,7 +32,7 @@ export interface ISubscriptionUsers {
   endDate: string;
   isActive: boolean;
   assessmentCount: string;
-  user: { email: string };
+  user: { email: string; fullname: string };
   subscription: { category: string };
 }
 
@@ -43,4 +43,32 @@ export interface IUserSubscription {
   isActive: boolean;
   assessmentCount: number;
   subscription: { category: string; price: number };
+}
+
+export interface ICvForm {
+  summary: string;
+  experience: string;
+  skill: string;
+  education: string;
+}
+
+export interface ICv {
+  id: number;
+  summary: string;
+  experience: string;
+  skill: string;
+  education: string;
+}
+
+export interface IUserCv {
+  fullname: string;
+  email: string;
+  location: { city: string; province: string };
+  CurriculumVitae: {
+    id: number;
+    summary: string;
+    experience: string;
+    skill: string;
+    education: string;
+  }[];
 }

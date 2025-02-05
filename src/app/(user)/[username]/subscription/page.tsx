@@ -1,7 +1,6 @@
 "use client";
 
 import DateFormatter from "@/helpers/dateFormatter";
-import { getUserSubscription } from "@/libs/userSubscription";
 import { IUserSubscription } from "@/types/types";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
@@ -10,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "@/helpers/axios";
 import { toast } from "react-toastify";
+import { getUserSubscription } from "@/libs/subscription";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -110,36 +110,53 @@ export default function UserSubscription({
                 </div>
 
                 <div className="mt-5 flex flex-col gap-3">
-                  <button
-                    onClick={() => router.push("/assessment")}
-                    disabled={
-                      item.subscription.category === "standard" &&
-                      Number(item.assessmentCount) >= 2
-                    }
-                    className={`rounded-md py-2 text-center font-medium transition duration-300 ease-in-out ${
-                      item.subscription.category === "standard" &&
-                      Number(item.assessmentCount) >= 2
-                        ? "cursor-not-allowed bg-primary/50 text-white"
-                        : "border border-primary text-primary hover:bg-primary hover:text-white"
-                    }`}
-                  >
-                    Take Skill Assessment
-                  </button>
+                  {item.isActive ? (
+                    <>
+                      <button
+                        onClick={() => router.push("/assessment")}
+                        disabled={
+                          item.subscription.category === "standard" &&
+                          Number(item.assessmentCount) >= 2
+                        }
+                        className={`rounded-md py-2 text-center font-medium transition duration-300 ease-in-out ${
+                          item.subscription.category === "standard" &&
+                          Number(item.assessmentCount) >= 2
+                            ? "cursor-not-allowed bg-primary/50 text-white"
+                            : "bg-accent text-white hover:bg-accent/80"
+                        }`}
+                      >
+                        Take Skill Assessment
+                      </button>
 
-                  <button
-                    onClick={() => router.push("/cv")}
-                    className="rounded-md border border-primary py-2 text-center font-medium text-primary transition duration-300 ease-in-out hover:bg-primary hover:text-white"
-                  >
-                    Create Professional CV
-                  </button>
+                      <button
+                        onClick={() => router.push(`/${params.username}/cv`)}
+                        className="rounded-md bg-accent py-2 text-center font-medium text-white transition duration-300 ease-in-out hover:bg-accent/80"
+                      >
+                        Generate Curriculum Vitae
+                      </button>
 
-                  {isRenew && (
+                      {isRenew && (
+                        <div className="w-full">
+                          <p className="mb-0.5 text-center text-sm font-medium text-accent">
+                            Your subscription almost expires
+                          </p>
+                          <button
+                            onClick={() => handleSubscribe()}
+                            disabled={isLoading}
+                            className="w-full rounded-md bg-primary py-2 text-center font-medium text-white transition duration-300 ease-in-out hover:bg-primary/80 disabled:cursor-not-allowed disabled:bg-primary/80"
+                          >
+                            {isLoading ? "Loading..." : "Renew Subscription"}
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  ) : (
                     <button
                       onClick={() => handleSubscribe()}
                       disabled={isLoading}
-                      className="rounded-md border border-accent bg-accent py-2 text-center font-medium text-white transition duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/80"
+                      className="rounded-md bg-accent py-2 text-center font-medium text-white transition duration-300 ease-in-out hover:bg-accent disabled:cursor-not-allowed disabled:bg-red-300"
                     >
-                      {isLoading ? "Loading..." : "Renew Subscription"}
+                      Activate Your Subscription
                     </button>
                   )}
                 </div>

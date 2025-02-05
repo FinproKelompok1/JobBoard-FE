@@ -40,7 +40,6 @@ export default function CreateSubscription() {
       router.push("/developer/subscription");
       router.refresh();
     } catch (error) {
-      console.log("Error create subscription:", error);
       toast.error("Error create subscription");
     } finally {
       setIsLoading(false);
@@ -52,13 +51,13 @@ export default function CreateSubscription() {
       <DeveloperSideBar />
 
       <div className="w-screen p-5 md:p-10">
-        <h1 className="text-primary text-3xl font-bold">Create Subscription</h1>
+        <h1 className="text-3xl font-bold text-primary">Create Subscription</h1>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={handleCreateSubscription}
         >
-          <Form className="border-primary/20 mt-5 flex w-full flex-col gap-5 rounded-lg border p-5 shadow-md md:w-96">
+          <Form className="mt-5 flex w-full flex-col gap-5 rounded-lg border border-primary/20 p-5 shadow-md md:w-96">
             <div className="flex flex-col">
               <label htmlFor="category" className="text-lg font-semibold">
                 Category
@@ -126,7 +125,7 @@ export default function CreateSubscription() {
             <button
               type="submit"
               disabled={isLoading}
-              className="bg-accent hover:bg-accent/80 mt-2 rounded-md px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out disabled:cursor-not-allowed"
+              className="mt-2 rounded-md bg-accent px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed"
             >
               {isLoading ? "Creating..." : "Create Subscription"}
             </button>
