@@ -41,7 +41,7 @@ export default async function DownloadCv({
 
           <div className="mt-5">
             <h1 className="border-b border-gray-500 pb-1 text-2xl font-bold">
-              Experiences
+              Work Experiences
             </h1>
             {userCv.CurriculumVitae[0].experience
               .split(";")

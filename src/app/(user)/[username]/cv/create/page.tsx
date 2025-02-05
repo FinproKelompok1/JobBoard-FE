@@ -53,7 +53,7 @@ export default function CreateCv({ params }: { params: { username: string } }) {
           validationSchema={validationSchema}
           onSubmit={handleCreateCv}
         >
-          <Form className="w-[500px] rounded-lg border-gray-200 md:border md:p-5 md:shadow-lg">
+          <Form className="w-[750px] rounded-xl border-gray-500 md:border md:p-5 md:shadow-lg">
             <div className="">
               <h1 className="text-3xl font-bold text-primary">
                 Create Curriculum Vitae
@@ -67,7 +67,7 @@ export default function CreateCv({ params }: { params: { username: string } }) {
               <Field
                 name="summary"
                 as="textarea"
-                className="rounded-md border border-gray-200 p-2"
+                className="rounded-md border border-gray-500 p-2"
                 placeholder="Enter your summary"
               ></Field>
               <ErrorMessage
@@ -79,14 +79,22 @@ export default function CreateCv({ params }: { params: { username: string } }) {
 
             <div className="mt-4 flex flex-col gap-2">
               <label htmlFor="experience" className="text-xl font-bold">
-                Experience
+                Work Experience
               </label>
+              <p className="text-sm">
+                Format: Company Name, Position, Start Date, End Date,
+                Description ;
+              </p>
               <Field
                 name="experience"
                 as="textarea"
-                className="rounded-md border border-gray-200 p-2"
+                className="rounded-md border border-gray-500 p-2"
                 placeholder="Enter your experiences"
               ></Field>
+              <p className="text-sm">
+                If you have multiple experiences, separate them with a semicolon
+                (;) and list them from latest to oldest.
+              </p>
               <ErrorMessage
                 name="experience"
                 component={"div"}
@@ -98,12 +106,20 @@ export default function CreateCv({ params }: { params: { username: string } }) {
               <label htmlFor="education" className="text-xl font-bold">
                 Education
               </label>
+              <p className="text-sm">
+                Format: School Name, Degree, Field of Study, Start Date, End
+                Date ;{" "}
+              </p>
               <Field
                 name="education"
                 as="textarea"
-                className="rounded-md border border-gray-200 p-2"
+                className="rounded-md border border-gray-500 p-2"
                 placeholder="Enter your educations"
               ></Field>
+              <p className="text-sm">
+                If you have multiple education, separate them with a semicolon
+                (;) and list them from latest to oldest.
+              </p>
               <ErrorMessage
                 name="education"
                 component={"div"}
@@ -118,7 +134,7 @@ export default function CreateCv({ params }: { params: { username: string } }) {
               <Field
                 name="skill"
                 as="textarea"
-                className="rounded-md border border-gray-200 p-2"
+                className="rounded-md border border-gray-500 p-2"
                 placeholder="Enter your skills"
               ></Field>
               <ErrorMessage
