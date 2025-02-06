@@ -3,7 +3,7 @@ import { IJob } from "@/types/jobs"
 import { useContext, useMemo } from "react"
 import { FaTrash } from "react-icons/fa"
 import { MdMoreHoriz } from "react-icons/md"
-import TableSekeleton from "./tableSekeleton"
+import JobSekeleton from "./jobSekeleton"
 import Link from "next/link"
 import { toastErrAxios } from "@/helpers/toast"
 import axios from "@/helpers/axios"
@@ -11,6 +11,7 @@ import { toast } from "react-toastify"
 import useSWR, { mutate } from "swr"
 import EditJob from "./editJob"
 import { QueryContext } from "./jobsList"
+import TotalApplicants from "./totalApplicants"
 
 export default function JobsTable() {
   const context = useContext(QueryContext)
@@ -46,19 +47,19 @@ export default function JobsTable() {
 
   if (isValidating || isLoading || jobs.length > 0) {
     return (
-      <table className="w-full mt-10 text-left jobs_table">
+      <table className="w-full mt-2text-left jobs_table">
         <thead>
           <tr>
-            <th>Published</th>
-            <th>Job</th>
-            <th>Candidates</th>
-            <th>Pre Selection Test</th>
-            <th>Job Actions</th>
+            <th>PUBLISH</th>
+            <th>JOB</th>
+            <th>APPLICANTS</th>
+            <th>PRE SELECTION TEST</th>
+            <th>JOB ACTIONS</th>
           </tr>
         </thead>
         <tbody>
           {isValidating || isLoading ? (
-            skeletons.map((_, idx) => <TableSekeleton key={idx} />)
+            skeletons.map((_, idx) => <JobSekeleton key={idx} />)
           ) : (
             jobs.map((item) => {
               return (
@@ -74,13 +75,13 @@ export default function JobsTable() {
                     <div className="font-medium border-b border-b-black w-fit">{item.title}</div>
                     <div>{item.category}</div>
                   </td>
-                  <td>0</td>
+                  <td><TotalApplicants jobId={item.id} /></td>
                   <td>{String(item.isTestActive)}</td>
                   <td>
                     <div className="flex items-center gap-4">
                       <EditJob job={item} />
                       <button onClick={() => handleDelete(item.id)}><FaTrash className="text-red-500" /></button>
-                      <Link href={`/job/${item.id}`}><MdMoreHoriz className="text-xl" /></Link>
+                      <Link href={`/admin/job/${item.id}`}><MdMoreHoriz className="text-xl" /></Link>
                     </div>
                   </td>
                 </tr>

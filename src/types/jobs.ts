@@ -1,18 +1,10 @@
-// export interface IJob {
-//   id: string;
-//   title: string;
-//   category: string;
-//   isPublished: boolean;
-//   isTestActive: boolean;
-// }
-
 export interface IJob {
-    id: string;
+  id: string;
   title: string;
   role: string;
   banner: null | string;
   endDate: string;
-  salary: string;
+  salary: number;
   category: string;
   isPublished: boolean;
   isTestActive: boolean;

@@ -1,8 +1,4 @@
 import { ErrorMessage, Field, FormikProps } from "formik";
-// import { SlCalender } from "react-icons/sl";
-// import UseOpen from "@/hooks/useOpen";
-// import { IoMdClose } from "react-icons/io";
-// import { useEffect } from "react";
 import { FormValueJob } from "@/types/form";
 
 export default function SelectDate({ handleChange, values }: FormikProps<FormValueJob>) {

@@ -19,3 +19,12 @@ export async function getTotalJobs(url: string) {
     toastErrAxios(err);
   }
 }
+
+export async function getJobDetail(jobId: string) {
+  try {
+    const { data } = await axios.get(`/jobs/${jobId}`);
+    return data.result
+  } catch (err) {
+    toastErrAxios(err);
+  }
+}

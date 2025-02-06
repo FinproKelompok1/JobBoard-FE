@@ -28,13 +28,13 @@ export default function Sidebar() {
   const isActive = (path: string) => pathname === path
 
   return (
-    <nav className={`sidebar sticky top-0 hidden flex-col h-screen overflow-hidden border-r py-4 transition-all duration-150 md:flex bg-blueNavy text-white ${SidebarOpen ? 'open' : 'closed'}`}>
+    <nav className={`sidebar sticky top-0 hidden flex-col h-screen overflow-hidden border-r py-4 transition-all duration-150 tablet:flex bg-blueNavy text-white ${SidebarOpen ? 'min-w-[250px]' : 'min-w-[50px]'}`}>
       <div className="flex justify-center mb-4">
         <Link href={"/admin/dashboard"}>
           {contentOpen ? (
-            <Image src='https://assets.loket.com/images/logo-loket-white.png' alt="Loket" className="w-28" width={150} height={150} />
+            <Image src='/logo-title-white.png' alt="TalentBridge" className="w-44" width={250} height={250} />
           ) : (
-            <Image src='https://assets.loket.com/images/favicon/favicon.ico' alt="Loket" className="bg-white" width={30} height={30} />
+            <Image src='/favico-white.png' alt="TalentBridge" width={40} height={40} />
           )}
         </Link>
       </div>
