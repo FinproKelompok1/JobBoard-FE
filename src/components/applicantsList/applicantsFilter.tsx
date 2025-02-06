@@ -1,6 +1,10 @@
 import { createQueryString } from "@/helpers/createQuery"
 import { useEffect, useState } from "react"
 import { useDebounce } from "use-debounce"
+import AgeRange from "./ageRange"
+import SalaryRange from "./salaryRange"
+import { FiFilter } from "react-icons/fi"
+import { LiaSortAlphaDownSolid, LiaSortAlphaUpAltSolid } from "react-icons/lia"
 
 interface IProps {
   setSearch: (param: string) => void
@@ -24,8 +28,8 @@ export default function ApplicantFilter({
   const [text, setText] = useState<string>('')
   const [search] = useDebounce(text, 800)
   const [tempEdu, setTempEdu] = useState<string>('')
-  const [tempMinAge, setTempMinAge] = useState<string>()
-  const [tempMaxAge, setTempMaxAge] = useState<string>()
+  const [tempMinAge, setTempMinAge] = useState<string>('')
+  const [tempMaxAge, setTempMaxAge] = useState<string>('')
   const [tempMinSalary, setTempMinSalary] = useState<string>('')
   const [tempMaxSalary, setTempMaxSalary] = useState<string>('')
 
@@ -40,13 +44,18 @@ export default function ApplicantFilter({
     setEdu(query)
   }
 
-  const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const query = createQueryString('sort', e.target.value)
+  const handleSort = (e: React.MouseEvent<HTMLAnchorElement>, sort: string) => {
+    e.preventDefault()
+    const query = createQueryString('sort', sort)
     setSort(query)
   }
 
   const applyAge = () => {
     if (tempMinAge && tempMaxAge) {
+      if (tempMinAge > tempMaxAge) {
+        alert("Min age must be less than max age")
+        return
+      }
       const minAge = createQueryString('min_age', tempMinAge)
       const maxAge = createQueryString('max_age', tempMaxAge)
       setMinAge(minAge)
@@ -55,9 +64,15 @@ export default function ApplicantFilter({
   }
 
   const applySalary = () => {
-    if (tempMinSalary && tempMaxSalary) {
-      const minSalary = createQueryString('min_salary', tempMinSalary)
-      const maxSalary = createQueryString('max_salary', tempMaxSalary)
+    const minimum = Number(tempMinSalary.replace(/\D/g, ""))
+    const maximum = Number(tempMaxSalary.replace(/\D/g, ""))
+    if (minimum && maximum) {
+      if (minimum > maximum) {
+        alert("Min salary must be less than max salary")
+        return
+      }
+      const minSalary = createQueryString('min_salary', String(minimum))
+      const maxSalary = createQueryString('max_salary', String(maximum))
       setMinSalary(minSalary)
       setMaxSalary(maxSalary)
     }
@@ -75,63 +90,11 @@ export default function ApplicantFilter({
         name="name"
         className="px-2 py-1 outline-none border"
       />
-      <div className="flex gap-2 items-center">
-        <input
-          type="number"
-          min={0}
-          max={100}
-          name="min_age"
-          placeholder="Age"
-          value={tempMinAge}
-          onChange={(e) => setTempMinAge(e.target.value)}
-          className="outline-none px-2 py-1 border w-16"
-        />
-        <span>between</span>
-        <input
-          type="number"
-          min={0}
-          max={100}
-          name="max_age"
-          placeholder="Age"
-          value={tempMaxAge}
-          onChange={(e) => setTempMaxAge(e.target.value)}
-          className="outline-none px-2 py-1 border w-16"
-        />
-        <button
-          onClick={applyAge}
-          className="px-2 py-1 text-xs bg-pink text-white font-semibold"
-        >
-          APPLY
-        </button>
-      </div>
-      <div className="flex items-center gap-2">
-        <input
-          type="text"
-          name="min_salary"
-          placeholder="Min Salary"
-          className="outline-none px-2 py-1 border"
-          onChange={(e) => setTempMinSalary(e.target.value)}
-        />
-        <span>between</span>
-        <input
-          type="text"
-          name="max_salary"
-          placeholder="Max Salary"
-          className="outline-none px-2 py-1 border"
-          onChange={(e) => setTempMaxSalary(e.target.value)}
-        />
-        <button
-          onClick={applySalary}
-          className="px-2 py-1 text-xs bg-pink text-white font-semibold"
-        >
-          APPLY
-        </button>
-      </div>
       <select
         onChange={handleEdu}
         name="last_edu"
         id="last_edu"
-        className="outline-none p-2 border cursor-pointer"
+        className="outline-none px-2 py-1 border cursor-pointer"
         value={tempEdu}
       >
         <option value="" disabled>filter by education</option>
@@ -141,12 +104,39 @@ export default function ApplicantFilter({
         <option value="doctoral">Doctoral</option>
         <option value="master">Master</option>
       </select>
-      <div>
-        <label htmlFor="sort">Sort : </label>
-        <select onChange={handleSort} name="sort" id="sort" className="border mt-2">
-          <option value="asc">Asc</option>
-          <option value="desc">Desc</option>
-        </select>
+      <div className="dropdown">
+        <button tabIndex={0} role="button" className="p-2 hover:bg-slate-200 transition duration-200">
+          <LiaSortAlphaDownSolid />
+          <LiaSortAlphaUpAltSolid />
+        </button>
+        <ul tabIndex={0} className="dropdown-content menu bg-base-100 z-[1] w-fit p-2 shadow">
+          <p className="text-xs font-medium text-black/50 mx-2">sorted by earliest appliment</p>
+          <li><a onClick={(e) => handleSort(e, 'asc')}>ascending</a></li>
+          <li><a onClick={(e) => handleSort(e, 'desc')}>descending</a></li>
+        </ul>
+      </div>
+      <div className="dropdown">
+        <button tabIndex={0} role="button" className="p-2 hover:bg-slate-200 transition duration-200"><FiFilter /></button>
+        <ul tabIndex={0} className="dropdown-content menu bg-base-100 z-[1] w-fit p-2 shadow">
+          <div className="flex items-center gap-2">
+            <SalaryRange
+              setTempMinSalary={setTempMinSalary}
+              setTempMaxSalary={setTempMaxSalary}
+              applySalary={applySalary}
+              tempMinSalary={tempMinSalary}
+              tempMaxSalary={tempMaxSalary}
+            />
+          </div>
+          <div className="flex gap-2 items-center mt-4">
+            <AgeRange
+              setTempMinAge={setTempMinAge}
+              setTempMaxAge={setTempMaxAge}
+              applyAge={applyAge}
+              tempMinAge={tempMinAge}
+              tempMaxAge={tempMaxAge}
+            />
+          </div>
+        </ul>
       </div>
     </div>
   )

@@ -43,7 +43,7 @@ export default function JobsList() {
       <div className="dropdown mt-10">
         <button tabIndex={0} role="button" className="p-2 hover:bg-slate-200 transition duration-200"><IoFilterSharp /></button>
         <ul tabIndex={0} className="dropdown-content menu bg-base-100 z-[1] w-fit p-2 shadow">
-          <p className="text-xs font-medium text-black/50 text-center">sorted by earliest entry</p>
+          <p className="text-xs font-medium text-black/50 mx-2">sorted by earliest entry</p>
           <li><a onClick={(e) => handleSort(e, 'asc')}>ascending</a></li>
           <li><a onClick={(e) => handleSort(e, 'desc')}>descending</a></li>
         </ul>
