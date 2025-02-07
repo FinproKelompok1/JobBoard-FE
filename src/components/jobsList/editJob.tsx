@@ -18,6 +18,7 @@ import RichTextEditor from "../createJob/textEditor"
 import { IJob } from "@/types/jobs"
 import { QueryContext } from "./jobsList"
 import { mutate } from "swr"
+import Swal from "sweetalert2"
 
 export default function EditJob({ job }: { job: IJob }) {
   const context = useContext(QueryContext)
@@ -54,6 +55,16 @@ export default function EditJob({ job }: { job: IJob }) {
   }, [open])
 
   const handleUpdate = async (values: FormValueJob) => {
+    const { isConfirmed } = await Swal.fire({
+      title: "Are you sure?",
+      text: "You are able to revert by editing it back",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Confirm!"
+    })
+    if (!isConfirmed) return
     try {
       SetIsLoading(true)
       const formData = new FormData()

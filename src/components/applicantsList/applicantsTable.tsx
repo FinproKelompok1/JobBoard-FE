@@ -9,8 +9,9 @@ import { formatRupiahTanpaDesimal } from "@/helpers/formatCurrency";
 import { formatDate } from "@/helpers/dateFormatter";
 import { eduFormatter } from "@/helpers/educationFormatter";
 import SetStatusApplicant from "./setStatusApplicant";
-// import PreviewPdf from "./previewPdf";
 import Link from "next/link";
+import { FcAcceptDatabase, FcProcess } from "react-icons/fc";
+import SetSchedule from "./setSchedule";
 
 interface IProps {
   search: string
@@ -51,7 +52,7 @@ export default function ApplicantsTable({
 
   if (isValidating || isLoading || applicants.length > 0) {
     return (
-      <table className="w-[1000px] mt-4 text-left applicants_table overflow-x-scroll">
+      <table className="w-[1200px] mt-4 text-left applicants_table overflow-x-scroll">
         <thead>
           <tr>
             <th>APPLICANT</th>
@@ -60,6 +61,7 @@ export default function ApplicantsTable({
             <th>EXPECTED SALARY</th>
             <th>STATUS</th>
             <th>RESUME</th>
+            <th>ACTION</th>
           </tr>
         </thead>
         <tbody>
@@ -87,8 +89,16 @@ export default function ApplicantsTable({
                   <td>{formatDate(item.createdAt.split('T')[0])}</td>
                   <td>{formatRupiahTanpaDesimal(item.expectedSalary)}</td>
                   <td><SetStatusApplicant {...props} /></td>
-                  {/* <td><PreviewPdf resume={item.resume} /></td> */}
                   <td><Link href={item.resume} className="px-2 py-1 font-medium text-white bg-pink">Preview</Link></td>
+                  <td>
+                    <div className="flex items-center justify-center">
+                      {item.status === 'processed' ?
+                        (<FcProcess className="text-xl"/>) : item.status === 'accepted' ?
+                          (<FcAcceptDatabase className="text-xl"/>) : item.status === 'interviewed' ?
+                            (<SetSchedule userId={item.userId} jobId={jobId} />) : <div>Rejected</div>
+                      }
+                    </div>
+                  </td>
                 </tr>
               )
             })

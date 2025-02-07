@@ -5,6 +5,7 @@ import AgeRange from "./ageRange"
 import SalaryRange from "./salaryRange"
 import { FiFilter } from "react-icons/fi"
 import { LiaSortAlphaDownSolid, LiaSortAlphaUpAltSolid } from "react-icons/lia"
+import { IoMdClose } from "react-icons/io"
 
 interface IProps {
   setSearch: (param: string) => void
@@ -42,6 +43,11 @@ export default function ApplicantFilter({
     setTempEdu(e.target.value)
     const query = createQueryString('last_edu', e.target.value)
     setEdu(query)
+  }
+
+  const resetEdu = () => {
+    setTempEdu('')
+    setEdu('')
   }
 
   const handleSort = (e: React.MouseEvent<HTMLAnchorElement>, sort: string) => {
@@ -90,20 +96,25 @@ export default function ApplicantFilter({
         name="name"
         className="px-2 py-1 outline-none border"
       />
-      <select
-        onChange={handleEdu}
-        name="last_edu"
-        id="last_edu"
-        className="outline-none px-2 py-1 border cursor-pointer"
-        value={tempEdu}
-      >
-        <option value="" disabled>filter by education</option>
-        <option value="highSchoolDiploma">High School Diploma</option>
-        <option value="bachelor">Bachelor</option>
-        <option value="diploma">Diploma</option>
-        <option value="doctoral">Doctoral</option>
-        <option value="master">Master</option>
-      </select>
+      <div className="inline-flex items-center gap-2">
+        <select
+          onChange={handleEdu}
+          name="last_edu"
+          id="last_edu"
+          className="outline-none px-2 py-1 border cursor-pointer"
+          value={tempEdu}
+        >
+          <option value="" disabled>filter by education</option>
+          <option value="highSchoolDiploma">High School Diploma</option>
+          <option value="bachelor">Bachelor</option>
+          <option value="diploma">Diploma</option>
+          <option value="doctoral">Doctoral</option>
+          <option value="master">Master</option>
+        </select>
+        {tempEdu && (
+          <button type="button" className="text-xs hover:text-pink" onClick={resetEdu}><IoMdClose /></button>
+        )}
+      </div>
       <div className="dropdown">
         <button tabIndex={0} role="button" className="p-2 hover:bg-slate-200 transition duration-200">
           <LiaSortAlphaDownSolid />
