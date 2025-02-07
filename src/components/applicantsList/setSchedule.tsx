@@ -61,6 +61,26 @@ export default function SetSchedule({ jobId, userId }: IProps) {
     }
     getData()
   }, [])
+
+  const handleDeleteSchedule = async () => {
+    const { isConfirmed } = await Swal.fire({
+      title: "Are you sure?",
+      text: `This schedule cannot be reverted or restored`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    })
+    if (!isConfirmed) return
+    try {
+      const { data } = await axios.delete(`/schedule/delete?jobId=${jobId}&userId=${userId}`)
+      toast.success(data.message)
+      mutate((key: string) => key.startsWith(`/applicants/${jobId}`));
+    } catch (err) {
+      toastErrAxios(err)
+    }
+  }
   return (
     <>
       {!interviewDate && !interviewTime ? (
@@ -71,7 +91,8 @@ export default function SetSchedule({ jobId, userId }: IProps) {
             <span>{interviewDate}</span>
             <span>{interviewTime}</span>
           </div>
-          <button className="absolute top-[0.5rem] transition duration-300 group-hover:opacity-100 opacity-0 px-2 py-1 bg-blueNavy text-white font-medium">Update</button>
+          <button className="absolute top-[0.8rem] -left-[1rem] text-xs transition duration-300 group-hover:opacity-100 opacity-0 px-2 py-1 bg-blueNavy text-white font-medium">Update</button>
+          <button onClick={handleDeleteSchedule} className="absolute top-[0.8rem] -right-[1rem] text-xs transition duration-300 group-hover:opacity-100 opacity-0 px-2 py-1 bg-red-500 text-white font-medium">Delete</button>
         </div>
       )}
       <div className={`fixed ${hidden ? '' : 'hidden'} z-50 inset-0 bg-[rgba(0,0,0,0.5)]`}></div>
