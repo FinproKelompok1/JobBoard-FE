@@ -10,8 +10,11 @@ import { formatDate } from "@/helpers/dateFormatter";
 import { eduFormatter } from "@/helpers/educationFormatter";
 import SetStatusApplicant from "./setStatusApplicant";
 import Link from "next/link";
-import { FcAcceptDatabase, FcProcess } from "react-icons/fc";
+import { FcProcess } from "react-icons/fc";
 import SetSchedule from "./setSchedule";
+import SetReviewRejection from "./setReviewRejection";
+import { GoChecklist } from "react-icons/go";
+import { RxCrossCircled } from "react-icons/rx";
 
 interface IProps {
   search: string
@@ -93,9 +96,10 @@ export default function ApplicantsTable({
                   <td>
                     <div className="flex items-center justify-center">
                       {item.status === 'processed' ?
-                        (<FcProcess className="text-xl"/>) : item.status === 'accepted' ?
-                          (<FcAcceptDatabase className="text-xl"/>) : item.status === 'interviewed' ?
-                            (<SetSchedule userId={item.userId} jobId={jobId} />) : <div>Rejected</div>
+                        (<FcProcess className="text-xl text-black" />) : item.status === 'accepted' ?
+                          (<GoChecklist className="text-xl text-green-400" />) : item.status === 'interviewed' ?
+                            (<SetSchedule userId={item.userId} jobId={jobId} />) : !item.rejectedReview ?
+                              (<SetReviewRejection userId={item.userId} jobId={jobId} />) : <RxCrossCircled className="text-xl text-red-500" />
                       }
                     </div>
                   </td>
