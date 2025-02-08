@@ -1,11 +1,9 @@
 import axios from "@/helpers/axios"
 import { toastErrAxios } from "@/helpers/toast"
-import UseOpen from "@/hooks/useOpen"
-import React, { useEffect } from "react"
+import React from "react"
 import { toast } from "react-toastify"
-import Swal from "sweetalert2"
 import { mutate } from "swr"
-import SetSchedule from "./setSchedule"
+import { sweetAlertWarning } from "@/helpers/sweetAlert"
 
 interface IProps {
   status: string
@@ -17,15 +15,7 @@ export default function SetStatusApplicant({ userId, jobId, status }: IProps) {
   const handleSetStatus = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     try {
       const newStatus = e.target.value
-      const { isConfirmed } = await Swal.fire({
-        title: "Are you sure?",
-        text: `You set applicant status to become ${newStatus}`,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Confirm!"
-      })
+      const { isConfirmed } = await sweetAlertWarning(`You set applicant status to become ${newStatus}`, "Confirm!")
       if (!isConfirmed) return
       const { data } = await axios.patch('/applicants', { userId, jobId, status: newStatus })
       toast.success(data.message)

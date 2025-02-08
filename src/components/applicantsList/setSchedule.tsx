@@ -1,10 +1,11 @@
 import axios from "@/helpers/axios"
 import { formatDate } from "@/helpers/dateFormatter"
+import { sweetAlertWarning } from "@/helpers/sweetAlert"
 import { toastErrAxios } from "@/helpers/toast"
 import UseOpen from "@/hooks/useOpen"
 import { useEffect, useState } from "react"
+import { IoMdClose } from "react-icons/io"
 import { toast } from "react-toastify"
-import Swal from "sweetalert2"
 import { mutate } from "swr"
 
 interface IProps {
@@ -16,29 +17,34 @@ export default function SetSchedule({ jobId, userId }: IProps) {
   const { open, hidden, menuHandler } = UseOpen()
   const [interviewDate, setInterviewDate] = useState<string>('')
   const [interviewTime, setInterviewTime] = useState<string>('')
+  const [interviewOldDate, setInterviewOldDate] = useState<string>('')
+  const [interviewOldTime, setInterviewOldTime] = useState<string>('')
   const date = new Date()
   const minDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
-  const handleSave = async () => {
-    const { isConfirmed } = await Swal.fire({
-      title: "Are you sure?",
-      text: `Your schedule will be sent direct to applicant's email`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Confirm!"
-    })
+  const handleCreateSchedule = async () => {
+    const { isConfirmed } = await sweetAlertWarning("Your schedule will be sent direct to applicant's email", "Confirm!")
     if (!isConfirmed) return
     try {
       const startTime = `${interviewDate}T${interviewTime}:00+07:00`
       const { data } = await axios.post('/schedule', { jobId, userId, startTime })
       mutate((key: string) => key.startsWith(`/applicants/${jobId}`));
-      toast.success(data)
+      toast.success(data.message)
     } catch (err) {
       toastErrAxios(err)
-    } finally {
-      menuHandler()
+    }
+  }
+
+  const handleReschedule = async () => {
+    const { isConfirmed } = await sweetAlertWarning("The applicant will be resent the new schedule", "Confirm!")
+    if (!isConfirmed) return
+    try {
+      const startTime = `${interviewDate}T${interviewTime}:00+07:00`
+      const { data } = await axios.patch('/schedule', { jobId, userId, startTime })
+      mutate((key: string) => key.startsWith(`/applicants/${jobId}`));
+      toast.success(data.message)
+    } catch (err) {
+      toastErrAxios(err)
     }
   }
 
@@ -54,24 +60,16 @@ export default function SetSchedule({ jobId, userId }: IProps) {
     const getData = async () => {
       const { data } = await axios.post('/schedule/applicant-schedule', { jobId, userId })
       if (data.result) {
-        const res = data.result.startTime
-        setInterviewDate(formatDate(res.split('T')[0]))
-        setInterviewTime(new Date(res).toLocaleTimeString('it-IT'))
+        const res = new Date(data.result.startTime)
+        setInterviewOldDate(`${res.getFullYear()}-${String(res.getMonth() + 1).padStart(2, '0')}-${String(res.getDate()).padStart(2, '0')}`)
+        setInterviewOldTime(res.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }))
       }
     }
     getData()
   }, [])
 
   const handleDeleteSchedule = async () => {
-    const { isConfirmed } = await Swal.fire({
-      title: "Are you sure?",
-      text: `This schedule cannot be reverted or restored`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
-    })
+    const { isConfirmed } = await sweetAlertWarning("This schedule cannot be reverted or restored", "Yes, delete it!")
     if (!isConfirmed) return
     try {
       const { data } = await axios.delete(`/schedule/delete?jobId=${jobId}&userId=${userId}`)
@@ -83,20 +81,21 @@ export default function SetSchedule({ jobId, userId }: IProps) {
   }
   return (
     <>
-      {!interviewDate && !interviewTime ? (
+      {!interviewOldDate && !interviewOldTime ? (
         <button type="button" onClick={menuHandler} className='px-2 py-1 font-medium text-white bg-green-400 text-xs'>SET SCHEDULE</button>
       ) : (
         <div className="group relative">
           <div className="flex flex-col group-hover:opacity-0 transition duration-300">
-            <span>{interviewDate}</span>
-            <span>{interviewTime}</span>
+            <span>{formatDate(interviewOldDate)}</span>
+            <span>{interviewOldTime}</span>
           </div>
-          <button className="absolute top-[0.8rem] -left-[1rem] text-xs transition duration-300 group-hover:opacity-100 opacity-0 px-2 py-1 bg-blueNavy text-white font-medium">Update</button>
+          <button onClick={menuHandler} className="absolute top-[0.8rem] -left-[1rem] text-xs transition duration-300 group-hover:opacity-100 opacity-0 px-2 py-1 bg-blueNavy text-white font-medium">Update</button>
           <button onClick={handleDeleteSchedule} className="absolute top-[0.8rem] -right-[1rem] text-xs transition duration-300 group-hover:opacity-100 opacity-0 px-2 py-1 bg-red-500 text-white font-medium">Delete</button>
         </div>
       )}
       <div className={`fixed ${hidden ? '' : 'hidden'} z-50 inset-0 bg-[rgba(0,0,0,0.5)]`}></div>
       <div className={`${open ? 'scale-100' : 'scale-0'} w-[50%] py-5 px-6 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition duration-300 bg-white z-[60] ${hidden ? '' : 'hidden'}`}>
+        <button type="button" onClick={menuHandler} className="w-fit text-[1.5rem] hover:text-red-500 mb-2"><IoMdClose /></button>
         <div className='flex flex-col'>
           <label htmlFor="interview_date" className='pb-2 font-semibold mt-4'>Interview date :</label>
           <input
@@ -120,7 +119,11 @@ export default function SetSchedule({ jobId, userId }: IProps) {
             className='shadow-md border focus:border-lightBlue focus:border-2 outline-none px-2 py-1'
           />
         </div>
-        <button type="button" disabled={interviewDate == '' || interviewTime == ''} onClick={handleSave} className={`${interviewDate == '' || interviewTime == '' ? 'disabled:cursor-not-allowed' : 'hover:shadow-sm'} shadow-md border border-lightBlue shadow-lightBlue font-[550] mt-8 py-2 transition duration-300 w-full`}>SAVE</button>
+        {!interviewOldDate && !interviewOldTime ? (
+          <button type="button" disabled={interviewDate == '' || interviewTime == ''} onClick={handleCreateSchedule} className={`${interviewDate == '' || interviewTime == '' ? 'disabled:cursor-not-allowed' : 'hover:shadow-sm'} shadow-md border border-lightBlue shadow-lightBlue font-[550] mt-8 py-2 transition duration-300 w-full`}>SAVE</button>
+        ) : (
+          <button type="button" disabled={interviewDate == interviewOldDate && interviewTime == interviewOldTime} onClick={handleReschedule} className={`${interviewDate == interviewOldDate && interviewTime == interviewOldTime ? 'disabled:cursor-not-allowed' : 'hover:shadow-sm'} shadow-md border border-lightBlue shadow-lightBlue font-[550] mt-8 py-2 transition duration-300 w-full`}>Update</button>
+        )}
       </div>
     </>
   )

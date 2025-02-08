@@ -12,7 +12,7 @@ import useSWR, { mutate } from "swr"
 import EditJob from "./editJob"
 import { QueryContext } from "./jobsList"
 import TotalApplicants from "./totalApplicants"
-import Swal from "sweetalert2"
+import { sweetAlertWarning } from "@/helpers/sweetAlert"
 
 export default function JobsTable() {
   const context = useContext(QueryContext)
@@ -24,15 +24,7 @@ export default function JobsTable() {
   const skeletons = useMemo(() => Array.from({ length: 5 }), []);
 
   const handleDelete = async (jobId: string) => {
-    const { isConfirmed } = await Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
-    })
+    const { isConfirmed } = await sweetAlertWarning("You won't be able to revert this!", "Yes, delete it!")
     if (!isConfirmed) return
     try {
       const { data } = await axios.patch(`/jobs/delete/${jobId}`)
@@ -45,14 +37,7 @@ export default function JobsTable() {
   }
 
   const handlePublish = async (jobId: string, isPublished: boolean) => {
-    const { isConfirmed } = await Swal.fire({
-      title: "Are you sure?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, i'm sure"
-    })
+    const { isConfirmed } = await sweetAlertWarning('', "Yes, i'm sure")
     if (!isConfirmed) return
     try {
       mutate(`/jobs?${sort}&${search}`, isPublished, false)

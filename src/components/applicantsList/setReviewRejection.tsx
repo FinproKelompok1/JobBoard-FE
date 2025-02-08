@@ -1,10 +1,10 @@
 import axios from "@/helpers/axios";
+import { sweetAlertWarning } from "@/helpers/sweetAlert";
 import { toastErrAxios } from "@/helpers/toast";
 import UseOpen from "@/hooks/useOpen"
 import { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { toast } from "react-toastify";
-import Swal from "sweetalert2";
 import { mutate } from "swr";
 
 interface IProps {
@@ -15,6 +15,7 @@ interface IProps {
 export default function SetReviewRejection({ jobId, userId }: IProps) {
   const { open, hidden, menuHandler } = UseOpen()
   const [rejectedReview, setRejectedReview] = useState<string>('')
+
   useEffect(() => {
     if (open) {
       document.body.classList.add("overflow-hidden");
@@ -22,16 +23,9 @@ export default function SetReviewRejection({ jobId, userId }: IProps) {
       document.body.classList.remove("overflow-hidden");
     }
   }, [open])
+
   const handleSave = async () => {
-    const { isConfirmed } = await Swal.fire({
-      title: "Are you sure?",
-      text: `This review cannot be updated or reverted`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Confirm!"
-    })
+    const { isConfirmed } = await sweetAlertWarning("This review cannot be updated or reverted", "Confirm!")
     if (!isConfirmed) return
     try {
       const { data } = await axios.patch('/applicants/review', { rejectedReview, jobId, userId })
