@@ -19,6 +19,7 @@ export default function SetSchedule({ jobId, userId }: IProps) {
   const [interviewTime, setInterviewTime] = useState<string>('')
   const [interviewOldDate, setInterviewOldDate] = useState<string>('')
   const [interviewOldTime, setInterviewOldTime] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const date = new Date()
   const minDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
@@ -26,12 +27,15 @@ export default function SetSchedule({ jobId, userId }: IProps) {
     const { isConfirmed } = await sweetAlertWarning("Your schedule will be sent direct to applicant's email", "Confirm!")
     if (!isConfirmed) return
     try {
+      setIsLoading(true)
       const startTime = `${interviewDate}T${interviewTime}:00+07:00`
       const { data } = await axios.post('/schedule', { jobId, userId, startTime })
       mutate((key: string) => key.startsWith(`/applicants/${jobId}`));
       toast.success(data.message)
     } catch (err) {
       toastErrAxios(err)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -39,12 +43,15 @@ export default function SetSchedule({ jobId, userId }: IProps) {
     const { isConfirmed } = await sweetAlertWarning("The applicant will be resent the new schedule", "Confirm!")
     if (!isConfirmed) return
     try {
+      setIsLoading(true)
       const startTime = `${interviewDate}T${interviewTime}:00+07:00`
       const { data } = await axios.patch('/schedule', { jobId, userId, startTime })
       mutate((key: string) => key.startsWith(`/applicants/${jobId}`));
       toast.success(data.message)
     } catch (err) {
       toastErrAxios(err)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -120,9 +127,23 @@ export default function SetSchedule({ jobId, userId }: IProps) {
           />
         </div>
         {!interviewOldDate && !interviewOldTime ? (
-          <button type="button" disabled={interviewDate == '' || interviewTime == ''} onClick={handleCreateSchedule} className={`${interviewDate == '' || interviewTime == '' ? 'disabled:cursor-not-allowed' : 'hover:shadow-sm'} shadow-md border border-lightBlue shadow-lightBlue font-[550] mt-8 py-2 transition duration-300 w-full`}>SAVE</button>
+          <button
+            type="button"
+            disabled={interviewDate == '' || interviewTime == '' || isLoading}
+            onClick={handleCreateSchedule}
+            className={`${interviewDate == '' || interviewTime == '' || isLoading ? 'disabled:cursor-not-allowed opacity-60 shadow-none' : 'hover:shadow-sm'} shadow-md border border-lightBlue shadow-lightBlue font-[550] mt-8 py-2 transition duration-300 w-full`}
+          >
+            {isLoading ? 'LOADING...' : 'SAVE'}
+          </button>
         ) : (
-          <button type="button" disabled={interviewDate == interviewOldDate && interviewTime == interviewOldTime} onClick={handleReschedule} className={`${interviewDate == interviewOldDate && interviewTime == interviewOldTime ? 'disabled:cursor-not-allowed' : 'hover:shadow-sm'} shadow-md border border-lightBlue shadow-lightBlue font-[550] mt-8 py-2 transition duration-300 w-full`}>Update</button>
+          <button
+            type="button"
+            disabled={(interviewDate == interviewOldDate && interviewTime == interviewOldTime) || isLoading}
+            onClick={handleReschedule}
+            className={`${interviewDate == interviewOldDate && interviewTime == interviewOldTime ? 'disabled:cursor-not-allowed opacity-60 shadow-none' : 'hover:shadow-sm'} ${isLoading && 'disabled:cursor-not-allowed opacity-60 shadow-none'} shadow-md border border-lightBlue shadow-lightBlue font-[550] mt-8 py-2 transition duration-300 w-full`}
+          >
+            {isLoading ? 'LOADING...' : 'UPDATE'}
+          </button>
         )}
       </div>
     </>
