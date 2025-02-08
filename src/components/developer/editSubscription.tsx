@@ -1,14 +1,15 @@
 "use client";
 
-import DeveloperSideBar from "@/components/developer/developerSideBar";
 import axios from "@/helpers/axios";
 import { getSubscriptionById } from "@/libs/subscription";
-import { ISubscription, ISubscriptionForm } from "@/types/types";
+import { ISubscriptionForm } from "@/types/types";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FaEdit } from "react-icons/fa";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
+import { IoClose } from "react-icons/io5";
 
 const validationSchema = Yup.object({
   category: Yup.string(),
@@ -17,25 +18,27 @@ const validationSchema = Yup.object({
 });
 
 export default function EditSubscription({
-  params,
+  subscriptionId,
 }: {
-  params: { subscriptionId: number };
+  subscriptionId: number;
 }) {
   const [subscription, setSubscription] = useState<ISubscriptionForm | null>(
     null,
   );
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isEditing, setIsEditing] = useState<boolean>(true);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const router = useRouter();
 
   useEffect(() => {
     const fetchSubscription = async () => {
       try {
-        const subscription = await getSubscriptionById(params.subscriptionId);
+        const subscription = await getSubscriptionById(subscriptionId);
         setSubscription(subscription);
       } catch (error) {
         console.log("Error get subscription:", error);
       } finally {
-        setIsLoading(false);
+        setIsEditing(false);
       }
     };
 
@@ -51,7 +54,7 @@ export default function EditSubscription({
   const handleEditSubscription = async (values: ISubscriptionForm) => {
     try {
       const response = await axios.patch(
-        `/subscriptions/${params.subscriptionId}`,
+        `/subscriptions/${subscriptionId}`,
         values,
       );
 
@@ -64,34 +67,37 @@ export default function EditSubscription({
     }
   };
 
-  if (isLoading) {
-    return (
-      <main className="flex">
-        <DeveloperSideBar />
-        <div className="w-4/5 border p-10">
-          <h1 className="w-full text-3xl font-bold text-primary">Loading...</h1>
-        </div>
-      </main>
-    );
-  }
-
   return (
-    <main className="flex">
-      <DeveloperSideBar />
+    <>
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="flex items-center justify-center gap-2 rounded-md border-2 border-accent py-2 text-center font-semibold tracking-wide text-accent transition-all duration-300 ease-in-out hover:bg-accent hover:text-white"
+      >
+        <FaEdit size={18} />
+        Edit
+      </button>
 
-      <div className="w-screen p-5 md:p-10">
-        <h1 className="w-full text-3xl font-bold text-primary">
-          Edit Subscription ID {params.subscriptionId}
-        </h1>
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-xl rounded-lg bg-white p-5 shadow-lg">
+            <div className="flex justify-between">
+              <h1 className="text-2xl font-bold text-primary">
+                Edit Subscription
+              </h1>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-lg font-bold text-gray-600 hover:text-gray-800"
+              >
+                <IoClose size={30} />
+              </button>
+            </div>
 
-        <div className="mt-5">
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={handleEditSubscription}
-          >
-            {({ values }) => (
-              <Form className="mt-5 flex w-full flex-col gap-5 rounded-lg border border-primary/20 p-5 shadow-md md:w-96">
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={handleEditSubscription}
+            >
+              <Form className="mt-5 flex w-full flex-col gap-5">
                 <div className="flex flex-col">
                   <label htmlFor="category" className="text-lg font-semibold">
                     Category
@@ -100,7 +106,7 @@ export default function EditSubscription({
                     id="category"
                     name="category"
                     as="select"
-                    className="mt-2 rounded-md border p-2"
+                    className="mt-2 rounded-md border border-gray-500 p-2"
                   >
                     <option value="standard" label="Standard" />
                     <option value="professional" label="Professional" />
@@ -122,7 +128,7 @@ export default function EditSubscription({
                     name="price"
                     as="input"
                     type="number"
-                    className="mt-2 rounded-md border p-2"
+                    className="mt-2 rounded-md border border-gray-500 p-2"
                   />
                   <ErrorMessage
                     name="price"
@@ -139,7 +145,7 @@ export default function EditSubscription({
                     id="feature"
                     name="feature"
                     as="textarea"
-                    className="mt-2 rounded-md border p-2"
+                    className="mt-2 h-40 rounded-md border border-gray-500 p-2"
                     placeholder="Please seperate feature with comma"
                   />
                   <ErrorMessage
@@ -153,18 +159,33 @@ export default function EditSubscription({
                   </p>
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="mt-2 rounded-md bg-accent px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed"
-                >
-                  {isLoading ? "Saving..." : "Save Changes"}
-                </button>
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="confirmation"
+                    checked={isChecked}
+                    onChange={() => setIsChecked(!isChecked)}
+                    className="size-4"
+                  />
+                  <label htmlFor="confirmation" className="ml-2">
+                    Please check and confirm that all the inputs are correct.{" "}
+                  </label>
+                </div>
+
+                <div className="flex justify-end">
+                  <button
+                    type="submit"
+                    disabled={isEditing}
+                    className="mt-2 rounded-md bg-accent px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed"
+                  >
+                    {isEditing ? "Editing..." : "Edit Subscription"}
+                  </button>
+                </div>
               </Form>
-            )}
-          </Formik>
+            </Formik>
+          </div>
         </div>
-      </div>
-    </main>
+      )}
+    </>
   );
 }

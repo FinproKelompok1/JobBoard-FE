@@ -6,7 +6,7 @@ export async function getSubscriptions() {
 
     return response.data.subscriptions;
   } catch (error) {
-    console.log("Error get subscriptions:", error);
+    console.error("Error get subscriptions:", error);
   }
 }
 
@@ -16,7 +16,7 @@ export async function getSubscriptionById(subscriptionId: number) {
 
     return response.data.subscription;
   } catch (error) {
-    console.log("Error get subscriptions:", error);
+    console.error("Error get subscriptions:", error);
   }
 }
 
@@ -26,7 +26,7 @@ export async function deleteSubscription(id: number) {
 
     return response.data.message;
   } catch (error) {
-    console.log("Error get subscriptions:", error);
+    console.error("Error get subscriptions:", error);
   }
 }
 
@@ -36,7 +36,7 @@ export async function getSubscriptionUsers(id: number) {
 
     return response.data.subscriptionUsers;
   } catch (error) {
-    console.log("Error get subscription users:", error);
+    console.error("Error get subscription users:", error);
   }
 }
 
@@ -46,6 +46,6 @@ export async function getUserSubscription(username: string) {
 
     return response.data.userSubscription;
   } catch (error) {
-    console.log("Error get user subscription:", error);
+    console.error("Error get user subscription:", error);
   }
 }

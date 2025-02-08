@@ -19,7 +19,7 @@ export default function Subscription() {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchSubscriptions = async () => {
+    const fetchSubs = async () => {
       try {
         const subscriptions = await getSubscriptions();
         setSubscriptions(subscriptions);
@@ -30,7 +30,7 @@ export default function Subscription() {
       }
     };
 
-    fetchSubscriptions();
+    fetchSubs();
   }, []);
 
   const handleSubscribe = async () => {
@@ -53,7 +53,7 @@ export default function Subscription() {
     <main>
       <div className="flex w-screen flex-col items-center p-5 md:p-10">
         <h1 className="w-full text-center text-3xl font-bold text-primary">
-          Subscription List
+          Subscription Plan
         </h1>
 
         <div className="mt-5 flex flex-col items-start justify-center text-gray-700 md:items-center">
@@ -68,52 +68,56 @@ export default function Subscription() {
           </p>
         </div>
 
-        <div className="mt-7">
-          <div className="flex flex-wrap gap-5">
-            {subscriptions.map((subscription, index) => (
-              <div
-                key={index}
-                className="flex min-h-[300px] w-full flex-col justify-between rounded-lg border border-primary/20 p-5 shadow-md md:w-80"
-              >
-                <div className="flex flex-col gap-y-2">
-                  <h1 className="text-3xl font-bold text-accent">
-                    {subscription.category === "professional"
-                      ? "Professional"
-                      : "Standard"}
-                  </h1>
+        {isLoading ? (
+          <div className="mt-10 text-xl font-bold text-primary">Loading...</div>
+        ) : (
+          <div className="mt-10">
+            <div className="flex flex-wrap gap-5">
+              {subscriptions.map((subscription, index) => (
+                <div
+                  key={index}
+                  className="flex min-h-[300px] w-full flex-col justify-between rounded-xl border border-gray-500 p-5 shadow-md md:w-80"
+                >
+                  <div className="flex flex-col gap-y-2">
+                    <h1 className="text-3xl font-bold text-accent">
+                      {subscription.category === "professional"
+                        ? "Professional"
+                        : "Standard"}
+                    </h1>
 
-                  <p className="text-2xl font-medium text-primary">
-                    {CurrencyFormatter(subscription.price)}{" "}
-                    <span className="text-base font-normal">for 30 days</span>
-                  </p>
-                  <div className="text-lg text-primary">
-                    Features:
-                    {stringToArray(subscription.feature).map(
-                      (feature, index) => (
-                        <ol key={index} className="pl-4 text-lg text-primary">
-                          <li className="list-disc">{feature}</li>
-                        </ol>
-                      ),
-                    )}
+                    <p className="text-2xl font-medium text-primary">
+                      {CurrencyFormatter(subscription.price)}{" "}
+                      <span className="text-base font-normal">for 30 days</span>
+                    </p>
+                    <div className="text-lg text-primary">
+                      Features:
+                      {stringToArray(subscription.feature).map(
+                        (feature, index) => (
+                          <ol key={index} className="pl-4 text-lg text-primary">
+                            <li className="list-disc">{feature}</li>
+                          </ol>
+                        ),
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    <button
+                      onClick={() => {
+                        setSubscriptionId(subscription.id);
+                        setSubcriprionPrice(subscription.price);
+                        handleSubscribe();
+                      }}
+                      className="rounded-md bg-accent py-2 text-center font-semibold tracking-wide text-white transition-all duration-300 ease-in-out hover:bg-accent/80 hover:text-white"
+                    >
+                      Subscribe
+                    </button>
                   </div>
                 </div>
-
-                <div className="flex flex-col gap-3">
-                  <button
-                    onClick={() => {
-                      setSubscriptionId(subscription.id);
-                      setSubcriprionPrice(subscription.price);
-                      handleSubscribe();
-                    }}
-                    className="rounded-md bg-accent py-2 text-center font-semibold tracking-wide text-white transition-all duration-300 ease-in-out hover:bg-accent/80 hover:text-white"
-                  >
-                    Subscribe
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </main>
   );

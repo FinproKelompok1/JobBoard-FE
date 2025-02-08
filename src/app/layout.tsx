@@ -53,7 +53,6 @@ export default function RootLayout({
           draggable
           closeOnClick
           autoClose={5000}
-          theme="dark"
           position="bottom-right"
         />
       </body>

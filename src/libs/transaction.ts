@@ -6,7 +6,7 @@ export async function getTransactions() {
 
     return response.data.transactions;
   } catch (error) {
-    console.log("Error get transactions:", error);
+    console.error("Error get transactions:", error);
   }
 }
 
@@ -16,7 +16,7 @@ export async function getTransactionsById(transactionId: string) {
 
     return response.data.transaction;
   } catch (error) {
-    console.log("Error get transactions:", error);
+    console.error("Error get transactions:", error);
   }
 }
 
@@ -29,6 +29,6 @@ export async function getTransactionToken(id: string, amount: number) {
 
     return data.transactionToken;
   } catch (error) {
-    console.log("Error get transaction token:", error);
+    console.error("Error get transaction token:", error);
   }
 }

@@ -12,9 +12,11 @@ export default async function TransactionList() {
       <DeveloperSideBar />
 
       <div className="w-full overflow-x-auto p-5 md:p-10">
-        <h1 className="text-3xl font-bold text-primary">Transaction List</h1>
+        <h1 className="border-b border-gray-500 pb-5 text-3xl font-bold text-primary">
+          Transaction List
+        </h1>
 
-        <div className="mt-5 w-fit max-w-full overflow-x-auto rounded-lg border border-gray-300">
+        <div className="mt-10 max-w-full overflow-x-auto rounded-lg border border-gray-300">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-primary/10">
               <tr>

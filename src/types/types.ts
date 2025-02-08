@@ -3,6 +3,7 @@ export interface ISubscription {
   category: string;
   price: number;
   feature: string;
+  UserSubscription: { userId: number; isActive: boolean }[];
 }
 
 export interface ISubscriptionForm {
@@ -71,4 +72,30 @@ export interface IUserCv {
     skill: string;
     education: string;
   }[];
+}
+
+export interface IAssessmentForm {
+  title: string;
+  description: string;
+}
+
+export interface IAssessment {
+  id: number;
+  title: string;
+  description: string;
+  isActive: boolean;
+  AssessmentQuestion: IAssessmentQuestion[];
+}
+
+export interface IAssessmentQuestionForm {
+  question: string;
+  options: string[];
+  correctAnswer: string;
+}
+
+export interface IAssessmentQuestion {
+  id: number;
+  question: string;
+  options: string[];
+  correctAnswer: number;
 }

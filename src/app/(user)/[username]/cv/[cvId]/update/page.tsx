@@ -16,13 +16,14 @@ const validationSchema = Yup.object({
   education: Yup.string().required("Education is required"),
 });
 
-export default function EditCv({
+export default function UpdateCv({
   params,
 }: {
   params: { cvId: number; username: string };
 }) {
   const [cv, setCv] = useState<ICv | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -88,22 +89,22 @@ export default function EditCv({
           validationSchema={validationSchema}
           onSubmit={handleEditCv}
         >
-          <Form className="w-[750px] rounded-xl border-gray-500 md:border md:p-5 md:shadow-lg">
+          <Form className="flex w-[750px] flex-col gap-5 rounded-xl border-gray-500 md:border md:p-5 md:shadow-lg">
             <div className="">
               <h1 className="text-3xl font-bold text-primary">
                 Update Curriculum Vitae
               </h1>
             </div>
 
-            <div className="mt-4 flex flex-col gap-2">
+            <div className="flex flex-col gap-2">
               <label htmlFor="summary" className="text-xl font-bold">
                 Summary
               </label>
               <Field
                 name="summary"
                 as="textarea"
-                className="rounded-md border border-gray-500 p-2"
-                placeholder="Enter your summary"
+                className="h-40 rounded-md border border-gray-500 p-2"
+                placeholder="Please enter your summary"
               ></Field>
               <ErrorMessage
                 name="summary"
@@ -112,21 +113,21 @@ export default function EditCv({
               ></ErrorMessage>
             </div>
 
-            <div className="mt-4 flex flex-col gap-2">
+            <div className="flex flex-col gap-2">
               <label htmlFor="experience" className="text-xl font-bold">
                 Work Experience
               </label>
-              <p className="text-sm">
+              <p className="text-sm text-gray-700">
                 Format: Company Name, Position, Start Date, End Date,
-                Description ;
+                Description ; etc
               </p>
               <Field
                 name="experience"
                 as="textarea"
-                className="rounded-md border border-gray-500 p-2"
-                placeholder="Enter your experiences"
+                className="h-40 rounded-md border border-gray-500 p-2"
+                placeholder="Please enter your experiences"
               ></Field>
-              <p className="text-sm">
+              <p className="text-sm text-gray-700">
                 If you have multiple experiences, separate them with a semicolon
                 (;) and list them from latest to oldest.
               </p>
@@ -137,21 +138,21 @@ export default function EditCv({
               ></ErrorMessage>
             </div>
 
-            <div className="mt-4 flex flex-col gap-2">
+            <div className="flex flex-col gap-2">
               <label htmlFor="education" className="text-xl font-bold">
                 Education
               </label>
-              <p className="text-sm">
+              <p className="text-sm text-gray-700">
                 Format: School Name, Degree, Field of Study, Start Date, End
-                Date ;{" "}
+                Date ; etc
               </p>
               <Field
                 name="education"
                 as="textarea"
-                className="rounded-md border border-gray-500 p-2"
-                placeholder="Enter your educations"
+                className="h-40 rounded-md border border-gray-500 p-2"
+                placeholder="Please enter your educations"
               ></Field>
-              <p className="text-sm">
+              <p className="text-sm text-gray-700">
                 If you have multiple education, separate them with a semicolon
                 (;) and list them from latest to oldest.
               </p>
@@ -162,17 +163,20 @@ export default function EditCv({
               ></ErrorMessage>
             </div>
 
-            <div className="mt-4 flex flex-col gap-2">
+            <div className="flex flex-col gap-2">
               <label htmlFor="skill" className="text-xl font-bold">
                 Skills
               </label>
+              <p className="text-sm text-gray-700">
+                Format: Skill 1 ; Skill 2 ; Skill 3 ; etc
+              </p>
               <Field
                 name="skill"
                 as="textarea"
-                className="rounded-md border border-gray-500 p-2"
-                placeholder="Enter your skills"
+                className="h-40 rounded-md border border-gray-500 p-2"
+                placeholder="Please enter your skills"
               ></Field>
-              <p className="text-sm">
+              <p className="text-sm text-gray-700">
                 Seperate each skill with a semicolon (;)
               </p>
               <ErrorMessage
@@ -182,11 +186,24 @@ export default function EditCv({
               ></ErrorMessage>
             </div>
 
-            <div className="mt-4 flex justify-end">
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="confirmation"
+                checked={isChecked}
+                onChange={() => setIsChecked(!isChecked)}
+                className="size-4"
+              />
+              <label htmlFor="confirmation" className="ml-2">
+                Please check and confirm that all the inputs are correct.{" "}
+              </label>
+            </div>
+
+            <div className="flex justify-end">
               <button
                 type="submit"
-                disabled={isLoading}
-                className="mt-2 w-full rounded-md bg-accent px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed md:w-fit"
+                disabled={isLoading || !isChecked}
+                className="w-full rounded-md bg-accent px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/80 md:w-fit"
               >
                 {isLoading ? "Updating..." : "Update CV"}
               </button>
