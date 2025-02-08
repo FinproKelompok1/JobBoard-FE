@@ -55,6 +55,7 @@ export default function CreateAssessmentQuestion({
 
       toast.success(data.message);
       resetForm();
+      setIsChecked(false);
       await mutate();
     } catch (error) {
       toast.error("Error create assessment");
