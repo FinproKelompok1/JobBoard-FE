@@ -15,7 +15,7 @@ export interface IQueryContext {
 export const QueryContext = createContext<IQueryContext | null>(null)
 
 export default function JobsList() {
-  const [sort, setSort] = useState<string>('')
+  const [sort, setSort] = useState<string>('sort=asc')
   const [text, setText] = useState<string>('')
   const [search] = useDebounce(text, 800)
 
@@ -49,9 +49,7 @@ export default function JobsList() {
         </ul>
       </div>
       <QueryContext.Provider value={{ search, sort }}>
-        <div className="overflow-x-auto">
-          <JobsTable />
-        </div>
+        <JobsTable />
       </QueryContext.Provider>
     </>
   )

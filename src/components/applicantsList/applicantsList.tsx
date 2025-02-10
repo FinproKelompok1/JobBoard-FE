@@ -55,17 +55,15 @@ export default function ApplicantsList() {
           ) : null
         }
       </div>
-      <div className="overflow-x-auto">
-        <ApplicantsTable
-          search={search}
-          edu={edu}
-          sort={sort}
-          min_age={minAge}
-          max_age={maxAge}
-          min_salary={minSalary}
-          max_salary={maxSalary}
-        />
-      </div>
+      <ApplicantsTable
+        search={search}
+        edu={edu}
+        sort={sort}
+        min_age={minAge}
+        max_age={maxAge}
+        min_salary={minSalary}
+        max_salary={maxSalary}
+      />
     </div>
   )
 }
