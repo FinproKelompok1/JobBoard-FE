@@ -1,7 +1,10 @@
+import Graphics from "@/components/demographic/graphics";
+
 export default function DashboardPage() {
   return (
     <main>
-      <h1>WEBSITE ANALYTICS</h1>
+      <h1>DEMOGRAPHIC</h1>
+      <Graphics />
     </main>
   )
 }
