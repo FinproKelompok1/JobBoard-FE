@@ -42,7 +42,7 @@ export async function getSubscriptionUsers(id: number) {
 
 export async function getUserSubscription(username: string) {
   try {
-    const response = await axios.get(`/user-subscription/${username}`);
+    const response = await axios.get(`/user-subscriptions/${username}`);
 
     return response.data.userSubscription;
   } catch (error) {

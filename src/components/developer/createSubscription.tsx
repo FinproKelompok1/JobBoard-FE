@@ -40,12 +40,12 @@ export default function CreateSubscription() {
 
       toast.success(data.message);
       resetForm();
-      setIsModalOpen(false);
       router.refresh();
     } catch (error) {
       toast.error("Error creating subscription");
     } finally {
       setIsCreating(false);
+      setIsModalOpen(false);
     }
   };
 

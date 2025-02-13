@@ -1,7 +1,8 @@
 "use client";
 
-import CreateAssessmentQuestion from "@/components/developer/createQuestion";
+import CreateAssessmentQuestion from "@/components/developer/createAssessmentQuestion";
 import DeveloperSideBar from "@/components/developer/developerSideBar";
+import EditQuestion from "@/components/developer/editAssessmentQuestion";
 import { getAssessmentById, getAssessmentQuestions } from "@/libs/assessment";
 import { IAssessment, IAssessmentQuestion } from "@/types/types";
 import { useState } from "react";
@@ -26,7 +27,6 @@ export default function AssessmentQuestion({
 }) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const questionsPerPage = 5;
-
   const { data: assessment } = useSWR<IAssessment>(
     [`assessment-%${params.assessmentId}`, params.assessmentId],
     fetcher,
@@ -101,7 +101,7 @@ export default function AssessmentQuestion({
             </p>
           </div>
 
-          <p className="mt-2 text-lg">{assessment?.description}</p>
+          <p className="mt-2 max-w-3xl text-lg">{assessment?.description}</p>
         </div>
 
         <div className="mt-10 w-[1000px]">
@@ -109,15 +109,20 @@ export default function AssessmentQuestion({
             (assessmentQuestion.totalQuestions === 0 ? (
               <div>
                 <p className="text-xl text-primary">
-                  There is no question yet.
+                  There is no question yet. Please create 25 questions to
+                  activate this assessment.
                 </p>
               </div>
             ) : (
               assessmentQuestion.questions.map((question, index) => (
                 <div key={question.id} className="mb-5">
-                  <p className="text-xl font-semibold">
-                    {question.id}. {question.question}
-                  </p>
+                  <div className="flex items-center gap-5">
+                    <p className="text-xl font-semibold">
+                      {question.id}. {question.question}
+                    </p>
+                    <EditQuestion question={question} mutate={mutate} />
+                  </div>
+
                   <div className="ml-5 mt-2">
                     <ol className="list-lower-alpha text-lg">
                       {question.options.map((option, optionIndex) => (

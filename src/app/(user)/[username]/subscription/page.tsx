@@ -54,7 +54,7 @@ export default function UserSubscription({
   return (
     <main>
       <div className="flex flex-col items-center justify-center p-5 md:p-10">
-        <h1 className="w-full text-center text-3xl font-bold text-primary">
+        <h1 className="w-full border-b border-gray-500 pb-5 text-center text-3xl font-bold text-primary">
           My Subscription
         </h1>
 
@@ -70,7 +70,7 @@ export default function UserSubscription({
             return (
               <div
                 key={index}
-                className="mt-10 w-96 rounded-lg border border-gray-200 p-5 shadow-lg"
+                className="mt-10 w-96 rounded-lg border border-gray-500 p-5 shadow-lg"
               >
                 <div className="flex items-center justify-between gap-5">
                   <h1 className="text-3xl font-bold text-primary">
@@ -113,7 +113,9 @@ export default function UserSubscription({
                   {item.isActive ? (
                     <>
                       <button
-                        onClick={() => router.push("/assessment")}
+                        onClick={() =>
+                          router.push(`/${params.username}/assessment`)
+                        }
                         disabled={
                           item.subscription.category === "standard" &&
                           Number(item.assessmentCount) >= 2

@@ -1,67 +1,60 @@
 "use client";
 
 import axios from "@/helpers/axios";
-import { IAssessmentQuestionForm } from "@/types/types";
+import { IAssessmentQuestion, IAssessmentQuestionForm } from "@/types/types";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useState } from "react";
-import { FaPlus } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 
-const initialValues: IAssessmentQuestionForm = {
-  question: "",
-  options: ["", "", "", ""],
-  correctAnswer: "",
-};
-
 const validationSchema = Yup.object({
   question: Yup.string().required("Question is required"),
-  correctAnswer: Yup.string().required("Correct Answer is required"),
+  correctAnswer: Yup.string()
+    .required("Correct Answer is required")
+    .matches(/^[a-d]$/, "Correct Answer must be a, b, c, or d"),
   options: Yup.array()
     .of(Yup.string().required("Options is required"))
-    .min(4, "Please provide 4 options"),
+    .max(200, "Option must be at most 200 characters")
+    .required("Options is required"),
 });
 
-export default function CreateAssessmentQuestion({
-  assessmentId,
+export default function EditAssesmentQuestion({
+  question,
   mutate,
-  disabled,
 }: {
-  assessmentId: number;
+  question: IAssessmentQuestion;
   mutate: () => void;
-  disabled: boolean;
 }) {
-  const [isCreating, setIsCreating] = useState<boolean>(false);
-  const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [assessmentQuestion, setAssessmentQuestion] =
+    useState<IAssessmentQuestion>(question);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
 
-  const handleCreateQuestion = async (
-    values: IAssessmentQuestionForm,
-    { resetForm }: { resetForm: () => void },
-  ) => {
+  const indexToLetter = (index: number): string =>
+    String.fromCharCode(97 + index);
+
+  const initialValues: IAssessmentQuestionForm = {
+    question: question.question,
+    options: question.options,
+    correctAnswer: indexToLetter(question.correctAnswer),
+  };
+
+  const handleEditQuestion = async (values: IAssessmentQuestionForm) => {
     try {
-      setIsCreating(true);
+      setIsEditing(true);
+      await axios.patch(`/assessment-questions/${question.id}`, values);
 
-      const formattedValues = {
-        ...values,
-        options: values.options.map((option) => option.trim()),
-      };
-
-      const { data } = await axios.post(
-        `/assessments/${assessmentId}/questions`,
-        formattedValues,
-      );
-
-      toast.success(data.message);
-      resetForm();
-      setIsChecked(false);
-      await mutate();
-    } catch (error) {
-      toast.error("Error create assessment");
-    } finally {
-      setIsCreating(false);
+      toast.success("Question edited successfully");
+      mutate();
       setIsModalOpen(false);
+    } catch (error) {
+      console.error("Failed to edit question:", error);
+      toast.error("Failed to edit question");
+    } finally {
+      setIsEditing(false);
     }
   };
 
@@ -69,20 +62,17 @@ export default function CreateAssessmentQuestion({
     <>
       <button
         onClick={() => setIsModalOpen(true)}
-        disabled={disabled}
-        className="flex items-center gap-2 whitespace-nowrap rounded-md bg-accent px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/50"
+        className="mt-2 flex items-center justify-center gap-2 rounded-md border-2 border-accent px-2 py-1 text-center font-semibold tracking-wide text-accent transition-all duration-300 ease-in-out hover:bg-accent hover:text-white"
       >
-        <FaPlus size={18} />
-        Create Question
+        <FaEdit size={18} />
+        Edit
       </button>
 
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-full max-w-lg rounded-lg bg-white p-5 shadow-lg">
+          <div className="w-full max-w-xl rounded-lg bg-white p-5 shadow-lg">
             <div className="flex justify-between">
-              <h1 className="text-2xl font-bold text-primary">
-                Create Question
-              </h1>
+              <h1 className="text-2xl font-bold text-primary">Edit Question</h1>
               <button
                 onClick={() => setIsModalOpen(false)}
                 className="text-lg font-bold text-gray-600 hover:text-gray-800"
@@ -94,7 +84,7 @@ export default function CreateAssessmentQuestion({
             <Formik
               initialValues={initialValues}
               validationSchema={validationSchema}
-              onSubmit={handleCreateQuestion}
+              onSubmit={handleEditQuestion}
             >
               {({ values, setFieldValue }) => (
                 <Form className="mt-5 flex flex-col gap-5">
@@ -109,6 +99,9 @@ export default function CreateAssessmentQuestion({
                       className="mt-2 h-20 rounded-md border border-gray-500 p-2"
                       placeholder="Please enter question"
                     ></Field>
+                    <p className="text-sm text-gray-500">
+                      Option must be at most 200 characters
+                    </p>
                     <ErrorMessage
                       name="question"
                       component="div"
@@ -155,7 +148,7 @@ export default function CreateAssessmentQuestion({
                       name="correctAnswer"
                       as="input"
                       className="mt-2 rounded-md border border-gray-500 p-2"
-                      placeholder="Please enter the correct option letter (Example: a)"
+                      placeholder="Please enter the correct option: a, b, c, or d"
                     />
                     <ErrorMessage
                       name="correctAnswer"
@@ -180,10 +173,10 @@ export default function CreateAssessmentQuestion({
                   <div className="flex justify-end">
                     <button
                       type="submit"
-                      disabled={isCreating || !isChecked}
+                      disabled={isEditing || !isChecked}
                       className="rounded-md bg-accent px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/50"
                     >
-                      {isCreating ? "Creating..." : "Create Question"}
+                      {isEditing ? "Editing..." : "Edit Question"}
                     </button>
                   </div>
                 </Form>

@@ -1,6 +1,4 @@
 import DeveloperSideBar from "@/components/developer/developerSideBar";
-import DeveloperDashboardSideBar from "@/components/developer/developerSideBar";
-import { IoClose, IoMenu } from "react-icons/io5";
 
 export default function DeveloperDashboard() {
   return (

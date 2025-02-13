@@ -30,7 +30,7 @@ export default async function SubscriptionUsers({
           Category
         </h2>
 
-        <div className="mt-5 max-w-full overflow-x-auto rounded-lg border border-gray-300">
+        <div className="mt-5 max-w-full overflow-x-auto rounded-lg border border-gray-500">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-primary/10">
               <tr>

@@ -30,14 +30,14 @@ export default async function Assessment() {
               </p>
             </div>
           ) : (
-            <div className="flex">
+            <div className="flex flex-wrap gap-5">
               {assessments.map((assessment, index) => {
                 return (
                   <div
                     key={index}
-                    className="flex w-full flex-col rounded-xl border border-gray-500 p-5 shadow-md md:w-[700px]"
+                    className="flex min-h-56 w-full flex-col justify-between rounded-xl border border-gray-500 p-5 shadow-md md:max-w-[700px]"
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col-reverse items-start gap-3 md:flex-row md:items-center md:justify-between">
                       <h1 className="text-2xl font-bold text-primary">
                         {assessment.title}
                       </h1>
@@ -50,9 +50,7 @@ export default async function Assessment() {
                       />
                     </div>
 
-                    <p className="mt-4 text-justify">
-                      {assessment.description}
-                    </p>
+                    <p className="mt-4 items-start">{assessment.description}</p>
 
                     <div className="mt-5 flex gap-3">
                       <Link

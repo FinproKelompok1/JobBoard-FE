@@ -99,3 +99,10 @@ export interface IAssessmentQuestion {
   options: string[];
   correctAnswer: number;
 }
+
+export interface IUserAssessment {
+  userId: number;
+  assessmentId: number;
+  endTime: string;
+  assessment: { title: string };
+}

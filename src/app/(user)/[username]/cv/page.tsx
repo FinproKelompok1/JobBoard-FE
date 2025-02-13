@@ -56,10 +56,10 @@ export default function CurriculumVitae({
   };
 
   return (
-    <main className="flex flex-col items-center p-5">
-      <section className="flex flex-col items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-primary">
+    <main className="flex flex-col items-center p-5 md:p-10">
+      <section className="flex w-full flex-col">
+        <div className="flex flex-col items-center justify-center">
+          <h1 className="w-full border-b border-gray-500 pb-5 text-center text-3xl font-bold text-primary">
             My Curriculum Vitae
           </h1>
         </div>

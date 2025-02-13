@@ -16,8 +16,12 @@ const initialValues: IAssessmentForm = {
 };
 
 const validationSchema = Yup.object({
-  title: Yup.string().required("Title is required"),
-  description: Yup.string().required("Description is required"),
+  title: Yup.string()
+    .max(50, "Title must be at most 50 characters")
+    .required("Title is required"),
+  description: Yup.string()
+    .max(200, "Description must be at most 200 characters")
+    .required("Description is required"),
 });
 
 export default function CreateAssessment() {
@@ -108,6 +112,9 @@ export default function CreateAssessment() {
                     className="mt-2 h-40 rounded-md border border-gray-500 p-2"
                     placeholder="Please enter assessment's description"
                   />
+                  <p className="text-sm text-gray-500">
+                    Description must be at most 200 characters
+                  </p>
                   <ErrorMessage
                     name="description"
                     component="div"
