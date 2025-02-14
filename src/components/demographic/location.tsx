@@ -1,6 +1,6 @@
 import { ILocationDemography } from "@/types/analytics";
 import React, { useState, useCallback } from "react";
-import { BarChart, Bar, Cell, XAxis, YAxis, Tooltip } from "recharts";
+import { BarChart, Bar, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, Label, CartesianGrid } from "recharts";
 
 export default function LocationGraphic({ data }: { data: ILocationDemography[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -14,23 +14,30 @@ export default function LocationGraphic({ data }: { data: ILocationDemography[] 
   );
 
   return (
-    <div>
-      <p>Click each rectangle </p>
-      <BarChart width={730} height={250} data={data}>
-        <XAxis dataKey="city" />
-        <YAxis />
-        <Tooltip />
-        <Bar dataKey="total" onClick={handleClick}>
-          {data.map((entry, index) => (
-            <Cell
-              cursor="pointer"
-              fill={index === activeIndex ? "#82ca9d" : "#8884d8"}
-              key={`cell-${index}`}
-            />
-          ))}
-        </Bar>
-      </BarChart>
-      <p className="content">{`Amount of "${activeItem.city}": ${activeItem.total}`}</p>
+    <div className="h-[300px] w-full">
+      <ResponsiveContainer width='100%' height='100%'>
+        <BarChart data={data}>
+          <XAxis dataKey="city" />
+          <CartesianGrid strokeDasharray="3 3" />
+          <YAxis label={{
+            value: 'Location',
+            angle: -90,
+            position: 'insideLeft',
+            offset: 10,
+            style: { fontSize: 18, fill: "#000", fontWeight: 500 }
+          }} />
+          <Tooltip />
+          <Bar dataKey="total" onClick={handleClick}>
+            {data.map((_, index) => (
+              <Cell
+                cursor="pointer"
+                fill={index === activeIndex ? "#82ca9d" : "#8884d8"}
+                key={`cell-${index}`}
+              />
+            ))}
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 }

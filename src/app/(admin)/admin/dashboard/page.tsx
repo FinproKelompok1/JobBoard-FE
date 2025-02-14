@@ -1,10 +1,11 @@
-import Graphics from "@/components/demographic/graphics";
+import GraphicsDemogrphics from "@/components/demographic/graphicsDemogrphics";
 
 export default function DashboardPage() {
   return (
     <main>
-      <h1>DEMOGRAPHIC</h1>
-      <Graphics />
+      <div className="max-w-[940px] mx-auto">
+        <GraphicsDemogrphics />
+      </div>
     </main>
   )
 }

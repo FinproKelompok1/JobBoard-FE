@@ -1,6 +1,6 @@
 import { IGenderDemography } from "@/types/analytics";
 import React from "react";
-import { PieChart, Pie, Cell, Tooltip } from "recharts";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Label } from "recharts";
 
 interface ICustomizedLabel {
   cx: number
@@ -9,10 +9,11 @@ interface ICustomizedLabel {
   innerRadius: number
   outerRadius: number
   percent: number
+  type: string
 }
 
 export default function GenderGraphic({ data }: { data: IGenderDemography[] }) {
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+  const COLORS = ["#0088FE", "#00C49F"];
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
     cx,
@@ -21,11 +22,12 @@ export default function GenderGraphic({ data }: { data: IGenderDemography[] }) {
     innerRadius,
     outerRadius,
     percent,
+    type,
   }: ICustomizedLabel) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
-  
+
     return (
       <text
         x={x}
@@ -34,27 +36,36 @@ export default function GenderGraphic({ data }: { data: IGenderDemography[] }) {
         textAnchor={x > cx ? "start" : "end"}
         dominantBaseline="central"
       >
-        {`${(percent * 100).toFixed(0)}%`}
+        <tspan x={x} dy="-0.5em">{`${type[0].toUpperCase()}${type.slice(1)}`}</tspan>
+        <tspan x={x} dy="1.2em">{`${(percent * 100).toFixed(0)}%`}</tspan>
       </text>
     );
   };
   return (
-    <PieChart width={400} height={400}>
-      <Pie
-        data={data}
-        cx={200}
-        cy={200}
-        labelLine={false}
-        label={renderCustomizedLabel}
-        outerRadius={80}
-        fill="#8884d8"
-        dataKey="total"
-      >
-        <Tooltip />
-        {data.map((_, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-        ))}
-      </Pie>
-    </PieChart>
+    <ResponsiveContainer width='50%' height='100%'>
+      <PieChart>
+        <Tooltip
+          formatter={(value) => [`${value} People`]}
+          animationEasing="ease"
+        />
+        <text x="50%" y="10" textAnchor="middle" dominantBaseline="middle" fontSize={18} fill="#000" fontWeight={500}>
+          Gender
+        </text>
+        <Pie
+          data={data}
+          cx={223}
+          cy={150}
+          labelLine={false}
+          label={renderCustomizedLabel}
+          outerRadius={100}
+          fill="#8884d8"
+          dataKey="total"
+        >
+          {data.map((_, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
+      </PieChart>
+    </ResponsiveContainer>
   );
 }
