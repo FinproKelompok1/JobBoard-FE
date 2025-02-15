@@ -18,3 +18,18 @@ export interface IDemography {
   gender: IGenderDemography[];
   location: ILocationDemography[];
 }
+
+export interface IJobRole {
+  role: string
+  avgsalary: number
+}
+
+export interface IJobLocation {
+  city: string
+  avgsalary: number
+}
+
+export interface ISalaryTrend {
+  basedOnJobRole: IJobRole[]
+  basedOnJobLocation: IJobLocation[]
+}

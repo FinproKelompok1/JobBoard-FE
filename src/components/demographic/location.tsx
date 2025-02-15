@@ -26,7 +26,7 @@ export default function LocationGraphic({ data }: { data: ILocationDemography[] 
             offset: 10,
             style: { fontSize: 18, fill: "#000", fontWeight: 500 }
           }} />
-          <Tooltip />
+          <Tooltip cursor={{ fill: "transparent" }} />
           <Bar dataKey="total" onClick={handleClick}>
             {data.map((_, index) => (
               <Cell

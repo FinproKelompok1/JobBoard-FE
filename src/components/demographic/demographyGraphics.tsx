@@ -9,7 +9,7 @@ const GenderGraphic = dynamic(() => import("@/components/demographic/gender"), {
 const AgeGraphic = dynamic(() => import("@/components/demographic/age"), { ssr: false })
 const LocationGraphic = dynamic(() => import("@/components/demographic/location"), { ssr: false })
 
-export default function GraphicsDemogrphics() {
+export default function demographyGraphics() {
   const opt = {
     revalidateOnFocus: false,
     revalidateIfStale: false,
@@ -28,8 +28,8 @@ export default function GraphicsDemogrphics() {
 
   return (
     <div className="flex flex-col gap-10 shadow-xl border px-4 my-4 rounded-md">
-      <h1 className="text-xl font-medium mt-2 mb-10">DEMOGRAPHIC</h1>
-      <div className="flex h-[300px] w-full flex-col md:flex-row">
+      <h1 className="text-xl font-medium mt-2 mb-10">DEMOGRAPHICS</h1>
+      <div className="md:flex inline-flex flex-col md:flex-row">
         <GenderGraphic data={data.gender} />
         <AgeGraphic data={data.age} />
       </div>

@@ -1,10 +1,12 @@
-import GraphicsDemogrphics from "@/components/demographic/graphicsDemogrphics";
+import DemographyGraphics from "@/components/demographic/demographyGraphics";
+import SalaryTrendGraphics from "@/components/salaryTrend/salaryTrendGraphics";
 
 export default function DashboardPage() {
   return (
     <main>
       <div className="max-w-[940px] mx-auto">
-        <GraphicsDemogrphics />
+        <DemographyGraphics />
+        <SalaryTrendGraphics />
       </div>
     </main>
   )

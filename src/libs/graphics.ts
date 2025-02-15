@@ -9,3 +9,12 @@ export async function getDemography(url: string) {
     toastErrAxios(err);
   }
 }
+
+export async function getSalaryTrend(url:string) {
+  try {
+    const {data} = await axios.get(url)
+    return data.result
+  } catch (err) {
+    toastErrAxios(err)
+  }
+}

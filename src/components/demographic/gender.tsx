@@ -42,30 +42,32 @@ export default function GenderGraphic({ data }: { data: IGenderDemography[] }) {
     );
   };
   return (
-    <ResponsiveContainer width='50%' height='100%'>
-      <PieChart>
-        <Tooltip
-          formatter={(value) => [`${value} People`]}
-          animationEasing="ease"
-        />
-        <text x="50%" y="10" textAnchor="middle" dominantBaseline="middle" fontSize={18} fill="#000" fontWeight={500}>
-          Gender
-        </text>
-        <Pie
-          data={data}
-          cx={223}
-          cy={150}
-          labelLine={false}
-          label={renderCustomizedLabel}
-          outerRadius={100}
-          fill="#8884d8"
-          dataKey="total"
-        >
-          {data.map((_, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-          ))}
-        </Pie>
-      </PieChart>
-    </ResponsiveContainer>
+    <div className="h-[300px] flex-1">
+      <ResponsiveContainer width='100%' height='100%'>
+        <PieChart>
+          <Tooltip
+            formatter={(value) => [`${value} People`]}
+            animationEasing="ease"
+          />
+          <text x="50%" y="10" textAnchor="middle" dominantBaseline="middle" fontSize={18} fill="#000" fontWeight={500}>
+            Gender
+          </text>
+          <Pie
+            data={data}
+            cx='50%'
+            cy={150}
+            labelLine={false}
+            label={renderCustomizedLabel}
+            outerRadius='85%'
+            fill="#8884d8"
+            dataKey="total"
+          >
+            {data.map((_, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
   );
 }
