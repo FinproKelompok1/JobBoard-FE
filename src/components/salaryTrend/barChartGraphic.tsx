@@ -1,5 +1,5 @@
 import { formatRupiahTanpaDesimal } from "@/helpers/formatCurrency";
-import { IJobLocation } from "@/types/analytics";
+import { IJobLocation, IJobRole } from "@/types/analytics";
 import {
   Bar,
   BarChart,
@@ -17,7 +17,14 @@ interface ICustomYAxisTickProps {
   payload: { value: number }
 }
 
-export default function JobLocation({ data }: { data: IJobLocation[] }) {
+interface IProps {
+  data: IJobRole[] | IJobLocation[]
+  xlabel: string
+  xDataKey: string
+  barDataKey: string
+}
+
+export default function BarChartGraphic({ data, xlabel, xDataKey, barDataKey }: IProps) {
 
   const CustomYAxisTick = (props: ICustomYAxisTickProps) => {
     const { x, y, payload } = props;
@@ -40,14 +47,14 @@ export default function JobLocation({ data }: { data: IJobLocation[] }) {
 
   return (
     <ResponsiveContainer width='100%' height='100%'>
-      <BarChart data={data} margin={{ bottom: 20 }} >
-        <XAxis dataKey="city">
-          <Label value='By Job Location' position='insideBottom' fontSize={18} fill="#000" offset={-20} fontWeight='500' />
+      <BarChart data={data} margin={{ bottom: 20 }}>
+        <XAxis dataKey={xDataKey} tick={{ style: { fontSize: 12 } }}>
+          <Label value={xlabel} position='insideBottom' fontSize={18} fill="#000" offset={-10} fontWeight='500' />
         </XAxis>
         <CartesianGrid strokeDasharray="3 3" />
         <YAxis tick={(props) => <CustomYAxisTick {...props} />} />
         <Tooltip formatter={(value) => formatRupiahTanpaDesimal(Number(value))} cursor={{ fill: "transparent" }} />
-        <Bar dataKey="avgsalary" fill="#8884d8" />
+        <Bar dataKey={barDataKey} fill="#8884d8" />
       </BarChart>
     </ResponsiveContainer>
   )

@@ -2,12 +2,11 @@
 
 import { getDemography } from "@/libs/graphics";
 import { IDemography } from "@/types/analytics";
-import dynamic from "next/dynamic";
 import useSWR from "swr";
-
-const GenderGraphic = dynamic(() => import("@/components/demographic/gender"), { ssr: false })
-const AgeGraphic = dynamic(() => import("@/components/demographic/age"), { ssr: false })
-const LocationGraphic = dynamic(() => import("@/components/demographic/location"), { ssr: false })
+import EducationGraphic from "./education";
+import GenderGraphic from "@/components/demographic/gender";
+import AgeGraphic from "@/components/demographic/age";
+import LocationGraphic from "@/components/demographic/location";
 
 export default function demographyGraphics() {
   const opt = {
@@ -33,7 +32,10 @@ export default function demographyGraphics() {
         <GenderGraphic data={data.gender} />
         <AgeGraphic data={data.age} />
       </div>
-      <LocationGraphic data={data.location} />
+      <div className="md:flex inline-flex flex-col md:flex-row">
+        <LocationGraphic data={data.location} />
+        <EducationGraphic data={data.education} />
+      </div>
     </div>
   )
 }

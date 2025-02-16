@@ -1,5 +1,13 @@
 import { IAgeDemography } from "@/types/analytics";
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis
+} from "recharts";
 
 export default function AgeGraphic({ data }: { data: IAgeDemography[] }) {
 
@@ -7,7 +15,7 @@ export default function AgeGraphic({ data }: { data: IAgeDemography[] }) {
     <div className="h-[300px] flex-1">
       <ResponsiveContainer width='100%' height='100%'>
         <BarChart data={data} barSize={29}>
-          <XAxis dataKey="age" />
+          <XAxis dataKey="age" tick={{ style: { fontSize: 12 } }} />
           <CartesianGrid strokeDasharray="3 3" />
           <YAxis label={{
             value: 'Age',

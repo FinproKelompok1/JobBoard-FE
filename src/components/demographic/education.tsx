@@ -1,12 +1,7 @@
-import { IGenderDemography } from "@/types/analytics";
+import { eduFormatter } from "@/helpers/educationFormatter";
+import { IEducationDemography } from "@/types/analytics";
 import React from "react";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Label } from "recharts";
 
 interface ICustomizedLabel {
   cx: number
@@ -15,12 +10,11 @@ interface ICustomizedLabel {
   innerRadius: number
   outerRadius: number
   percent: number
-  type: string
+  education: string
 }
 
-export default function GenderGraphic({ data }: { data: IGenderDemography[] }) {
-  const COLORS = ["#0088FE", "#00C49F"];
-  const RADIAN = Math.PI / 180;
+export default function EducationGraphic({ data }: { data: IEducationDemography[] }) {
+  const COLORS = ["#4CAF50", "#0088FE", "#FFBB28", "#A569BD", "#E44D26"];
   const renderCustomizedLabel = ({
     cx,
     cy,
@@ -28,9 +22,10 @@ export default function GenderGraphic({ data }: { data: IGenderDemography[] }) {
     innerRadius,
     outerRadius,
     percent,
-    type,
+    education,
   }: ICustomizedLabel) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const RADIAN = Math.PI / 180;
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.65; // Sedikit lebih dalam untuk visibilitas lebih baik
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
@@ -39,11 +34,17 @@ export default function GenderGraphic({ data }: { data: IGenderDemography[] }) {
         x={x}
         y={y}
         fill="white"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fontSize={12}
+        fontWeight="bold"
       >
-        <tspan x={x} dy="-0.5em">{`${type[0].toUpperCase()}${type.slice(1)}`}</tspan>
-        <tspan x={x} dy="1.2em">{`${(percent * 100).toFixed(0)}%`}</tspan>
+        <tspan x={x} dy="-0.4em">
+          {eduFormatter(education)}
+        </tspan>
+        <tspan x={x} dy="1.2em">
+          {`${(percent * 100).toFixed(0)}%`}
+        </tspan>
       </text>
     );
   };
@@ -56,7 +57,7 @@ export default function GenderGraphic({ data }: { data: IGenderDemography[] }) {
             animationEasing="ease"
           />
           <text x="50%" y="10" textAnchor="middle" dominantBaseline="middle" fontSize={18} fill="#000" fontWeight={500}>
-            Gender
+            Education
           </text>
           <Pie
             data={data}

@@ -1,6 +1,15 @@
 import { ILocationDemography } from "@/types/analytics";
 import React, { useState, useCallback } from "react";
-import { BarChart, Bar, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, Label, CartesianGrid } from "recharts";
+import {
+  BarChart,
+  Bar,
+  Cell,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid
+} from "recharts";
 
 export default function LocationGraphic({ data }: { data: ILocationDemography[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -14,10 +23,10 @@ export default function LocationGraphic({ data }: { data: ILocationDemography[] 
   );
 
   return (
-    <div className="h-[300px] w-full">
+    <div className="h-[300px] flex-1">
       <ResponsiveContainer width='100%' height='100%'>
         <BarChart data={data}>
-          <XAxis dataKey="city" />
+          <XAxis dataKey="city" tick={{ style: { fontSize: 12 } }} />
           <CartesianGrid strokeDasharray="3 3" />
           <YAxis label={{
             value: 'Location',
