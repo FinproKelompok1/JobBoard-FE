@@ -5,18 +5,11 @@ import DeveloperSideBar from "@/components/developer/developerSideBar";
 import EditQuestion from "@/components/developer/editAssessmentQuestion";
 import { getAssessmentById, getAssessmentQuestions } from "@/libs/assessment";
 import { IAssessment, IAssessmentQuestion } from "@/types/types";
-import { useState } from "react";
 import useSWR from "swr";
 
-const fetcher = async ([url, id, page, limit]: [
-  string,
-  number,
-  number,
-  number,
-]) => {
+const fetcher = async ([url, id]: [string, number]) => {
   if (url.includes("assessment")) return await getAssessmentById(id);
-  if (url.includes("questions"))
-    return await getAssessmentQuestions(id, page, limit);
+  if (url.includes("questions")) return await getAssessmentQuestions(id);
   return null;
 };
 
@@ -25,8 +18,6 @@ export default function AssessmentQuestion({
 }: {
   params: { assessmentId: number };
 }) {
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const questionsPerPage = 5;
   const { data: assessment } = useSWR<IAssessment>(
     [`assessment-%${params.assessmentId}`, params.assessmentId],
     fetcher,
@@ -35,17 +26,7 @@ export default function AssessmentQuestion({
   const { data: assessmentQuestion, mutate } = useSWR<{
     questions: IAssessmentQuestion[];
     totalQuestions: number;
-    totalPages: number;
-    currentPage: number;
-  }>(
-    [
-      `questions-${params.assessmentId}`,
-      params.assessmentId,
-      currentPage,
-      questionsPerPage,
-    ],
-    fetcher,
-  );
+  }>([`questions-${params.assessmentId}`, params.assessmentId], fetcher);
 
   if (!assessment || !assessmentQuestion) {
     return (
@@ -59,15 +40,6 @@ export default function AssessmentQuestion({
   }
 
   const isMaxQuestions = assessmentQuestion.totalQuestions >= 25;
-
-  const totalPages = Math.ceil(
-    assessmentQuestion.totalQuestions / questionsPerPage,
-  );
-  const startIndex = (currentPage - 1) * questionsPerPage;
-  const paginatedQuestions = assessmentQuestion.questions.slice(
-    startIndex,
-    startIndex + questionsPerPage,
-  );
 
   return (
     <main className="flex">
@@ -118,7 +90,7 @@ export default function AssessmentQuestion({
                 <div key={question.id} className="mb-5">
                   <div className="flex items-center gap-5">
                     <p className="text-xl font-semibold">
-                      {question.id}. {question.question}
+                      {question.question} (ID: {question.id})
                     </p>
                     <EditQuestion question={question} mutate={mutate} />
                   </div>
@@ -142,30 +114,6 @@ export default function AssessmentQuestion({
                 </div>
               ))
             ))}
-        </div>
-
-        <div className="mt-5 flex justify-end">
-          <div className="flex w-fit items-center justify-between gap-5">
-            <button
-              className="rounded-md bg-accent px-4 py-2 text-white disabled:bg-gray-400"
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            >
-              Previous
-            </button>
-            <p className="text-lg font-semibold">
-              Page {currentPage} of {totalPages}
-            </p>
-            <button
-              className="rounded-md bg-accent px-4 py-2 text-white disabled:bg-gray-400"
-              disabled={currentPage === totalPages}
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-              }
-            >
-              Next
-            </button>
-          </div>
         </div>
       </div>
     </main>

@@ -1,6 +1,7 @@
 import CreateUserAssessment from "@/components/developer/createUserAssessment";
-import { getAssessments } from "@/libs/assessment";
-import { IAssessment } from "@/types/types";
+import { getAssessments, getUserAssessmentById } from "@/libs/assessment";
+import { getUserSubscription } from "@/libs/subscription";
+import { IAssessment, IUserSubscription } from "@/types/types";
 
 export default async function UserAssessmentList({
   params,
@@ -8,6 +9,15 @@ export default async function UserAssessmentList({
   params: { username: string };
 }) {
   const assessments: IAssessment[] = await getAssessments();
+  const userSubscription: IUserSubscription[] = await getUserSubscription(
+    params.username,
+  );
+
+  const isAssessmentLimit = userSubscription.some(
+    (userSubs) =>
+      userSubs.subscription.category === "standard" &&
+      userSubs.assessmentCount >= 2,
+  );
 
   return (
     <main>
@@ -15,6 +25,19 @@ export default async function UserAssessmentList({
         <div className="flex flex-col items-center justify-center gap-2 border-b border-gray-500 pb-5">
           <h1 className="text-3xl font-bold text-primary">Skill Assessment</h1>
         </div>
+
+        {isAssessmentLimit && (
+          <div className="mt-5 flex flex-col items-center justify-center">
+            <p className="text-xl font-semibold text-red-500">
+              You has reached the maximum assessment limit.
+            </p>
+            <p className="text-lg font-medium">
+              Please subscribe{" "}
+              <span className="font-bold">Profesional Category</span> for
+              unlimited assessment attempt.
+            </p>
+          </div>
+        )}
 
         <div className="mt-10">
           {assessments.filter((assessment) => assessment.isActive).length ===
@@ -39,10 +62,14 @@ export default async function UserAssessmentList({
                         </h1>
                       </div>
 
-                      <p className="mt-4">{assessment.description}</p>
+                      <p className="mt-4 text-lg">{assessment.description}</p>
 
                       <div className="mt-5 flex justify-end gap-3">
-                        <CreateUserAssessment username={params.username} assessmentId={assessment.id} />
+                        <CreateUserAssessment
+                          username={params.username}
+                          assessmentId={assessment.id}
+                          disabled={isAssessmentLimit}
+                        />
                       </div>
                     </div>
                   );

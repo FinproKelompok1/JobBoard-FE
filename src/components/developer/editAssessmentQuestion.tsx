@@ -62,7 +62,7 @@ export default function EditAssesmentQuestion({
     <>
       <button
         onClick={() => setIsModalOpen(true)}
-        className="mt-2 flex items-center justify-center gap-2 rounded-md border-2 border-accent px-2 py-1 text-center font-semibold tracking-wide text-accent transition-all duration-300 ease-in-out hover:bg-accent hover:text-white"
+        className="flex items-center justify-center gap-2 rounded-md border-2 border-accent px-2 py-1 text-center font-semibold tracking-wide text-accent transition-all duration-300 ease-in-out hover:bg-accent hover:text-white"
       >
         <FaEdit size={18} />
         Edit

@@ -56,7 +56,7 @@ export default function CreateAssessmentQuestion({
       };
 
       const { data } = await axios.post(
-        `/assessments/${assessmentId}/questions`,
+        `/assessment-questions/${assessmentId}`,
         formattedValues,
       );
 

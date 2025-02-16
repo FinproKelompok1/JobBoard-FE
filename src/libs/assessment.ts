@@ -40,8 +40,6 @@ export async function getUserAssessmentById(userAssessmentId: number) {
   try {
     const response = await axios.get(`/user-assessments/${userAssessmentId}`);
 
-    console.log("response:", response);
-
     return response.data.userAssessment;
   } catch (error) {
     console.error("Error get user assessment by ID:", error);

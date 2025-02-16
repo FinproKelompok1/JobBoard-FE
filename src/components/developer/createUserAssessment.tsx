@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "@/helpers/axios";
+import { toastErrAxios } from "@/helpers/toast";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -8,9 +9,11 @@ import { toast } from "react-toastify";
 export default function CreateUserAssessment({
   username,
   assessmentId,
+  disabled,
 }: {
   username: string;
   assessmentId: number;
+  disabled: boolean;
 }) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isCreating, setIsCreating] = useState<boolean>(false);
@@ -21,11 +24,10 @@ export default function CreateUserAssessment({
       setIsCreating(true);
       const { data } = await axios.post(`/user-assessments/${assessmentId}`);
 
-      toast.success(data.message);
       router.push(`/${username}/assessment/${data.userAssessmentId}`);
     } catch (error) {
       console.error("Error creating user assessment:", error);
-      toast.error("Error creating user assessment");
+      toastErrAxios(error);
     } finally {
       setIsCreating(false);
       setIsModalOpen(false);
@@ -36,7 +38,8 @@ export default function CreateUserAssessment({
     <>
       <button
         onClick={() => setIsModalOpen(true)}
-        className="rounded-md border-2 border-accent bg-accent px-4 py-2 text-center font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 hover:text-white"
+        disabled={disabled}
+        className="rounded-md border-2 border-accent bg-accent px-4 py-2 text-center font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 hover:text-white disabled:cursor-not-allowed disabled:bg-accent/70"
       >
         Start assessment
       </button>

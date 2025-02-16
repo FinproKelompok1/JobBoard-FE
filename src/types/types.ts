@@ -85,6 +85,7 @@ export interface IAssessment {
   description: string;
   isActive: boolean;
   AssessmentQuestion: IAssessmentQuestion[];
+  UserAssessment: { User: { username: true } };
 }
 
 export interface IAssessmentQuestionForm {
@@ -104,5 +105,14 @@ export interface IUserAssessment {
   userId: number;
   assessmentId: number;
   endTime: string;
-  assessment: { title: string };
+  assessment: {
+    title: string;
+    AssessmentQuestion: {
+      id: number;
+      question: string;
+      options: string[];
+      correctAnswer: number;
+    };
+  };
+  User: { username: string };
 }
