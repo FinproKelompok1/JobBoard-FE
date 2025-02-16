@@ -46,6 +46,12 @@ export interface IApplicantsInterestCategory {
   total: number;
 }
 
+export interface IExptectedSalary {
+  category: string;
+  avgsalary: number;
+}
+
 export interface IApplicantsInterest {
   basedOnJobCategory: IApplicantsInterestCategory[];
+  basedOnExpectedSalary: IExptectedSalary[];
 }

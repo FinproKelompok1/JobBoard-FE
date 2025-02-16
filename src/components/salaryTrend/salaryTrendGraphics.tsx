@@ -25,7 +25,7 @@ export default function SalaryTrendGraphics() {
 
   return (
     <div className="flex flex-col gap-10 shadow-xl border px-4 pb-4 my-4 rounded-md">
-      <h1 className="text-xl font-medium mt-2 mb-2">SALARY TREND</h1>
+      <h1 className="text-xl font-medium mt-2 mb-2">SALARY TREND EMPLOYEE</h1>
       <div className="h-[300px]">
         <BarChartGraphic data={data.basedOnJobRole} xlabel="By Role" xDataKey="role" barDataKey="avgsalary" />
       </div>

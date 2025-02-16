@@ -7,8 +7,8 @@ export default function DashboardPage() {
     <main>
       <div className="max-w-[940px] mx-auto">
         <DemographyGraphics />
-        <SalaryTrendGraphics />
         <ApplicantsInterestGraph />
+        <SalaryTrendGraphics />
       </div>
     </main>
   )

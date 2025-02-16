@@ -27,7 +27,7 @@ export default function demographyGraphics() {
 
   return (
     <div className="flex flex-col gap-10 shadow-xl border px-4 my-4 rounded-md">
-      <h1 className="text-xl font-medium mt-2 mb-10">DEMOGRAPHICS</h1>
+      <h1 className="text-xl font-medium mt-2 mb-10">APPLICANTS DEMOGRAPHICS</h1>
       <div className="md:flex inline-flex flex-col md:flex-row">
         <GenderGraphic data={data.gender} />
         <AgeGraphic data={data.age} />
