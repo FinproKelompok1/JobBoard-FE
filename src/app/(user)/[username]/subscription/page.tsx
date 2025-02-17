@@ -70,13 +70,14 @@ export default function UserSubscription({
             return (
               <div
                 key={index}
-                className="mt-10 w-96 rounded-lg border border-gray-500 p-5 shadow-lg"
+                className="mt-10 w-full rounded-lg border-gray-500 md:w-[410px] md:border md:p-5 md:shadow-lg"
               >
                 <div className="flex items-center justify-between gap-5">
                   <h1 className="text-3xl font-bold text-primary">
                     {item.subscription?.category === "professional"
                       ? "Professional"
-                      : "Standard"}
+                      : "Standard"}{" "}
+                    Plan
                   </h1>
                   <p
                     className={`${item.isActive ? "bg-green-500" : "bg-red-500"} w-fit rounded-lg px-2 py-1 font-medium tracking-wide text-white`}
@@ -94,17 +95,22 @@ export default function UserSubscription({
 
                 <div className="mt-2">
                   <p className="">
-                    Skill Assessment remaining:{" "}
+                    Skill Assessment Attempts Remaining:{" "}
                     {item.subscription.category === "professional" ? (
                       <span className="font-medium text-accent">Unlimited</span>
                     ) : (
-                      `${2 - Number(item.assessmentCount)}`
+                      <span className="font-semibold">
+                        {2 - Number(item.assessmentCount)}
+                      </span>
                     )}
                   </p>
                   {item.subscription.category === "standard" &&
                     Number(item.assessmentCount) >= 2 && (
                       <p className="text-sm text-red-500">
-                        You've reached the maximum Skill Assessment attempts.
+                        You have used all available Skill Assessment attempts.
+                        Please Upgrade to the{" "}
+                        <span className="font-semibold">Professional</span> plan
+                        for unlimited access.
                       </p>
                     )}
                 </div>
@@ -123,7 +129,7 @@ export default function UserSubscription({
                         className={`rounded-md py-2 text-center font-medium transition duration-300 ease-in-out ${
                           item.subscription.category === "standard" &&
                           Number(item.assessmentCount) >= 2
-                            ? "cursor-not-allowed bg-primary/50 text-white"
+                            ? "cursor-not-allowed bg-accent/50 text-white"
                             : "bg-accent text-white hover:bg-accent/80"
                         }`}
                       >
@@ -147,7 +153,7 @@ export default function UserSubscription({
                             disabled={isLoading}
                             className="w-full rounded-md bg-primary py-2 text-center font-medium text-white transition duration-300 ease-in-out hover:bg-primary/80 disabled:cursor-not-allowed disabled:bg-primary/80"
                           >
-                            {isLoading ? "Loading..." : "Renew Subscription"}
+                            {isLoading ? "Renewing..." : "Renew Subscription"}
                           </button>
                         </div>
                       )}
@@ -158,7 +164,9 @@ export default function UserSubscription({
                       disabled={isLoading}
                       className="rounded-md bg-accent py-2 text-center font-medium text-white transition duration-300 ease-in-out hover:bg-accent disabled:cursor-not-allowed disabled:bg-red-300"
                     >
-                      Activate Your Subscription
+                      {isLoading
+                        ? "Activating..."
+                        : "Activate Your Subscription"}
                     </button>
                   )}
                 </div>

@@ -25,7 +25,7 @@ const validationSchema = Yup.object({
 });
 
 export default function CreateAssessment() {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isCreating, setIsCreating] = useState<boolean>(false);
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const router = useRouter();
@@ -35,7 +35,7 @@ export default function CreateAssessment() {
     { resetForm }: { resetForm: () => void },
   ) => {
     try {
-      setIsLoading(true);
+      setIsCreating(true);
       const { data } = await axios.post("/assessments", values);
 
       toast.success(data.message);
@@ -45,7 +45,7 @@ export default function CreateAssessment() {
     } catch (error) {
       toast.error("Error create assessment");
     } finally {
-      setIsLoading(false);
+      setIsCreating(false);
     }
   };
 
@@ -138,10 +138,10 @@ export default function CreateAssessment() {
                 <div className="flex justify-end">
                   <button
                     type="submit"
-                    disabled={isLoading || !isChecked}
+                    disabled={isCreating || !isChecked}
                     className="rounded-md bg-accent px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/80"
                   >
-                    {isLoading ? "Creating..." : "Create Assessment"}
+                    {isCreating ? "Creating..." : "Create Assessment"}
                   </button>
                 </div>
               </Form>

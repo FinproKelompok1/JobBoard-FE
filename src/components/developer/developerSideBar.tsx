@@ -23,7 +23,9 @@ export default function DeveloperSideBar() {
         <nav className="flex h-full flex-col justify-between overflow-y-auto p-5 text-white">
           <div>
             <Image
-              src={"/logo-title-white.png"}
+              src={
+                "https://res.cloudinary.com/difaukz1b/image/upload/v1739765828/logo/a8bmafj8reccjcniaswh.png"
+              }
               alt="logo"
               width={200}
               height={200}

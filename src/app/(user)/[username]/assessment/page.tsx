@@ -29,12 +29,11 @@ export default async function UserAssessmentList({
         {isAssessmentLimit && (
           <div className="mt-5 flex flex-col items-center justify-center">
             <p className="text-xl font-semibold text-red-500">
-              You has reached the maximum assessment limit.
+              You have reached your assessment attempt limit.
             </p>
             <p className="text-lg font-medium">
-              Please subscribe{" "}
-              <span className="font-bold">Profesional Category</span> for
-              unlimited assessment attempt.
+              Please upgrade to <span className="font-bold">Profesional</span>{" "}
+              plan for unlimited assessment attempts.
             </p>
           </div>
         )}
@@ -54,7 +53,7 @@ export default async function UserAssessmentList({
                   return (
                     <div
                       key={index}
-                      className="flex min-h-56 w-full flex-col rounded-xl border border-gray-500 p-5 shadow-md md:w-[700px]"
+                      className="flex min-h-56 w-full flex-col border-gray-500 md:w-[700px] md:rounded-xl md:border md:p-5 md:shadow-md"
                     >
                       <div className="flex items-center justify-between">
                         <h1 className="text-2xl font-bold text-primary">
@@ -64,7 +63,7 @@ export default async function UserAssessmentList({
 
                       <p className="mt-4 text-lg">{assessment.description}</p>
 
-                      <div className="mt-5 flex justify-end gap-3">
+                      <div className="mt-5 flex gap-3 md:justify-end">
                         <CreateUserAssessment
                           username={params.username}
                           assessmentId={assessment.id}

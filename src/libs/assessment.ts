@@ -45,3 +45,13 @@ export async function getUserAssessmentById(userAssessmentId: number) {
     console.error("Error get user assessment by ID:", error);
   }
 }
+
+export async function getCertificateById(certificateId: number) {
+  try {
+    const response = await axios.get(`/user-assessments/${certificateId}`);
+
+    return response.data.certificate;
+  } catch (error) {
+    console.error("Error get certificate by ID:", error);
+  }
+}

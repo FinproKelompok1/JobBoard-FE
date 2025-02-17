@@ -102,9 +102,12 @@ export interface IAssessmentQuestion {
 }
 
 export interface IUserAssessment {
+  id: number;
   userId: number;
   assessmentId: number;
   endTime: string;
+  status: string;
+  score: number;
   assessment: {
     title: string;
     AssessmentQuestion: {
@@ -114,5 +117,6 @@ export interface IUserAssessment {
       correctAnswer: number;
     };
   };
-  User: { username: string };
+  User: { username: string; fullname: string };
+  certificate: { CertificateUrl: string; badgeName: string; badgeIcon: string };
 }

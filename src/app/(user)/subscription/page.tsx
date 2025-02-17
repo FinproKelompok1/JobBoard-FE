@@ -60,10 +60,10 @@ export default function Subscription() {
           <p className="text-left text-lg md:text-center md:text-xl">
             Take your career to the next level with the right plan!
           </p>
-          <p className="mt-2 text-left text-lg md:text-center md:text-xl">
+          <p className="text-left text-lg md:text-center md:text-xl">
             Unlock exclusive features for 30 days and gain a competitive edge.
           </p>
-          <p className="mt-3 text-left text-lg font-semibold md:text-center md:text-xl">
+          <p className="mt-1 text-left text-lg font-semibold text-primary md:text-center md:text-xl">
             Get started today—your future awaits!{" "}
           </p>
         </div>
@@ -82,7 +82,8 @@ export default function Subscription() {
                     <h1 className="text-3xl font-bold text-accent">
                       {subscription.category === "professional"
                         ? "Professional"
-                        : "Standard"}
+                        : "Standard"}{" "}
+                      Plan
                     </h1>
 
                     <p className="text-2xl font-medium text-primary">

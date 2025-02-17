@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   description:
     "Discover the perfect match for your career or hiring needs on Talent Bridge. Empowering job seekers and employers with a seamless platform for posting jobs, browsing opportunities, and building professional connections.",
   icons: {
-    icon: "/logo.png",
+    icon: "https://res.cloudinary.com/difaukz1b/image/upload/v1739765829/logo/cyivbskat7hf8dnbtahp.png",
   },
 };
 
