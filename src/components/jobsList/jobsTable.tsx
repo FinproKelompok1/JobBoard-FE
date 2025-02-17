@@ -14,6 +14,8 @@ import { QueryContext } from "./jobsList"
 import TotalApplicants from "./totalApplicants"
 import { sweetAlertWarning } from "@/helpers/sweetAlert"
 import Pagination from "../pagination"
+import SetPublish from "./setPublish"
+import SetPreTest from "./setPreTest"
 
 interface ISWR {
   jobs: IJob[],
@@ -22,7 +24,12 @@ interface ISWR {
 }
 
 export default function JobsTable() {
-  const opt = { revalidateOnFocus: false, revalidateIfStale: false, revalidateOnReconnect: false, revalidateOnMount: true }
+  const opt = {
+    revalidateOnFocus: false,
+    revalidateIfStale: false,
+    revalidateOnReconnect: false,
+    revalidateOnMount: true
+  }
   const context = useContext(QueryContext)
   if (!context) {
     throw new Error('There is no context')
@@ -43,18 +50,6 @@ export default function JobsTable() {
       const { data } = await axios.patch(`/jobs/delete/${jobId}`)
       mutate(`/jobs?${sort}&${search}`)
       mutate('/jobs/total')
-      toast.success(data.message)
-    } catch (err) {
-      toastErrAxios(err)
-    }
-  }
-
-  const handlePublish = async (jobId: string, isPublished: boolean) => {
-    const { isConfirmed } = await sweetAlertWarning('', "Yes, i'm sure")
-    if (!isConfirmed) return
-    try {
-      const { data } = await axios.patch(`/jobs/publish/${jobId}`, { isPublished })
-      mutate(`/jobs?${sort}&${search}`)
       toast.success(data.message)
     } catch (err) {
       toastErrAxios(err)
@@ -84,18 +79,14 @@ export default function JobsTable() {
                   return (
                     <tr key={item.id}>
                       <td>
-                        <label className="inline-flex items-center cursor-pointer">
-                          <input type="checkbox" onChange={() => handlePublish(item.id, !item.isPublished)} value={`${item.isPublished}`} className="sr-only peer" checked={item.isPublished} />
-                          <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
-                          <span className="ml-3 text-sm font-medium text-gray-900">{item.isPublished ? "published" : "unpublished"}</span>
-                        </label>
+                        <SetPublish item={item} />
                       </td>
                       <td>
                         <div className="font-medium border-b border-b-black w-fit">{item.title}</div>
                         <div>{item.category}</div>
                       </td>
                       <td><TotalApplicants jobId={item.id} /></td>
-                      <td>{String(item.isTestActive)}</td>
+                      <td><SetPreTest item={item} /></td>
                       <td>
                         <div className="flex items-center gap-4">
                           <EditJob job={item} />
