@@ -12,9 +12,11 @@ export default async function TransactionList() {
       <DeveloperSideBar />
 
       <div className="w-full overflow-x-auto p-5 md:p-10">
-        <h1 className="text-primary text-3xl font-bold">Transaction List</h1>
+        <h1 className="border-b border-gray-500 pb-5 text-3xl font-bold text-primary">
+          Transaction List
+        </h1>
 
-        <div className="mt-5 w-fit max-w-full overflow-x-auto rounded-lg border border-gray-300">
+        <div className="mt-10 max-w-full overflow-x-auto rounded-lg border border-gray-500">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-primary/10">
               <tr>
@@ -56,7 +58,7 @@ export default async function TransactionList() {
                   </td>
                   <td className="border-r px-4 py-2">
                     <span
-                      className={`text-primary rounded-full px-3 py-1 text-left text-sm tracking-wide ${transaction.status === "pending" ? "bg-yellow-200" : transaction.status === "settlement" ? "bg-green-200" : "bg-red-200"} `}
+                      className={`rounded-full px-3 py-1 text-left text-sm tracking-wide text-primary ${transaction.status === "pending" ? "bg-yellow-200" : transaction.status === "settlement" ? "bg-green-200" : "bg-red-200"} `}
                     >
                       {transaction.status === "pending"
                         ? "Pending"

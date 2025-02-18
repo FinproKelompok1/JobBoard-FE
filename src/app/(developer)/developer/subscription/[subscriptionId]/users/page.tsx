@@ -19,21 +19,24 @@ export default async function SubscriptionUsers({
     <main className="flex">
       <DeveloperSideBar />
 
-      <div className="w-screen p-5 md:p-10">
+      <div className="w-full overflow-x-auto p-5 md:p-10">
         <h1 className="w-full text-3xl font-bold text-primary">
           Subscription Users
         </h1>
         <h2 className="mt-3 text-xl font-semibold text-accent">
-          Category{" "}
           {subscription.category === "professional"
             ? "Professional"
-            : "Standard"}
+            : "Standard"}{" "}
+          Category
         </h2>
 
-        <div className="mt-5">
+        <div className="mt-5 max-w-full overflow-x-auto rounded-lg border border-gray-500">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-primary/10">
               <tr>
+                <th className="table-head border-b border-r border-gray-300">
+                  Full Name
+                </th>
                 <th className="table-head border-b border-r border-gray-300">
                   User Email
                 </th>
@@ -44,7 +47,7 @@ export default async function SubscriptionUsers({
                   End Date
                 </th>
                 <th className="table-head border-b border-r border-gray-300">
-                  Assessment Count
+                  Assessment
                 </th>
                 <th className="table-head border-b border-r border-gray-300">
                   Status
@@ -54,6 +57,9 @@ export default async function SubscriptionUsers({
             <tbody className="divide-y divide-gray-200 bg-white">
               {subscriptionUsers.map((item, index) => (
                 <tr key={index}>
+                  <td className="table-data border-b border-r border-gray-300">
+                    {item.user.fullname}
+                  </td>
                   <td className="table-data border-b border-r border-gray-300">
                     {item.user.email}
                   </td>

@@ -6,24 +6,21 @@ export async function getTransactions() {
 
     return response.data.transactions;
   } catch (error) {
-    console.log("Error get transactions:", error);
+    console.error("Error get transactions:", error);
   }
 }
 
-export async function getTransactionsById(id: string) {
+export async function getTransactionsById(transactionId: string) {
   try {
-    const response = await axios.get(`/transactions/${id}`);
+    const response = await axios.get(`/transactions/${transactionId}`);
 
     return response.data.transaction;
   } catch (error) {
-    console.log("Error get transactions:", error);
+    console.error("Error get transactions:", error);
   }
 }
 
-export async function getTransactionToken(
-  id: string,
-  amount: number,
-) {
+export async function getTransactionToken(id: string, amount: number) {
   try {
     const { data } = await axios.post("/transactions/payment", {
       order_id: id,
@@ -32,6 +29,6 @@ export async function getTransactionToken(
 
     return data.transactionToken;
   } catch (error) {
-    console.log("Error get transaction token:", error);
+    console.error("Error get transaction token:", error);
   }
 }

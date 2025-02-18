@@ -6,17 +6,17 @@ export async function getSubscriptions() {
 
     return response.data.subscriptions;
   } catch (error) {
-    console.log("Error get subscriptions:", error);
+    console.error("Error get subscriptions:", error);
   }
 }
 
-export async function getSubscriptionById(id: number) {
+export async function getSubscriptionById(subscriptionId: number) {
   try {
-    const response = await axios.get(`/subscriptions/${id}`);
+    const response = await axios.get(`/subscriptions/${subscriptionId}`);
 
     return response.data.subscription;
   } catch (error) {
-    console.log("Error get subscriptions:", error);
+    console.error("Error get subscriptions:", error);
   }
 }
 
@@ -26,7 +26,7 @@ export async function deleteSubscription(id: number) {
 
     return response.data.message;
   } catch (error) {
-    console.log("Error get subscriptions:", error);
+    console.error("Error get subscriptions:", error);
   }
 }
 
@@ -36,6 +36,16 @@ export async function getSubscriptionUsers(id: number) {
 
     return response.data.subscriptionUsers;
   } catch (error) {
-    console.log("Error get subscription users:", error);
+    console.error("Error get subscription users:", error);
+  }
+}
+
+export async function getUserSubscription(username: string) {
+  try {
+    const response = await axios.get(`/user-subscriptions/${username}`);
+
+    return response.data.userSubscription;
+  } catch (error) {
+    console.error("Error get user subscription:", error);
   }
 }
