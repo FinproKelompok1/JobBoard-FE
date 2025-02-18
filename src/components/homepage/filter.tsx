@@ -1,4 +1,5 @@
 'use client'
+import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 
 interface Province {
@@ -11,13 +12,33 @@ interface City {
   name: string;
 }
 
-export default function JobFilter() {
+interface JobFilterProps {
+  onSearch?: (filters: FilterParams) => void;
+  isHero?: boolean;
+  className?: string;
+  initialFilters?: FilterParams;
+}
+
+export interface FilterParams {
+  searchTerm: string;
+  category: string;
+  province: string;
+  city: string;
+}
+
+export default function JobFilter({ 
+  onSearch, 
+  isHero = false, 
+  className = "",
+  initialFilters
+}: JobFilterProps) {
+  const router = useRouter();
   const [provinces, setProvinces] = useState<Province[]>([]);
   const [cities, setCities] = useState<City[]>([]);
-  const [selectedProvince, setSelectedProvince] = useState<string>('');
-  const [selectedCity, setSelectedCity] = useState<string>('');
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedProvince, setSelectedProvince] = useState<string>(initialFilters?.province || '');
+  const [selectedCity, setSelectedCity] = useState<string>(initialFilters?.city || '');
+  const [searchTerm, setSearchTerm] = useState<string>(initialFilters?.searchTerm || '');
+  const [selectedCategory, setSelectedCategory] = useState<string>(initialFilters?.category || '');
 
   const categories = [
     'Accountancy',
@@ -63,27 +84,40 @@ export default function JobFilter() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({
+    const filters = {
       searchTerm,
-      selectedCategory,
-      selectedProvince,
-      selectedCity
-    });
+      category: selectedCategory,
+      province: selectedProvince,
+      city: selectedCity
+    };
+
+    if (isHero) {
+      const queryString = new URLSearchParams({
+        search: searchTerm,
+        category: selectedCategory,
+        province: selectedProvince,
+        city: selectedCity
+      }).toString();
+      
+      router.push(`/jobs?${queryString}`);
+    } else {
+      onSearch?.(filters);
+    }
   };
 
   return (
-    <form onSubmit={handleSearch} className="flex items-center gap-4">
+    <form onSubmit={handleSearch} className={`flex items-center gap-4 ${className}`}>
       <input
         type="text"
         value={searchTerm}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+        onChange={(e) => setSearchTerm(e.target.value)}
         placeholder="Job Title, Skills, Keywords"
         className="flex-1 p-3 rounded bg-white/80 backdrop-blur border border-white/20 placeholder:text-gray-500 text-gray-800"
       />
 
       <select
         value={selectedCategory}
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedCategory(e.target.value)}
+        onChange={(e) => setSelectedCategory(e.target.value)}
         className="p-3 rounded bg-white/80 backdrop-blur border border-white/20 text-gray-800"
       >
         <option value="">Any Category</option>
@@ -96,7 +130,7 @@ export default function JobFilter() {
 
       <select
         value={selectedProvince}
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+        onChange={(e) => {
           setSelectedProvince(e.target.value);
           setSelectedCity('');
         }}
@@ -112,7 +146,7 @@ export default function JobFilter() {
 
       <select
         value={selectedCity}
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedCity(e.target.value)}
+        onChange={(e) => setSelectedCity(e.target.value)}
         className="p-3 rounded bg-white/80 backdrop-blur border border-white/20 text-gray-800"
         disabled={!selectedProvince}
       >
