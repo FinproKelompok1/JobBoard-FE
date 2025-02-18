@@ -57,9 +57,9 @@ export default function Hero() {
         </div>
 
         <div className="bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20">
-          <JobFilter />
-        </div>
+        <JobFilter isHero={true} />
       </div>
+    </div>
     </div>
   );
 }
