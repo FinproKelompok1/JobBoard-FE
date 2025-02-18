@@ -2,20 +2,30 @@
 import React from 'react';
 
 interface NavLinksProps {
+  isHomePage: boolean;
   isScrolled: boolean;
 }
 
-export default function NavLinks({ isScrolled }: NavLinksProps) {
+export default function NavLinks({ isHomePage, isScrolled }: NavLinksProps) {
+  const navigationItems = [
+    { label: 'FIND GREAT JOBS', path: '/jobs' },
+    { label: 'FIND TOP EMPLOYERS', path: '/companies' },
+    { label: 'ABOUT US', path: '/about-us' }
+  ];
+
+
+  const textColor = isHomePage
+    ? (isScrolled ? 'text-[#0D3880]' : 'text-[#FFFFFF]')
+    : 'text-[#0D3880]';
+
   return (
-    ['FIND GREAT JOBS', 'ABOUT US', 'CONTACT US'].map((item) => (
+    navigationItems.map(({ label, path }) => (
       <a
-        key={item}
-        href="#"
-        className={`font-medium hover:text-[#E60278] transition-colors ${
-          isScrolled ? 'text-[#0D3880]' : 'text-[#FFFFFF]'
-        }`}
+        key={label}
+        href={path}
+        className={`font-medium hover:text-[#E60278] transition-colors ${textColor}`}
       >
-        {item}
+        {label}
       </a>
     ))
   );
