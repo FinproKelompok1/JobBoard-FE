@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import SelectDate from './selectDate';
 import RichTextEditor from './textEditor';
 import { FormValueJob } from '@/types/form';
-import { jobSchema } from '@/libs/formSchemas';
+import { jobInitialValue, jobSchema } from '@/libs/jobSchemas';
 import axios from '@/helpers/axios'
 import { toastErrAxios } from '@/helpers/toast'
 import SelectProvince from './selectProvince'
@@ -18,19 +18,6 @@ import { BannerUploader } from './bannerUploader'
 export default function CreateJob() {
   const [isLoading, SetIsLoading] = useState<boolean>(false);
   const [provinceId, setProvinceId] = useState<string>('')
-
-  const initialValue: FormValueJob = {
-    title: '',
-    role: '',
-    banner: null,
-    endDate: '',
-    province: '',
-    salary: '',
-    city: '',
-    category: '',
-    description: '<h1>Requirements</h1><br/><h1>Responsibilities</h1>',
-    tags: '',
-  }
 
   const handleAdd = async (job: FormValueJob) => {
     try {
@@ -55,7 +42,7 @@ export default function CreateJob() {
   return (
     <div className='max-w-[940px] xl:mx-auto mx-4'>
       <Formik
-        initialValues={initialValue}
+        initialValues={jobInitialValue}
         validationSchema={jobSchema}
         onSubmit={(values, action) => {
           action.resetForm()

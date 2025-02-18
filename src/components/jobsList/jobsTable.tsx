@@ -48,8 +48,7 @@ export default function JobsTable() {
     if (!isConfirmed) return
     try {
       const { data } = await axios.patch(`/jobs/delete/${jobId}`)
-      mutate(`/jobs?${sort}&${search}`)
-      mutate('/jobs/total')
+      mutate((key: string) => key.startsWith(`/jobs`));
       toast.success(data.message)
     } catch (err) {
       toastErrAxios(err)
@@ -79,14 +78,14 @@ export default function JobsTable() {
                   return (
                     <tr key={item.id}>
                       <td>
-                        <SetPublish item={item} />
+                        <SetPublish jobId={item.id} isJobPublished={item.isPublished} />
                       </td>
                       <td>
                         <div className="font-medium border-b border-b-black w-fit">{item.title}</div>
                         <div>{item.category}</div>
                       </td>
                       <td><TotalApplicants jobId={item.id} /></td>
-                      <td><SetPreTest item={item} /></td>
+                      <td><SetPreTest jobId={item.id} isTestValue={item.isTestActive} /></td>
                       <td>
                         <div className="flex items-center gap-4">
                           <EditJob job={item} />
