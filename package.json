@@ -9,8 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-alert-dialog": "^1.1.6",
+    "@radix-ui/react-dialog": "^1.1.6",
+    "@radix-ui/react-slot": "^1.1.2",
     "axios": "^1.7.9",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "dompurify": "^3.2.4",
     "formik": "^2.4.6",
+    "jwt-decode": "^4.0.0",
+    "lucide-react": "^0.475.0",
     "next": "14.2.16",
     "react": "^18",
     "react-dom": "^18",
@@ -19,6 +27,8 @@
     "react-toastify": "^11.0.3",
     "sweetalert2": "^11.6.13",
     "swr": "^2.3.0",
+    "tailwind-merge": "^3.0.1",
+    "tailwindcss-animate": "^1.0.7",
     "use-debounce": "^10.0.4",
     "yup": "^1.6.1"
   },

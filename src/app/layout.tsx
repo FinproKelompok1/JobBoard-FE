@@ -4,6 +4,8 @@ import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Script from "next/script";
+import NavbarWrapper from "@/components/navbar/navbarWrapper";
+import FooterWrapper from "@/components/footer/footerWrapper";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -42,6 +44,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <NavbarWrapper/>
         <ToastContainer
           draggable
           closeOnClick
@@ -56,6 +59,7 @@ export default function RootLayout({
           theme="dark"
           position="bottom-right"
         />
+        <FooterWrapper/>
       </body>
     </html>
   );

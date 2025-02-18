@@ -1,14 +1,15 @@
+'use client';
+
 import Hero from "@/components/homepage/hero";
 import DiscoverySection from "@/components/homepage/jobDiscovery";
-import Navbar from "@/components/navbar/navbar";
-
+import CompanyDiscovery from "@/components/homepage/companyDiscover";
 
 export default function Home() {
   return (
     <div>
-      <Navbar />
       <Hero />
       <DiscoverySection />
+      <CompanyDiscovery />
     </div>
   );
 }
