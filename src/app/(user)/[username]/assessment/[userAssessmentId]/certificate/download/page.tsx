@@ -51,12 +51,32 @@ export default async function CertificateFormat({
           <p className="text-lg">
             For completing Talent Bridge's Skill Assessment:
           </p>
-          <p className="mt-5 text-3xl font-medium">
-            {userAssessment.assessment.title}
-          </p>
-          <p className="mt-5 text-lg">Date: {formattedDate}</p>
+          <div className="mt-5 flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center rounded-xl border bg-primary p-1">
+              <Image
+                src={`${userAssessment.certificate.badgeIcon}`}
+                alt="badge image"
+                width={100}
+                height={100}
+                className="w-14"
+              />
+              <span className="text-lg font-bold text-white">
+                -
+                {userAssessment.assessment.title
+                  .split(" ")
+                  .map((word) => word[0])
+                  .join("")
+                  .toUpperCase()}
+                -
+              </span>
+            </div>
+            <p className="text-3xl font-medium">
+              {userAssessment.assessment.title}
+            </p>
+          </div>
         </div>
         <div className="mt-10 flex flex-col items-center">
+          <p>Completed on {formattedDate}</p>
           <p>
             Certificate ID:{" "}
             <span className="font-semibold">{certificateId}</span>

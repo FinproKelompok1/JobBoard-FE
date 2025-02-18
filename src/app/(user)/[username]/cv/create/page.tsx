@@ -47,14 +47,14 @@ export default function CreateCv({ params }: { params: { username: string } }) {
   };
 
   return (
-    <main>
-      <div className="flex items-center justify-center p-5 md:p-10">
+    <main className="bg-gray-100">
+      <div className="flex items-center justify-center md:p-10">
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={handleCreateCv}
         >
-          <Form className="flex w-[750px] flex-col gap-5 rounded-xl border-gray-500 md:border md:p-5 md:shadow-lg">
+          <Form className="flex w-[750px] flex-col gap-5 rounded-xl bg-white p-5 md:border md:shadow-lg">
             <div className="">
               <h1 className="text-3xl font-bold text-primary">
                 Create Curriculum Vitae

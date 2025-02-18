@@ -71,13 +71,13 @@ export default function TransactionDetail({
   };
 
   return (
-    <main className="flex">
+    <main className="min-h-screen bg-gray-100">
       <div className="flex w-screen flex-col items-center p-5 md:p-10">
-        <h1 className="w-full text-center text-3xl font-bold text-primary">
+        <h1 className="w-full border-b border-gray-500 pb-5 text-center text-3xl font-bold text-primary">
           Transaction Detail
         </h1>{" "}
         {transaction && (
-          <div className="mt-5 w-screen overflow-x-auto rounded-lg border border-primary/20 p-5 shadow-lg sm:w-fit">
+          <div className="mt-10 w-screen overflow-x-auto rounded-xl border bg-white p-5 shadow-lg sm:w-fit">
             <table>
               <tbody>
                 <tr>
@@ -98,7 +98,7 @@ export default function TransactionDetail({
                     {transaction.subscription.category === "professional"
                       ? ": Professional"
                       : ": Standard"}{" "}
-                    Category
+                    Plan
                   </td>
                 </tr>
                 <tr>
@@ -130,7 +130,7 @@ export default function TransactionDetail({
             </table>
 
             {transaction.status !== "settlement" && timeLeft && (
-              <div className="mt-5 text-center text-red-500">
+              <div className="mt-5 text-center font-medium text-red-500">
                 {timeLeft === "Expired"
                   ? "Transaction expired"
                   : `Expires in: ${timeLeft}`}

@@ -28,7 +28,7 @@ export default async function UserAssessmentCertificate({
     )}-${userAssessment.endTime.slice(0, 10).replace(/-/g, "")}-${userAssessment.id}`;
 
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center bg-gray-100">
+    <div className="flex min-h-screen w-full flex-col bg-gray-100 p-5 md:items-center md:justify-center">
       <div className="mb-5">
         <DownloadCertificate userAssessment={userAssessment} />
       </div>
@@ -42,7 +42,7 @@ export default async function UserAssessmentCertificate({
             className="w-80"
           ></Image>
         </div>
-        <h1 className="mt-10 text-center text-7xl font-medium text-primary">
+        <h1 className="mt-10 text-center text-7xl font-semibold text-primary">
           Certificate of Completion
         </h1>
         <div className="mt-10 flex flex-col items-center">
@@ -55,12 +55,31 @@ export default async function UserAssessmentCertificate({
           <p className="text-lg">
             For completing Talent Bridge's Skill Assessment:
           </p>
-          <p className="mt-5 text-3xl font-medium">
-            {userAssessment.assessment.title}
-          </p>
-          <p className="mt-5 text-lg">Date: {formattedDate}</p>
+          <div className="mt-5 flex flex-col items-center justify-center gap-2">
+            <p className="text-3xl font-medium">
+              {userAssessment.assessment.title}
+            </p>
+            <div className="flex flex-col items-center justify-center rounded-xl border bg-primary p-1">
+              <Image
+                src={`${userAssessment.certificate.badgeIcon}`}
+                alt="badge image"
+                width={100}
+                height={100}
+                className="w-14"
+              />
+              <span className="text-lg font-bold tracking-widest text-white">
+                {userAssessment.assessment.title
+                  .split(" ")
+                  .map((word) => word[0])
+                  .join("")
+                  .toUpperCase()}
+              </span>
+            </div>
+          </div>
         </div>
+
         <div className="mt-10 flex flex-col items-center">
+          <p>Completed on {formattedDate}</p>
           <p>
             Certificate ID:{" "}
             <span className="font-semibold">{certificateId}</span>

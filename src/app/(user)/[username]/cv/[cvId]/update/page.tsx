@@ -44,9 +44,6 @@ export default function UpdateCv({
     }
   }, [params.cvId]);
 
-  console.log("cv", cv);
-  console.log("cv ID", params.cvId);
-
   const initialValues: ICvForm = {
     summary: cv?.summary || "",
     experience: cv?.experience || "",
@@ -82,14 +79,14 @@ export default function UpdateCv({
   }
 
   return (
-    <main>
-      <div className="flex items-center justify-center p-5 md:p-10">
+    <main className="bg-gray-100">
+      <div className="flex items-center justify-center md:p-10">
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={handleEditCv}
         >
-          <Form className="flex w-[750px] flex-col gap-5 rounded-xl border-gray-500 md:border md:p-5 md:shadow-lg">
+          <Form className="flex w-[750px] flex-col gap-5 rounded-xl bg-white p-5 shadow-lg md:border">
             <div className="">
               <h1 className="text-3xl font-bold text-primary">
                 Update Curriculum Vitae

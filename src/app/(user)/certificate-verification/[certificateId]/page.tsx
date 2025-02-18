@@ -30,8 +30,8 @@ export default async function CertificateVerification({
     )}-${userAssessment.endTime.slice(0, 10).replace(/-/g, "")}-${userAssessment.id}`;
 
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center bg-gray-100">
-      <div className="h-[797px] w-[1123px] border-l-[20px] border-r-[20px] border-accent bg-white p-10 px-5 shadow-lg">
+    <div className="flex min-h-screen w-full flex-col p-5 md:items-center md:justify-center md:bg-gray-100">
+      <div className="h-[797px] w-[1123px] border-l-[20px] border-r-[20px] border-accent bg-white p-10 px-5 md:shadow-lg">
         <div className="flex items-center justify-center">
           <Image
             src="https://res.cloudinary.com/difaukz1b/image/upload/v1739765828/logo/smysmsf93hhdfdc2guw9.png"

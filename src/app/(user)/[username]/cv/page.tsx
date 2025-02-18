@@ -56,7 +56,7 @@ export default function CurriculumVitae({
   };
 
   return (
-    <main className="flex flex-col items-center p-5 md:p-10">
+    <main className="flex flex-col items-center bg-gray-100 p-5 md:p-10">
       <section className="flex w-full flex-col">
         <div className="flex flex-col items-center justify-center">
           <h1 className="w-full border-b border-gray-500 pb-5 text-center text-3xl font-bold text-primary">
@@ -97,7 +97,7 @@ export default function CurriculumVitae({
       </section>
 
       {userCv && (
-        <section className="mt-5 w-full border border-gray-500 p-5 md:w-[1000px] md:px-20 md:py-10">
+        <section className="mt-5 w-full border bg-white p-5 md:w-[1000px] md:px-20 md:py-10">
           <div className="flex flex-col items-center">
             <h1 className="text-3xl font-bold">{userCv.fullname}</h1>
             <div className="flex gap-2">

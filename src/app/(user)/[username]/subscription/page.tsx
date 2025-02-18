@@ -52,7 +52,7 @@ export default function UserSubscription({
   };
 
   return (
-    <main>
+    <main className="min-h-screen bg-gray-100">
       <div className="flex flex-col items-center justify-center p-5 md:p-10">
         <h1 className="w-full border-b border-gray-500 pb-5 text-center text-3xl font-bold text-primary">
           My Subscription
@@ -70,7 +70,7 @@ export default function UserSubscription({
             return (
               <div
                 key={index}
-                className="mt-10 w-full rounded-lg border-gray-500 md:w-[410px] md:border md:p-5 md:shadow-lg"
+                className="mt-10 w-full rounded-xl bg-white p-5 shadow-lg md:w-[410px] md:border"
               >
                 <div className="flex items-center justify-between gap-5">
                   <h1 className="text-3xl font-bold text-primary">
@@ -80,7 +80,7 @@ export default function UserSubscription({
                     Plan
                   </h1>
                   <p
-                    className={`${item.isActive ? "bg-green-500" : "bg-red-500"} w-fit rounded-lg px-2 py-1 font-medium tracking-wide text-white`}
+                    className={`${item.isActive ? "bg-green-500" : "bg-red-500"} w-fit rounded-lg px-2 py-1 font-semibold tracking-wide text-white`}
                   >
                     {item.isActive ? "Active" : "Inactive"}
                   </p>
