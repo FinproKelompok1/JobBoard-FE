@@ -1,5 +1,6 @@
 import axios from "@/helpers/axios";
 import { CurriculumVitae } from "@/types/profile";
+import { jwtDecode } from "jwt-decode";
 
 interface AdminRegisterData {
   companyName: string;

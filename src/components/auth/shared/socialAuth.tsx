@@ -13,7 +13,7 @@ export default function SocialAuth({ role }: { role: string }) {
       setIsLoading(prev => ({ ...prev, [provider]: true }));
 
       // Langsung ke backend, bukan melalui frontend route
-      const baseUrl = process.env.BASE_URL_BE || 'http://localhost:8000/api';
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_BE || 'http://localhost:8000/api';
       const authUrl = `${baseUrl}/auth/${provider}`;
 
       // Gunakan window.location.href untuk redirect

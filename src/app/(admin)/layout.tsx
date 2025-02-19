@@ -5,12 +5,24 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-    const user = useCookie('user');
     const router = useRouter();
 
+    const getCookie = (key: string): string | null => {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            let [cookieKey, cookieVal] = cookie.trim().split('=');
+            if (cookieKey === key) {
+                return decodeURIComponent(cookieVal);
+            }
+        }
+        return null;
+    };
+
+
     useEffect(() => {
+        const user = getCookie('user')
         if (!user) {
-            router.push("/auth/login");
+            router.push("/login");
             return;
         }
 
@@ -26,9 +38,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         } catch (error) {
             router.push("/auth/login");
         }
-    }, [user, router]);
-
-    if (!user) return null;
+    }, []);
 
     return <>{children}</>;
 }

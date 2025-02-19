@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Formik, Form } from 'formik';
 import FormInput from '../shared/formInput';
+import SocialAuth from '../shared/socialAuth';
 import { validationSchema } from './validation';
 import { authService } from '@/libs/auth';
 
@@ -35,7 +36,7 @@ export default function LoginDevForm() {
         otpToken: values.otp
       });
       console.log(response)
-      // router.push('/dashboard');
+      router.push('/');
     } catch (error: any) {
       console.log(error)
       const errorMessage = error.response?.data?.message || 'Login failed';
