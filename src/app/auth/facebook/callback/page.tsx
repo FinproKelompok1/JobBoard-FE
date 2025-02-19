@@ -19,7 +19,7 @@ export default function GoogleCallback() {
         }
 
         // Send the code to backend
-        const response = await fetch(`${process.env.BASE_URL_BE}/auth/google/callback?code=${code}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/auth/google/callback?code=${code}`, {
           method: 'GET',
           credentials: 'include'
         });

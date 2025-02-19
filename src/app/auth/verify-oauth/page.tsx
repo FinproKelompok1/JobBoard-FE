@@ -13,12 +13,38 @@ export default function VerifyOauthPage() {
     const router = useRouter();
     const [error, setError] = useState('');
 
-    const user = useCookie('user')
+    const getCookie = (key: string): string | null => {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            let [cookieKey, cookieVal] = cookie.trim().split('=');
+            if (cookieKey === key) {
+                return decodeURIComponent(cookieVal);
+            }
+        }
+        return null;
+    };
 
     useEffect(() => {
-        if (user)
-            router.push("/");
-    }, [user, router]);
+        const user = getCookie('user')
+        if (!user) {
+            router.push("/login");
+            return;
+        }
+
+
+        try {
+            const userObject = JSON.parse(user);
+
+            if (userObject.role === 'none')
+                return
+
+                router.push("/");
+        } catch (error) {
+            console.log(error)
+            // router.push("/auth/login");
+        }
+    }, []);
+
     const initialValues = {
         username: '',
         companyName: '',

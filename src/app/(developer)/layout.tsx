@@ -5,30 +5,41 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function DeveloperLayout({ children }: { children: React.ReactNode }) {
-    const user = useCookie('user'); 
     const router = useRouter();
 
+    const getCookie = (key: string): string | null => {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            let [cookieKey, cookieVal] = cookie.trim().split('=');
+            if (cookieKey === key) {
+                return decodeURIComponent(cookieVal);
+            }
+        }
+        return null;
+    };
+
     useEffect(() => {
+        const user = getCookie('user')
         if (!user) {
-            router.push("/auth/login"); 
+            router.push("/login");
             return;
         }
 
+
         try {
-            const userObject = JSON.parse(user);
+            const userObject = JSON.parse(user ?? '{}');
 
             if (userObject.role === 'none')
                 router.push("/auth/verify-oauth");
-            
+
             if (userObject.role !== "developer") {
                 router.push("/unauthorized");
             }
         } catch (error) {
-            router.push("/auth/login");
+            console.log(error)
+            // router.push("/auth/login");
         }
-    }, [user, router]);
-
-    if (!user) return null;
+    }, []);
 
     return <>{children}</>;
 }

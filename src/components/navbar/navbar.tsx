@@ -16,9 +16,42 @@ export default function Navbar({ isHomePage }: NavbarProps) {
   const [userH, setUserH] = useState<any | null>(null);
   const user = useCookie('user');
 
+  // Menambahkan event listener untuk cookie changes
+  useEffect(() => {
+    const checkUserCookie = () => {
+      const userCookie = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('user='));
+      
+      if (userCookie) {
+        const userData = userCookie.split('=')[1];
+        try {
+          setUserH(JSON.parse(userData));
+        } catch (e) {
+          console.error('Error parsing user cookie:', e);
+        }
+      } else {
+        setUserH(null);
+      }
+    };
+
+    // Check initial state
+    checkUserCookie();
+
+    // Set up interval to check for cookie changes
+    const interval = setInterval(checkUserCookie, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Update user state when cookie changes
   useEffect(() => {
     if (user) {
-      setUserH(JSON.parse(user));
+      try {
+        setUserH(JSON.parse(user));
+      } catch (e) {
+        console.error('Error parsing user:', e);
+      }
     }
   }, [user]);
 
@@ -30,9 +63,11 @@ export default function Navbar({ isHomePage }: NavbarProps) {
 
   const logOut = () => {
     document.cookie = 'user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+    setUserH(null);
     window.location.href = '/';
   };
 
+  // Rest of the code remains the same...
   const bgColor = isHomePage 
     ? (isScrolled ? 'bg-[#FFFFFF] shadow-lg' : 'bg-transparent')
     : 'bg-[#FFFFFF] shadow-lg';
