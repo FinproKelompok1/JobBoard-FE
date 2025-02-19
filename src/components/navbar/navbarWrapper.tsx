@@ -6,7 +6,6 @@ import Navbar from './navbar';
 export default function NavbarWrapper() {
   const pathname = usePathname();
   
-
   const shouldShowNavbar = () => {
     if (pathname === '/') return true;
     
@@ -14,12 +13,13 @@ export default function NavbarWrapper() {
       '/jobs',
       '/companies',
       '/companies-detail',
-      '/jobs-detail',
+      '/job-detail',
       '/profile',
       '/subscription',
       '/apply-job',
-        '/transaction',
-        '/about-us',
+      '/transaction',
+      '/about-us',
+      '/contact',
       '/auth/register',
       '/auth/login'
     ];

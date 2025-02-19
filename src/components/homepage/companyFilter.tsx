@@ -22,7 +22,6 @@ export default function CompaniesFilter({
 }: CompaniesFilterProps) {
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm space-y-4">
-      {/* Search Input */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
         <input
@@ -34,7 +33,6 @@ export default function CompaniesFilter({
         />
       </div>
 
-      {/* Location Filter */}
       <div className="relative">
         <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
         <input
@@ -46,7 +44,6 @@ export default function CompaniesFilter({
         />
       </div>
 
-      {/* Sort Options */}
       <div>
         <select
           value={sortBy}
