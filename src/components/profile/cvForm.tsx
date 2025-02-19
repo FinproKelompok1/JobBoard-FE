@@ -4,7 +4,7 @@ import { FileText, Edit, Save, BriefcaseIcon, GraduationCap, Award, RadioTower }
 import { CurriculumVitae } from '@/types/profile';
 
 export interface CVInputSectionProps {
-  initialCV: CurriculumVitae | null;  // Changed to null instead of undefined
+  initialCV: CurriculumVitae | null; 
   onSave: (cvData: Omit<CurriculumVitae, 'id'>) => Promise<void>;
 }
 

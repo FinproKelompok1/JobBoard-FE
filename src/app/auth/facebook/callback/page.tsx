@@ -11,14 +11,12 @@ export default function GoogleCallback() {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        // Get the code from URL
         const code = searchParams.get('code');
         if (!code) {
           router.push('/login?error=No authorization code received');
           return;
         }
 
-        // Send the code to backend
         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/auth/google/callback?code=${code}`, {
           method: 'GET',
           credentials: 'include'
@@ -28,7 +26,6 @@ export default function GoogleCallback() {
           throw new Error('Failed to authenticate');
         }
 
-        // Redirect to dashboard on success
         router.push('/dashboard');
       } catch (error) {
         console.error('Authentication error:', error);

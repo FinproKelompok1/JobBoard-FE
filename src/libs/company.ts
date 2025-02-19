@@ -1,4 +1,3 @@
-// src/services/company.ts
 import axios from "@/helpers/axios";
 import { toastErrAxios } from "@/helpers/toast";
 

@@ -1,5 +1,3 @@
-// src/types/profile.ts
-
 export enum Gender {
   female = "female",
   male = "male",

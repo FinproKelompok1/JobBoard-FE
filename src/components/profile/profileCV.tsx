@@ -45,14 +45,12 @@ export default function ProfileEditForm({ user, handleClose, onUpdate }: Profile
         setLoading(true);
         setError('');
         
-        // Show preview immediately
         const reader = new FileReader();
         reader.onload = (e) => {
           setFormData(prev => ({ ...prev, avatar: e.target?.result as string }));
         };
         reader.readAsDataURL(file);
 
-        // Upload to server
         const response = await uploadProfileImage(file);
         setFormData(prev => ({ ...prev, avatar: response.data.avatar }));
         onUpdate();

@@ -53,14 +53,12 @@ useEffect(() => {
   const filterCompanies = () => {
     let result = [...companies];
 
-    // Filter by search query
     if (searchQuery.trim()) {
       result = result.filter(company =>
         company.companyName.toLowerCase().includes(searchQuery.toLowerCase().trim())
       );
     }
 
-    // Filter by location
     if (location.trim()) {
       result = result.filter(company => {
         return company.Job?.some(job => {
@@ -75,7 +73,6 @@ useEffect(() => {
       });
     }
 
-    // Sort companies
     if (sortBy) {
       switch (sortBy) {
         case 'nameAsc':
