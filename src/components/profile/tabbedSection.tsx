@@ -15,9 +15,7 @@ export default function TabbedSection({ user, onUpdate }: TabbedSectionProps) {
 
   const handleCVSave = async (cvData: Omit<CurriculumVitae, 'id'>) => {
     try {
-      // Save CV data to backend
       await updateCV(user.id, cvData);
-      // Refresh profile data after successful update
       await onUpdate();
     } catch (error) {
       console.error('Error updating CV:', error);
@@ -55,7 +53,7 @@ export default function TabbedSection({ user, onUpdate }: TabbedSectionProps) {
       <div className="p-6">
         {activeTab === 'academic' && (
           <CVInputSection 
-            initialCV={user.CurriculumVitae?.[0] || null}  // Changed to null as fallback
+            initialCV={user.CurriculumVitae?.[0] || null}   
             onSave={handleCVSave}
           />
         )}

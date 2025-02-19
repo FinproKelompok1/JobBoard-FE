@@ -16,7 +16,6 @@ export default function Navbar({ isHomePage }: NavbarProps) {
   const [userH, setUserH] = useState<any | null>(null);
   const user = useCookie('user');
 
-  // Menambahkan event listener untuk cookie changes
   useEffect(() => {
     const checkUserCookie = () => {
       const userCookie = document.cookie
@@ -35,16 +34,13 @@ export default function Navbar({ isHomePage }: NavbarProps) {
       }
     };
 
-    // Check initial state
     checkUserCookie();
 
-    // Set up interval to check for cookie changes
     const interval = setInterval(checkUserCookie, 1000);
 
     return () => clearInterval(interval);
   }, []);
 
-  // Update user state when cookie changes
   useEffect(() => {
     if (user) {
       try {
@@ -67,7 +63,6 @@ export default function Navbar({ isHomePage }: NavbarProps) {
     window.location.href = '/';
   };
 
-  // Rest of the code remains the same...
   const bgColor = isHomePage 
     ? (isScrolled ? 'bg-[#FFFFFF] shadow-lg' : 'bg-transparent')
     : 'bg-[#FFFFFF] shadow-lg';

@@ -21,7 +21,6 @@ export default function CompaniesFilter({
   onLocationChange,
   onSortChange
 }: CompaniesFilterProps) {
-  // Debounced handlers
   const debouncedSearch = useDebounce((value: string) => {
     onSearchChange(value);
   }, 300);
@@ -30,7 +29,6 @@ export default function CompaniesFilter({
     onLocationChange(value);
   }, 300);
 
-  // Handle input changes with debounce
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
     debouncedSearch(value);

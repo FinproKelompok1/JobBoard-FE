@@ -18,12 +18,11 @@ interface CompanyCardProps {
 }
 
 export default function CompanyCard({ company }: CompanyCardProps) {
-  // Get unique locations with null checks
   const uniqueLocations = Array.from(new Set(
     company.Job?.map(job => 
       job.location ? `${job.location.city || ''}, ${job.location.province || ''}` : ''
     ).filter(location => location !== ', ' && location !== '') || []
-  )).slice(0, 2); // Only show first 2 locations
+  )).slice(0, 2); 
 
   return (
     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow max-w-xl w-full p-4">

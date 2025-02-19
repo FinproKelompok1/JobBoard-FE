@@ -7,10 +7,9 @@ export default function UnauthorizedPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Redirect user setelah beberapa detik
     setTimeout(() => {
-      router.push("/"); // Kembali ke halaman utama atau halaman login
-    }, 3000); // Redirect setelah 3 detik
+      router.push("/");
+    }, 3000); 
   }, [router]);
 
   return (

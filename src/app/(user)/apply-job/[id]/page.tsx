@@ -15,7 +15,6 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
   const [isLoading, setIsLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
 
-  // Get user data from cookie
   const getUserData = () => {
     try {
       const userStr = document.cookie
@@ -115,7 +114,6 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
     try {
       setIsLoading(true);
       
-      // Process salary - remove non-numeric characters
       const salary = expectedSalary.replace(/[^\d]/g, '');
       console.log('Processed salary:', salary);
 
@@ -125,7 +123,6 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
       formData.append('userId', userData.id.toString());
       formData.append('jobId', params.id);
 
-      // Debug log using Array.from instead of for...of
       Array.from(formData.entries()).forEach(([key, value]) => {
         console.log('FormData entry:', key, value);
       });

@@ -58,12 +58,10 @@ export const applyJob = async (
   token: string,
 ) => {
   try {
-    // Pastikan jobId ada dalam FormData
     if (!formData.has("jobId")) {
       formData.append("jobId", jobId);
     }
 
-    // Kirim request dengan jobId di URL dan FormData
     const response = await axios.post(`/apply/submit/${jobId}`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -73,7 +71,6 @@ export const applyJob = async (
 
     return response.data;
   } catch (error: any) {
-    // Log error untuk debugging
     console.error("Application submission error:", {
       status: error.response?.status,
       data: error.response?.data,

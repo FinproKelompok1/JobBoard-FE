@@ -53,7 +53,7 @@ axios.interceptors.request.use(
     if (!user) return config;
     const token = JSON.parse(user).token;
     if (token) {
-      console.log("Header Auth:", `Bearer ${token}`); // Cek format header
+      console.log("Header Auth:", `Bearer ${token}`);
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
@@ -63,7 +63,7 @@ axios.interceptors.request.use(
 export const authService = {
   login: async (data: LoginData) => {
     const response = await axios.post("/auth/login/user", data, {
-      withCredentials: true, // Tambahkan ini
+      withCredentials: true,
     });
 
     document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
@@ -103,7 +103,7 @@ export const authService = {
       company: data?.company,
       phone: data?.phone,
       username: data?.username,
-    }); // Corrected headers format
+    });
 
     document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
     if (response.data.user) {
@@ -157,7 +157,7 @@ interface DecodedToken {
 
 export const getUserProfile = async () => {
   try {
-    const response = await axios.get("/auth/me"); // ganti endpoint sesuai BE
+    const response = await axios.get("/auth/me");
     return response.data;
   } catch (error) {
     throw error;
