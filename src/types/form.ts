@@ -10,3 +10,15 @@ export interface FormValueJob {
   description: string;
   tags: string;
 }
+
+export interface FormValuePreselection {
+  title: string;
+  description: string;
+  preselectionQuestions: IPreselectionQuestion[];
+}
+
+interface IPreselectionQuestion {
+  question: string;
+  options: string[];
+  correctAnswer: number | null;
+}

@@ -16,6 +16,7 @@ const config: Config = {
         lightBlue: "#0049cc",
         blueNavy: "#0D3880",
         pink: "#E60278",
+        grey: "#e5e7eb",
         background: "var(--background)",
         foreground: "var(--foreground)",
         primary: "#0D3880",

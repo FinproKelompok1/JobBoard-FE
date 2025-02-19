@@ -1,7 +1,9 @@
+import CreateSelectionTest from "@/components/createSelectionTest/createSelectionTest";
+
 export default function PreselectionTestPage() {
   return (
     <main>
-      <h1>PRESELECTION TEST PAGE</h1>
+      <CreateSelectionTest />
     </main>
   )
 }

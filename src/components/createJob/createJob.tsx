@@ -75,7 +75,7 @@ export default function CreateJob() {
                     placeholder='Enter job title'
                     className='outline-none p-2 border bg-white'
                   />
-                  <ErrorMessage name="name" >{msg => <div className='text-red-500 text-xs mt-1 ml-1'><sup>*</sup>{msg}</div>}</ErrorMessage>
+                  <ErrorMessage name="title" >{msg => <div className='text-red-500 text-xs mt-1 ml-1'><sup>*</sup>{msg}</div>}</ErrorMessage>
                 </div>
                 <div className='flex flex-col'>
                   <label htmlFor='role' className='text-normal sm:text-xl font-medium mb-2 w-fit'>Role</label>
@@ -88,7 +88,7 @@ export default function CreateJob() {
                     placeholder='Enter job role'
                     className='outline-none p-2 border bg-white'
                   />
-                  <ErrorMessage name="name" >{msg => <div className='text-red-500 text-xs mt-1 ml-1'><sup>*</sup>{msg}</div>}</ErrorMessage>
+                  <ErrorMessage name="role" >{msg => <div className='text-red-500 text-xs mt-1 ml-1'><sup>*</sup>{msg}</div>}</ErrorMessage>
                 </div>
                 <div className='flex flex-col'>
                   <label htmlFor='province' className='text-normal sm:text-xl font-medium mb-2 w-fit'>Location</label>
