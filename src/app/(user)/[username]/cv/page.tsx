@@ -30,8 +30,10 @@ export default function CurriculumVitae({
     return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
   }
 
-  const skills = userCv?.CurriculumVitae[0].skill;
-  const skillList = skills?.split(";").map((skill) => skill.trim());
+  const skills = userCv?.CurriculumVitae[0]?.skill || "";
+  const skillList = skills
+    ? skills.split(";").map((skill) => skill.trim())
+    : [];
 
   const handleDownload = async () => {
     try {
@@ -56,7 +58,7 @@ export default function CurriculumVitae({
   };
 
   return (
-    <main className="flex flex-col items-center bg-gray-100 p-5 md:p-10">
+    <main className="flex min-h-screen flex-col items-center bg-gray-100 p-5 md:p-10">
       <section className="flex w-full flex-col">
         <div className="flex flex-col items-center justify-center">
           <h1 className="w-full border-b border-gray-500 pb-5 text-center text-3xl font-bold text-primary">
@@ -66,7 +68,7 @@ export default function CurriculumVitae({
         <div className="mt-5 flex items-center justify-center gap-5">
           {!userCv ? (
             <div className="flex flex-col items-center gap-2">
-              <p>
+              <p className="font-semibold">
                 You haven't created a CV yet. Please create one to get started.
               </p>
               <Link
@@ -79,7 +81,7 @@ export default function CurriculumVitae({
           ) : (
             <>
               <Link
-                href={`/${params.username}/cv/${userCv?.CurriculumVitae[0].id}/update`}
+                href={`/${params.username}/cv/${userCv?.CurriculumVitae[0]?.id}/update`}
                 className="rounded-lg bg-primary px-4 py-2 font-medium text-white transition-all duration-300 ease-in-out hover:bg-primary/80"
               >
                 Update CV
@@ -114,14 +116,14 @@ export default function CurriculumVitae({
             <h1 className="border-b border-gray-500 pb-1 text-2xl font-bold">
               Summary
             </h1>
-            <p className="mt-3">{userCv.CurriculumVitae[0].summary}</p>
+            <p className="mt-3">{userCv.CurriculumVitae[0]?.summary}</p>
           </div>
 
           <div className="mt-5">
             <h1 className="border-b border-gray-500 pb-1 text-2xl font-bold">
               Experiences
             </h1>
-            {userCv.CurriculumVitae[0].experience
+            {userCv.CurriculumVitae[0]?.experience
               .split(";")
               .map((experience, index) => {
                 const details = experience.split(",");
@@ -152,7 +154,7 @@ export default function CurriculumVitae({
             <h1 className="border-b border-gray-500 pb-1 text-2xl font-bold">
               Education
             </h1>
-            {userCv.CurriculumVitae[0].education
+            {userCv.CurriculumVitae[0]?.education
               .split(";")
               .map((education, index) => {
                 const details = education.split(",");
