@@ -5,6 +5,7 @@ import { getCompanies } from '@/libs/company';
 import CompaniesList from '@/components/homepage/companyList';
 import CompaniesFilter from '@/components/homepage/companyFilter';
 import { Building2 } from 'lucide-react';
+import LoadingPage from '@/components/loading';
 
 interface Company {
   id: number;
@@ -91,7 +92,7 @@ export default function CompaniesPage() {
       <div className="min-h-screen pt-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="min-h-[400px] flex items-center justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#E60278] border-t-transparent" />
+            <LoadingPage/>
           </div>
         </div>
       </div>

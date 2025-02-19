@@ -105,7 +105,7 @@ export default function JobCard({ job, getCategoryIcon, CurrencyFormatter }: Job
           })}
         </span>
         <Link 
-          href={`/jobs-detail/${job.id}`}
+          href={`/job-detail/${job.id}`}
           className="inline-flex items-center text-[#E60278] hover:text-[#E60278]/90 text-sm font-medium transition-colors"
         >
           View Details

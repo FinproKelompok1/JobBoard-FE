@@ -13,7 +13,7 @@ export default function FooterWrapper() {
       '/jobs',
       '/companies',
       '/companies-detail',
-      '/jobs-detail',
+      '/job-detail',
       '/profile',
       '/subscription',
       '/apply-job',
