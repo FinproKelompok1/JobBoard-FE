@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export default function Subscription() {
-  const [isSubscribing, setIsSubscribing] = useState<boolean>(false);
+  const [isSubscribingId, setIsSubscribingId] = useState<number | null>(null);
   const [subscriptions, setSubscriptions] = useState<ISubscription[]>([]);
   const router = useRouter();
 
@@ -28,21 +28,34 @@ export default function Subscription() {
     fetchSubs();
   }, []);
 
+  const token = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("token="))
+    ?.split("=")[1];
+
   const handleSubscribe = async (subscriptionId: number, amount: number) => {
     try {
-      setIsSubscribing(true);
-      const { data } = await axios.post("/transactions", {
-        subscriptionId,
-        amount,
-      });
+      setIsSubscribingId(subscriptionId);
+      const { data } = await axios.post(
+        "/transactions",
+        {
+          subscriptionId,
+          amount,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
       toast.success(data.message);
-      router.push(`/transaction/${data.transactionId}`);
+      router.push(`/transaction/${data.username}/${data.transactionId}`);
     } catch (error) {
       console.log("Error subscribe:", error);
       toastErrAxios(error);
     } finally {
-      setIsSubscribing(false);
+      setIsSubscribingId(null);
     }
   };
 
@@ -101,10 +114,12 @@ export default function Subscription() {
                     onClick={() =>
                       handleSubscribe(subscription.id, subscription.price)
                     }
-                    disabled={isSubscribing}
+                    disabled={isSubscribingId === subscription.id}
                     className="rounded-md bg-accent py-2 text-center font-semibold tracking-wide text-white transition-all duration-300 ease-in-out hover:bg-accent/80 hover:text-white"
                   >
-                    {isSubscribing ? "Subscribing..." : "Subscribe"}
+                    {isSubscribingId === subscription.id
+                      ? "Subscribing..."
+                      : "Subscribe"}
                   </button>
                 </div>
               </div>

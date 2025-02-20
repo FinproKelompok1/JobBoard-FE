@@ -34,7 +34,7 @@ export default function TransactionDetail({
                 (remainingTime % (1000 * 60 * 60)) / (1000 * 60),
               );
               const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
-              setTimeLeft(`${hours}h ${minutes}m ${seconds}s`);
+              setTimeLeft(`${hours} : ${minutes} : ${seconds}`);
             } else {
               setTimeLeft("Expired");
             }
@@ -71,19 +71,15 @@ export default function TransactionDetail({
   };
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen md:bg-gray-50">
       <div className="flex w-screen flex-col items-center p-5 md:p-10">
         <h1 className="w-full text-center text-3xl font-bold text-primary">
           Transaction Detail
-        </h1>{" "}
+        </h1>
         {transaction && (
-          <div className="mt-5 w-screen overflow-x-auto rounded-xl border bg-white p-5 shadow-lg sm:w-fit">
+          <div className="mt-5 w-screen overflow-x-auto rounded-xl bg-white p-5 sm:w-fit md:border md:shadow-lg">
             <table>
               <tbody>
-                <tr>
-                  <th className="pr-2 text-left">Created At</th>
-                  <td>: {DateFormatter(transaction.createdAt)}</td>
-                </tr>
                 <tr>
                   <th className="pr-2 text-left">Transaction ID</th>
                   <td>: {transaction.id}</td>
@@ -126,14 +122,36 @@ export default function TransactionDetail({
                     : {CurrencyFormatter(transaction.amount)}
                   </td>
                 </tr>
+                <tr>
+                  <th className="pr-2 text-left">Created At</th>
+                  <td>: {DateFormatter(transaction.createdAt)}</td>
+                </tr>
+                <tr>
+                  <th className="pr-2 text-left">Updated At</th>
+                  <td>: {DateFormatter(transaction.updatedAt)}</td>
+                </tr>
               </tbody>
             </table>
 
             {transaction.status !== "settlement" && timeLeft && (
-              <div className="mt-5 text-center font-medium text-red-500">
-                {timeLeft === "Expired"
-                  ? "Transaction expired"
-                  : `Expires in: ${timeLeft}`}
+              <div className="mt-5 text-center text-red-500">
+                <p className="font-medium">
+                  Please make payment before{" "}
+                  <span className="font-semibold">
+                    {" "}
+                    {DateFormatter(
+                      new Date(
+                        new Date(transaction.createdAt).getTime() +
+                          24 * 60 * 60 * 1000,
+                      ).toISOString(),
+                    )}
+                  </span>
+                </p>
+                <p className="font-semibold">
+                  {timeLeft === "Expired"
+                    ? "Transaction expired"
+                    : `Expires in ${timeLeft}`}
+                </p>
               </div>
             )}
             {transaction.status !== "settlement" && timeLeft !== "Expired" && (

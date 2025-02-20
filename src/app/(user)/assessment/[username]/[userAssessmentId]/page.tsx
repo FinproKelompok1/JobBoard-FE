@@ -105,7 +105,7 @@ export default function UserAssessmentForm({
 
       toast.success("Answer submitted successfully");
       router.push(
-        `/${userAssessment.User.username}/assessment/${params.userAssessmentId}/result`,
+        `/assessment/${userAssessment.User.username}/${params.userAssessmentId}/result`,
       );
     } catch (error) {
       console.error("Failed to submit answer:", error);

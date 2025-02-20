@@ -1,17 +1,57 @@
-import CreateUserAssessment from "@/components/developer/createUserAssessment";
-import { getAssessments, getUserAssessmentById } from "@/libs/assessment";
-import { getUserSubscription } from "@/libs/subscription";
-import { IAssessment, IUserSubscription } from "@/types/types";
+"use client";
 
-export default async function UserAssessmentList({
-  params,
-}: {
-  params: { username: string };
-}) {
-  const assessments: IAssessment[] = await getAssessments();
-  const userSubscription: IUserSubscription[] = await getUserSubscription(
-    params.username,
+import CreateUserAssessment from "@/components/assessment/createUserAssessment";
+import LoadingPage from "@/components/loading";
+import { getAssessments } from "@/libs/assessment";
+import { getUserProfile } from "@/libs/auth";
+import { getUserSubscription } from "@/libs/subscription";
+import { UserProfile } from "@/types/profile";
+import { IAssessment, IUserSubscription } from "@/types/types";
+import { useEffect, useState } from "react";
+
+export default function SkillAssessment() {
+  const [assessments, setAssessments] = useState<IAssessment[]>([]);
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [userSubscription, setUserSubscription] = useState<IUserSubscription[]>(
+    [],
   );
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const assessmentsData = await getAssessments();
+        const userData = await getUserProfile();
+        const userSubscriptionData = await getUserSubscription(
+          userData.data.username,
+        );
+
+        setAssessments(assessmentsData);
+        setUser(userData.data);
+        setUserSubscription(userSubscriptionData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <LoadingPage />;
+  }
+
+  if (!user) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-gray-50">
+        <p className="text-lg font-medium text-red-500">
+          Failed to load user data.
+        </p>
+      </main>
+    );
+  }
 
   const isAssessmentLimit = userSubscription.some(
     (userSubs) =>
@@ -20,9 +60,9 @@ export default async function UserAssessmentList({
   );
 
   return (
-    <main>
+    <main className="min-h-screen bg-gray-50">
       <div className="w-screen p-5 md:p-10">
-        <div className="flex flex-col items-center justify-center gap-2 border-b border-gray-500 pb-5">
+        <div className="flex flex-col items-center justify-center gap-2">
           <h1 className="text-3xl font-bold text-primary">Skill Assessment</h1>
         </div>
 
@@ -38,7 +78,7 @@ export default async function UserAssessmentList({
           </div>
         )}
 
-        <div className="mt-10">
+        <div className="mt-5">
           {assessments.filter((assessment) => assessment.isActive).length ===
           0 ? (
             <div className="flex flex-col items-center justify-center text-lg">
@@ -53,7 +93,7 @@ export default async function UserAssessmentList({
                   return (
                     <div
                       key={index}
-                      className="flex min-h-56 w-full flex-col border-gray-500 md:w-[700px] md:rounded-xl md:border md:p-5 md:shadow-md"
+                      className="flex min-h-56 w-full flex-col bg-white md:w-[600px] md:rounded-xl md:border md:p-5 md:shadow-md"
                     >
                       <div className="flex items-center justify-between">
                         <h1 className="text-2xl font-bold text-primary">
@@ -61,11 +101,11 @@ export default async function UserAssessmentList({
                         </h1>
                       </div>
 
-                      <p className="mt-4 text-lg">{assessment.description}</p>
+                      <p className="mt-4">{assessment.description}</p>
 
                       <div className="mt-5 flex gap-3 md:justify-end">
                         <CreateUserAssessment
-                          username={params.username}
+                          username={user.username}
                           assessmentId={assessment.id}
                           disabled={isAssessmentLimit}
                         />

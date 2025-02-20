@@ -85,7 +85,7 @@ export interface IAssessment {
   description: string;
   isActive: boolean;
   AssessmentQuestion: IAssessmentQuestion[];
-  UserAssessment: { User: { username: true } };
+  UserAssessment: { User: { username: string } };
 }
 
 export interface IAssessmentQuestionForm {
@@ -118,5 +118,10 @@ export interface IUserAssessment {
     };
   };
   User: { username: string; fullname: string };
-  certificate: { CertificateUrl: string; badgeName: string; badgeIcon: string };
+  certificate: {
+    id: number;
+    CertificateUrl: string;
+    badgeName: string;
+    badgeIcon: string;
+  };
 }

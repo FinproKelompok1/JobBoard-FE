@@ -14,9 +14,20 @@ export default function DownloadCertificate({
   const handleDownload = async () => {
     try {
       setIsDownloading(true);
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        ?.split("=")[1];
+
+      console.log("token:", token);
+
       const response = await axios.get(
         `/user-assessments/download/${userAssessment.User.username}/${userAssessment.id}`,
-        { responseType: "blob" },
+        {
+          responseType: "blob",
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${token}` },
+        },
       );
 
       const url = window.URL.createObjectURL(response.data);

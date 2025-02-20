@@ -4,7 +4,6 @@ import axios from "@/helpers/axios";
 import { toastErrAxios } from "@/helpers/toast";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { toast } from "react-toastify";
 
 export default function CreateUserAssessment({
   username,
@@ -22,9 +21,18 @@ export default function CreateUserAssessment({
   const handleCreateUserAssessment = async () => {
     try {
       setIsCreating(true);
-      const { data } = await axios.post(`/user-assessments/${assessmentId}`);
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        ?.split("=")[1];
 
-      router.push(`/${username}/assessment/${data.userAssessmentId}`);
+      const { data } = await axios.post(
+        `/user-assessments`,
+        { assessmentId: assessmentId },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+
+      router.push(`/assessment/${username}/${data.userAssessmentId}`);
     } catch (error) {
       console.error("Error creating user assessment:", error);
       toastErrAxios(error);
@@ -39,7 +47,7 @@ export default function CreateUserAssessment({
       <button
         onClick={() => setIsModalOpen(true)}
         disabled={disabled}
-        className="w-full rounded-md border-2 border-accent bg-accent px-4 py-2 text-center font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 hover:text-white disabled:cursor-not-allowed disabled:bg-accent/70 md:w-fit"
+        className="w-full rounded-md border-2 border-accent bg-accent px-4 py-2 text-center font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 hover:text-white disabled:cursor-not-allowed disabled:bg-accent/80 md:w-fit"
       >
         Start assessment
       </button>

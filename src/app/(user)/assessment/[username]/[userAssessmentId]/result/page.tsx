@@ -14,7 +14,7 @@ export default async function UserAssessmentResult({
   return (
     <main>
       <div className="w-screen p-5 md:p-10">
-        <div className="flex flex-col items-center justify-center gap-2 border-b border-gray-500 pb-5">
+        <div className="flex flex-col items-center justify-center gap-2">
           <h1 className="text-3xl font-bold text-primary">
             {userAssessment.assessment.title} - Assessment Result
           </h1>
@@ -65,14 +65,14 @@ export default async function UserAssessmentResult({
         <div className="flex items-center justify-center">
           {userAssessment.status === "failed" ? (
             <Link
-              href={`/${userAssessment.User.username}/subscription`}
+              href={`/subscription/${userAssessment.User.username}`}
               className="rounded-lg bg-accent px-4 py-2 font-semibold text-white"
             >
               Try again
             </Link>
           ) : (
             <Link
-              href={`/${userAssessment.User.username}/assessment/${userAssessment.id}/certificate`}
+              href={`/assessment/${userAssessment.User.username}/${userAssessment.id}/certificate`}
               className="rounded-lg bg-accent px-4 py-2 font-semibold text-white"
             >
               View certificate

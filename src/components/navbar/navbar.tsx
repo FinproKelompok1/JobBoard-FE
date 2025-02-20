@@ -123,12 +123,26 @@ export default function Navbar({ isHomePage }: NavbarProps) {
                 </a>
               )}
               {isUser && (
-                <Link
-                  href={`/${userH.username}/subscription`}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Subscription
-                </Link>
+                <>
+                  <Link
+                    href={`/subscription/${userH.username}`}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    My Subscription
+                  </Link>
+                  <Link
+                    href={`/transaction/${userH.username}`}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    My Transaction
+                  </Link>
+                  <Link
+                    href={`/assessment/${userH.username}`}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    My Assessment
+                  </Link>
+                </>
               )}
               <button
                 onClick={logOut}

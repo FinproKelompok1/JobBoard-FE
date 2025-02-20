@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation";
 import axios from "@/helpers/axios";
 import { toast } from "react-toastify";
 import { getUserSubscription } from "@/libs/subscription";
+import Link from "next/link";
+import LoadingPage from "@/components/loading";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -21,14 +23,22 @@ export default function UserSubscription({
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [userSubscription, setUserSubscription] = useState<
-    IUserSubscription[] | null
-  >(null);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
+  const [userSubscription, setUserSubscription] = useState<IUserSubscription[]>(
+    [],
+  );
 
   useEffect(() => {
     const fetchUserSubscription = async () => {
-      const data = await getUserSubscription(params.username);
-      setUserSubscription(data);
+      setIsFetching(true);
+      try {
+        const data = await getUserSubscription(params.username);
+        setUserSubscription(data);
+      } catch (error) {
+        console.error("Error fetching user subscription:", error);
+      } finally {
+        setIsFetching(false);
+      }
     };
     fetchUserSubscription();
   }, [params.username]);
@@ -52,14 +62,22 @@ export default function UserSubscription({
   };
 
   return (
-    <main className="min-h-screen bg-gray-100">
+    <main className="min-h-screen bg-gray-50">
       <div className="flex flex-col items-center justify-center p-5 md:p-10">
-        <h1 className="w-full border-b border-gray-500 pb-5 text-center text-3xl font-bold text-primary">
+        <h1 className="w-full pb-5 text-center text-3xl font-bold text-primary">
           My Subscription
         </h1>
 
-        {!userSubscription ? (
-          <div>no subs</div>
+        {isFetching ? (
+          <LoadingPage />
+        ) : !userSubscription ? (
+          <p className="text-lg font-medium">
+            You don't have a subscription yet. Please go to the{" "}
+            <span className="text-accent">
+              <Link href={"/subscription"}>subscription page</Link>
+            </span>{" "}
+            to start a subscription.
+          </p>
         ) : (
           userSubscription.map((item, index) => {
             const endDate = dayjs(item.endDate);
@@ -72,10 +90,10 @@ export default function UserSubscription({
             return (
               <div
                 key={index}
-                className="mt-10 w-full rounded-xl bg-white p-5 shadow-lg md:w-[410px] md:border"
+                className="w-full rounded-xl border border-gray-200 bg-white p-5 shadow-lg md:w-[400px] md:border"
               >
                 <div className="flex items-center justify-between gap-5">
-                  <h1 className="text-3xl font-bold text-primary">
+                  <h1 className="text-2xl font-bold text-primary">
                     {item.subscription?.category === "professional"
                       ? "Professional"
                       : "Standard"}{" "}
@@ -108,12 +126,16 @@ export default function UserSubscription({
                   </p>
                   {item.subscription.category === "standard" &&
                     Number(item.assessmentCount) >= 2 && (
-                      <p className="text-sm text-red-500">
-                        You have used all available Skill Assessment attempts.
-                        Please Upgrade to the{" "}
-                        <span className="font-semibold">Professional</span> plan
-                        for unlimited access.
-                      </p>
+                      <>
+                        <p className="text-sm text-red-500">
+                          You have used all available Skill Assessment attempts.
+                        </p>
+                        <p className="text-sm text-red-500">
+                          Please Upgrade to the{" "}
+                          <span className="font-semibold">Professional</span>{" "}
+                          plan for unlimited access.
+                        </p>
+                      </>
                     )}
                 </div>
 
@@ -121,9 +143,7 @@ export default function UserSubscription({
                   {item.isActive ? (
                     <>
                       <button
-                        onClick={() =>
-                          router.push(`/${params.username}/assessment`)
-                        }
+                        onClick={() => router.push(`/assessment`)}
                         disabled={
                           item.subscription.category === "standard" &&
                           Number(item.assessmentCount) >= 2
@@ -139,7 +159,7 @@ export default function UserSubscription({
                       </button>
 
                       <button
-                        onClick={() => router.push(`/${params.username}/cv`)}
+                        onClick={() => router.push(`/cv/${params.username}`)}
                         className="rounded-md bg-accent py-2 text-center font-medium text-white transition duration-300 ease-in-out hover:bg-accent/80"
                       >
                         Generate Curriculum Vitae

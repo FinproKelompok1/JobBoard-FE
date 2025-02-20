@@ -1,17 +1,19 @@
-import DownloadCertificate from "@/components/developer/downloadCertificate";
 import { getUserAssessmentById } from "@/libs/assessment";
 import { IUserAssessment } from "@/types/types";
 import Image from "next/image";
 import Link from "next/link";
+import { MdVerified } from "react-icons/md";
 
-export default async function UserAssessmentCertificate({
+export default async function CertificateVerification({
   params,
 }: {
-  params: { userAssessmentId: number };
+  params: { userAssessmentId: string };
 }) {
-  const userAssessment: IUserAssessment = await getUserAssessmentById(
-    params.userAssessmentId,
-  );
+  const splitinput = params.userAssessmentId.split("-");
+  const userAssessmentId = Number(splitinput.pop());
+
+  const userAssessment: IUserAssessment =
+    await getUserAssessmentById(userAssessmentId);
 
   const date = new Date(userAssessment.endTime);
   const formattedDate = date.toLocaleDateString("en-GB", {
@@ -28,11 +30,15 @@ export default async function UserAssessmentCertificate({
     )}-${userAssessment.endTime.slice(0, 10).replace(/-/g, "")}-${userAssessment.id}`;
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-gray-100 p-5 md:items-center md:justify-center">
-      <div className="mb-5">
-        <DownloadCertificate userAssessment={userAssessment} />
+    <div className="flex min-h-screen w-full flex-col p-5 md:items-center md:justify-center md:bg-gray-100">
+      <div className="flex items-center justify-center">
+        <div className="flex items-center gap-2">
+          <h1 className="text-3xl font-semibold text-green-600">Verified</h1>
+          <MdVerified className="size-8 text-green-600" />
+        </div>
       </div>
-      <div className="h-[797px] w-[1123px] border-l-[20px] border-r-[20px] border-accent bg-white p-10 px-5 shadow-lg">
+
+      <div className="mt-5 h-[797px] w-[1123px] border-l-[20px] border-r-[20px] border-accent bg-white p-10 px-5 shadow-lg">
         <div className="flex items-center justify-center">
           <Image
             src="https://res.cloudinary.com/difaukz1b/image/upload/v1739765828/logo/smysmsf93hhdfdc2guw9.png"
@@ -78,22 +84,37 @@ export default async function UserAssessmentCertificate({
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col items-center">
-          <p>Completed on {formattedDate}</p>
-          <p>
-            Certificate ID:{" "}
-            <span className="font-semibold">{certificateId}</span>
-          </p>
-          <p>
-            This certificate can be verified at:{" "}
-            <span className="text-accent">
-              <Link
-                href={`${process.env.NEXT_PUBLIC_BASE_URL_FE}/verify-certificate/${certificateId}`}
-              >
-                {`${process.env.NEXT_PUBLIC_BASE_URL_FE}/verify-certificate/${certificateId}`}
-              </Link>
-            </span>
-          </p>
+        <div className="mt-10 flex justify-between">
+          <div className="flex flex-col justify-end">
+            <p>
+              Completed on{" "}
+              <span className="font-semibold">{formattedDate}</span>
+            </p>
+            <p>
+              Certificate ID:{" "}
+              <span className="font-semibold">{certificateId}</span>
+            </p>
+            <p>
+              This certificate can be verified at{" "}
+              <span className="text-accent">
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_BASE_URL_FE}/certificate-verification/${certificateId}`}
+                >
+                  {`${process.env.NEXT_PUBLIC_BASE_URL_FE}/certificate-verification/${certificateId}`}
+                </Link>
+              </span>
+            </p>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <p className="text-sm">Scan to verify</p>
+            <Image
+              src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{${process.env.NEXT_PUBLIC_BASE_URL_FE}/certificate-verification/${certificateId}}}`}
+              alt="Certificate QR Code"
+              width={100}
+              height={100}
+              className="w-20"
+            />
+          </div>
         </div>
       </div>
     </div>

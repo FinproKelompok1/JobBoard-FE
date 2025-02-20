@@ -1,9 +1,11 @@
-import { getCertificateById, getUserAssessmentById } from "@/libs/assessment";
+import DownloadCertificate from "@/components/assessment/downloadCertificate";
+import ShareButton from "@/components/assessment/shareCertificate";
+import { getUserAssessmentById } from "@/libs/assessment";
 import { IUserAssessment } from "@/types/types";
 import Image from "next/image";
 import Link from "next/link";
 
-export default async function CertificateFormat({
+export default async function UserAssessmentCertificate({
   params,
 }: {
   params: { userAssessmentId: number };
@@ -27,7 +29,11 @@ export default async function CertificateFormat({
     )}-${userAssessment.endTime.slice(0, 10).replace(/-/g, "")}-${userAssessment.id}`;
 
   return (
-    <div className="">
+    <div className="flex min-h-screen w-full flex-col bg-gray-100 p-5 md:items-center md:justify-center">
+      <div className="mb-5 flex items-center justify-center gap-10">
+        <ShareButton certificateId={certificateId} />
+        <DownloadCertificate userAssessment={userAssessment} />
+      </div>
       <div className="h-[210mm] w-[297mm] border-l-[20px] border-r-[20px] border-accent bg-white p-10 px-5 shadow-lg">
         <div className="flex items-center justify-center">
           <Image
@@ -38,7 +44,7 @@ export default async function CertificateFormat({
             className="w-80"
           ></Image>
         </div>
-        <h1 className="mt-10 text-center text-7xl font-medium text-primary">
+        <h1 className="mt-10 text-center text-7xl font-semibold text-primary">
           Certificate of Completion
         </h1>
         <div className="mt-10 flex flex-col items-center">
@@ -51,7 +57,10 @@ export default async function CertificateFormat({
           <p className="text-lg">
             For completing Talent Bridge's Skill Assessment:
           </p>
-          <div className="mt-5 flex flex-col items-center justify-center">
+          <div className="mt-5 flex flex-col items-center justify-center gap-2">
+            <p className="text-3xl font-medium">
+              {userAssessment.assessment.title}
+            </p>
             <div className="flex flex-col items-center justify-center rounded-xl border bg-primary p-1">
               <Image
                 src={`${userAssessment.certificate.badgeIcon}`}
@@ -60,37 +69,49 @@ export default async function CertificateFormat({
                 height={100}
                 className="w-14"
               />
-              <span className="text-lg font-bold text-white">
-                -
+              <span className="text-lg font-bold tracking-widest text-white">
                 {userAssessment.assessment.title
                   .split(" ")
                   .map((word) => word[0])
                   .join("")
                   .toUpperCase()}
-                -
               </span>
             </div>
-            <p className="text-3xl font-medium">
-              {userAssessment.assessment.title}
-            </p>
           </div>
         </div>
-        <div className="mt-10 flex flex-col items-center">
-          <p>Completed on {formattedDate}</p>
-          <p>
-            Certificate ID:{" "}
-            <span className="font-semibold">{certificateId}</span>
-          </p>
-          <p>
-            This certificate can be verified at:{" "}
-            <span className="text-accent">
-              <Link
-                href={`${process.env.NEXT_PUBLIC_BASE_URL_FE}/verify-certificate/${certificateId}`}
-              >
-                {`${process.env.NEXT_PUBLIC_BASE_URL_FE}/verify-certificate/${certificateId}`}
-              </Link>
-            </span>
-          </p>
+
+        <div className="mt-10 flex justify-between">
+          <div className="flex flex-col justify-end">
+            <p>
+              Completed on{" "}
+              <span className="font-semibold">{formattedDate}</span>
+            </p>
+            <p>
+              Certificate ID:{" "}
+              <span className="font-semibold">{certificateId}</span>
+            </p>
+            <p>
+              This certificate can be verified at{" "}
+              <span className="text-accent">
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_BASE_URL_FE}/certificate-verification/${certificateId}`}
+                  target="_blank"
+                >
+                  {`${process.env.NEXT_PUBLIC_BASE_URL_FE}/certificate-verification/${certificateId}`}
+                </Link>
+              </span>
+            </p>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <p className="text-sm">Scan to verify</p>
+            <Image
+              src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{${process.env.NEXT_PUBLIC_BASE_URL_FE}/certificate-verification/${userAssessment.id}}}`}
+              alt="Certificate QR Code"
+              width={100}
+              height={100}
+              className="w-20"
+            />
+          </div>
         </div>
       </div>
     </div>
