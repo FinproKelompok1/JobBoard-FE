@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Search, MapPin } from 'lucide-react';
+import { useDebounce } from '@/hooks/useDebounce'; 
 
 interface CompaniesFilterProps {
   searchQuery: string;
@@ -20,15 +21,33 @@ export default function CompaniesFilter({
   onLocationChange,
   onSortChange
 }: CompaniesFilterProps) {
+  const debouncedSearch = useDebounce((value: string) => {
+    onSearchChange(value);
+  }, 300);
+
+  const debouncedLocation = useDebounce((value: string) => {
+    onLocationChange(value);
+  }, 300);
+
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.trim();
+    debouncedSearch(value);
+  }, [debouncedSearch]);
+
+  const handleLocationChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.trim();
+    debouncedLocation(value);
+  }, [debouncedLocation]);
+
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm space-y-4">
+    <div className="bg-white p-6 rounded-lg shadow-sm space-y-4 sticky top-24">
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
         <input
           type="text"
           placeholder="Search company name..."
-          value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
+          defaultValue={searchQuery}
+          onChange={handleSearchChange}
           className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60278] focus:border-transparent"
         />
       </div>
@@ -38,8 +57,8 @@ export default function CompaniesFilter({
         <input
           type="text"
           placeholder="Filter by location..."
-          value={location}
-          onChange={(e) => onLocationChange(e.target.value)}
+          defaultValue={location}
+          onChange={handleLocationChange}
           className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60278] focus:border-transparent"
         />
       </div>

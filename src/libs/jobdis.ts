@@ -58,7 +58,6 @@ export const applyJob = async (
   token: string,
 ) => {
   try {
-    // Pastikan jobId ada dalam FormData
     if (!formData.has("jobId")) {
       formData.append("jobId", jobId);
     }
@@ -72,7 +71,6 @@ export const applyJob = async (
 
     return response.data;
   } catch (error: any) {
-    // Log error untuk debugging
     console.error("Application submission error:", {
       status: error.response?.status,
       data: error.response?.data,

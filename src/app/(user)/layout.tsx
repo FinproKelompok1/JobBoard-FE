@@ -1,7 +1,6 @@
 "use client";
 
-import useCookie from "@/hooks/useCookie";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 export default function UserLayout({
@@ -10,6 +9,20 @@ export default function UserLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Define public routes that don't require authentication
+  const publicRoutes = [
+    "/about-us",
+    "/companies",
+    "/companies-detail",
+    "/job-detail",
+    "/jobs",
+  ];
+
+  const isPublicRoute = () => {
+    return publicRoutes.some((route) => pathname?.startsWith(route));
+  };
 
   const getCookie = (key: string): string | null => {
     const cookies = document.cookie.split(";");
@@ -23,6 +36,11 @@ export default function UserLayout({
   };
 
   useEffect(() => {
+    // If it's a public route, don't check for authentication
+    if (isPublicRoute()) {
+      return;
+    }
+
     const user = getCookie("user");
     if (!user) {
       router.push("/login");
@@ -32,7 +50,9 @@ export default function UserLayout({
     try {
       const userObject = JSON.parse(user);
 
-      if (userObject.role === "none") router.push("/auth/verify-oauth");
+      if (userObject.role === "none") {
+        router.push("/auth/verify-oauth");
+      }
 
       if (userObject.role !== "user") {
         router.push("/unauthorized");
@@ -40,7 +60,7 @@ export default function UserLayout({
     } catch (error) {
       router.push("/auth/login");
     }
-  }, [router]);
+  }, [router, pathname]);
 
   return <>{children}</>;
 }

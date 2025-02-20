@@ -17,8 +17,37 @@ export default function Navbar({ isHomePage }: NavbarProps) {
   const user = useCookie("user");
 
   useEffect(() => {
+    const checkUserCookie = () => {
+      const userCookie = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("user="));
+
+      if (userCookie) {
+        const userData = userCookie.split("=")[1];
+        try {
+          setUserH(JSON.parse(userData));
+        } catch (e) {
+          console.error("Error parsing user cookie:", e);
+        }
+      } else {
+        setUserH(null);
+      }
+    };
+
+    checkUserCookie();
+
+    const interval = setInterval(checkUserCookie, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
     if (user) {
-      setUserH(JSON.parse(user));
+      try {
+        setUserH(JSON.parse(user));
+      } catch (e) {
+        console.error("Error parsing user:", e);
+      }
     }
   }, [user]);
 
@@ -30,6 +59,9 @@ export default function Navbar({ isHomePage }: NavbarProps) {
 
   const logOut = () => {
     document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+    window.location.href = "/";
+    document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+    setUserH(null);
     window.location.href = "/";
   };
 

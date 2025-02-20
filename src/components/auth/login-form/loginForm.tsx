@@ -92,7 +92,6 @@ export default function LoginForm() {
                         name="rememberMe"
                         checked={values.rememberMe}
                         onChange={(e) => {
-                          // Handle checkbox change
                         }}
                         className="h-4 w-4 text-[#E60278] rounded"
                       />

@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { getCompanies } from '@/libs/company';
+import { getCompanies, type Company } from '@/libs/company';
 import CompaniesList from './companyList';
 
 export default function CompanyDiscovery() {
-  const [companies, setCompanies] = useState([]);
+  const [companies, setCompanies] = useState<Company[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,6 +14,7 @@ export default function CompanyDiscovery() {
       try {
         setIsLoading(true);
         const data = await getCompanies();
+        console.log('Fetched companies:', data);
         setCompanies(data);
       } catch (err) {
         setError('Failed to fetch companies');
@@ -38,6 +39,14 @@ export default function CompanyDiscovery() {
     return (
       <div className="min-h-[200px] flex items-center justify-center text-red-500">
         {error}
+      </div>
+    );
+  }
+
+  if (companies.length === 0) {
+    return (
+      <div className="min-h-[200px] flex items-center justify-center text-gray-500">
+        No companies found
       </div>
     );
   }

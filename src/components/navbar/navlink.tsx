@@ -8,9 +8,9 @@ interface NavLinksProps {
 
 export default function NavLinks({ isHomePage, isScrolled }: NavLinksProps) {
   const navigationItems = [
+    { label: "SUBSCRIPTION", path: "/subscription" },
     { label: "FIND GREAT JOBS", path: "/jobs" },
     { label: "FIND TOP EMPLOYERS", path: "/companies" },
-    { label: "SUBSCRIPTION", path: "/subscription" },
     { label: "ABOUT US", path: "/about-us" },
   ];
 

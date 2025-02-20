@@ -49,21 +49,27 @@ export default function CompaniesPage() {
     fetchCompanies();
   }, []);
 
-  useEffect(() => {
+useEffect(() => {
+  const filterCompanies = () => {
     let result = [...companies];
 
-    if (searchQuery) {
+    if (searchQuery.trim()) {
       result = result.filter(company =>
-        company.companyName.toLowerCase().includes(searchQuery.toLowerCase())
+        company.companyName.toLowerCase().includes(searchQuery.toLowerCase().trim())
       );
     }
 
-    if (location) {
+    if (location.trim()) {
       result = result.filter(company => {
-        return company.Job.some(job => 
-          job.location.city.toLowerCase().includes(location.toLowerCase()) ||
-          job.location.province.toLowerCase().includes(location.toLowerCase())
-        );
+        return company.Job?.some(job => {
+          if (!job.location) return false;
+          
+          const locationLower = location.toLowerCase().trim();
+          const cityMatch = job.location.city?.toLowerCase().includes(locationLower) || false;
+          const provinceMatch = job.location.province?.toLowerCase().includes(locationLower) || false;
+          
+          return cityMatch || provinceMatch;
+        });
       });
     }
 
@@ -85,7 +91,10 @@ export default function CompaniesPage() {
     }
 
     setFilteredCompanies(result);
-  }, [companies, searchQuery, location, sortBy]);
+  };
+
+  filterCompanies();
+}, [companies, searchQuery, location, sortBy]);
 
   if (isLoading) {
     return (
@@ -111,9 +120,26 @@ export default function CompaniesPage() {
     );
   }
 
+   if (isLoading) {
+    return (
+      <div className="min-h-screen fixed inset-0 flex items-center justify-center bg-gray-50/50 z-50">
+        <LoadingPage/>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-red-500">{error}</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen pt-20 bg-gray-50">
-      <div className="relative bg-gradient-to-br from-gray-900 to-gray-800 mb-8">
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section - Removed pt-20 */}
+      <div className="relative bg-gradient-to-br from-gray-900 to-gray-800">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#E60278]/10 rounded-full blur-2xl" />
           <div className="absolute top-1/2 -left-12 w-32 h-32 bg-white/5 rounded-full blur-3xl" />
@@ -154,7 +180,8 @@ export default function CompaniesPage() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4">
+      {/* Content Section */}
+      <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
             <CompaniesFilter
