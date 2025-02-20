@@ -47,9 +47,9 @@ export default function Subscription() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-100">
+    <main className="min-h-screen bg-gray-50">
       <div className="flex w-screen flex-col items-center p-5 md:p-10">
-        <h1 className="w-full border-b border-gray-500 pb-5 text-center text-3xl font-bold text-primary">
+        <h1 className="w-full text-center text-3xl font-bold text-primary">
           Subscription Plan
         </h1>
 

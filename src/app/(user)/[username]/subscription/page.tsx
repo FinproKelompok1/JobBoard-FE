@@ -58,7 +58,9 @@ export default function UserSubscription({
           My Subscription
         </h1>
 
-        {userSubscription &&
+        {!userSubscription ? (
+          <div>no subs</div>
+        ) : (
           userSubscription.map((item, index) => {
             const endDate = dayjs(item.endDate);
             const dayBeforeEndDate = endDate.subtract(1, "day").startOf("day");
@@ -172,7 +174,8 @@ export default function UserSubscription({
                 </div>
               </div>
             );
-          })}
+          })
+        )}
       </div>
     </main>
   );
