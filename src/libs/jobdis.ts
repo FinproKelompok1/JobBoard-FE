@@ -99,3 +99,33 @@ export const getJobApplications = async (jobId: string) => {
     throw error;
   }
 };
+
+export const checkUserApplication = async (
+  jobId: string,
+  userId: number,
+  token: string,
+) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/apply/check/${jobId}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId }),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to check application status");
+    }
+
+    const data = await response.json();
+    return data.hasApplied;
+  } catch (error) {
+    console.error("Error checking application:", error);
+    return false;
+  }
+};
