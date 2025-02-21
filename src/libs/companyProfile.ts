@@ -1,0 +1,60 @@
+import axios from "@/helpers/axios";
+import { toast } from "react-toastify";
+import { AdminProfile, ProfileFormData } from "@/types/company";
+
+const getCookieValue = (name: string) => {
+  const cookie = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith(`${name}=`));
+  return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
+};
+
+export const getAdminProfile = async (): Promise<AdminProfile> => {
+  try {
+    const user = getCookieValue("user");
+    if (!user) throw new Error("No user data found");
+
+    const userData = JSON.parse(user);
+    const token = userData.token;
+
+    const response = await axios.get("/companies/profile", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error fetching admin profile:", err);
+    toast.error("Failed to fetch profile");
+    throw err;
+  }
+};
+
+export const updateAdminProfile = async (data: ProfileFormData) => {
+  try {
+    const user = getCookieValue("user");
+    if (!user) throw new Error("No user data found");
+
+    const userData = JSON.parse(user);
+    const token = userData.token;
+
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+      if (value !== undefined) {
+        formData.append(key, value);
+      }
+    });
+
+    const response = await axios.put("/companies/profile", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error updating admin profile:", err);
+    toast.error("Failed to update profile");
+    throw err;
+  }
+};
