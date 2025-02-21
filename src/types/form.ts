@@ -22,3 +22,13 @@ interface IPreselectionQuestion {
   options: string[];
   correctAnswer: number | null;
 }
+
+export interface FormValueCompletingTask {
+  answer: IAnswer[];
+}
+
+interface IAnswer {
+  id: number;
+  correctAnswer: number;
+  selectedOption: number;
+}

@@ -67,7 +67,8 @@ export default function JobsTable() {
                 <th>JOB</th>
                 <th>APPLICANTS</th>
                 <th>PRE SELECTION TEST</th>
-                <th>JOB ACTIONS</th>
+                <th>STATUS</th>
+                <th>ACTIONS</th>
               </tr>
             </thead>
             <tbody>
@@ -75,6 +76,7 @@ export default function JobsTable() {
                 skeletons.map((_, idx) => <JobSekeleton key={idx} />)
               ) : (
                 data && data.jobs.map((item) => {
+                  const isExpired = new Date() > new Date(item.endDate)
                   return (
                     <tr key={item.id}>
                       <td>
@@ -86,6 +88,11 @@ export default function JobsTable() {
                       </td>
                       <td><TotalApplicants jobId={item.id} /></td>
                       <td><SetPreTest jobId={item.id} isTestValue={item.isTestActive} /></td>
+                      <td>{isExpired ? (
+                        <span className="font-medium text-red-500">Expired</span>
+                      ) : (
+                        <span className="font-medium text-blue-500">Active</span>)
+                      }</td>
                       <td>
                         <div className="flex items-center gap-4">
                           <EditJob job={item} />

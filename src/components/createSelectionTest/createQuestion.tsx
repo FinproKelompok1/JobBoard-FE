@@ -40,7 +40,7 @@ export default function CreateQuestion(formikProps: FormikProps<FormValuePresele
           ))}
           <button
             type="button"
-            onClick={() => push({ question: "", options: [""], correctAnswer: 0 })}
+            onClick={() => push({ question: "", options: [""], correctAnswer: null })}
             className="bg-pink text-white font-semibold py-2 px-4"
           >
             Add Question
