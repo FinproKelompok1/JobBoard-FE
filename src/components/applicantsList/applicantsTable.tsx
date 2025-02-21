@@ -74,6 +74,7 @@ export default function ApplicantsTable({
                 <th>APPLY ON</th>
                 <th>EXPECTED SALARY</th>
                 <th>STATUS</th>
+                <th>TEST RESULT</th>
                 <th>RESUME</th>
                 <th>ACTION</th>
               </tr>
@@ -105,6 +106,7 @@ export default function ApplicantsTable({
                       <td>{formatDate(item.createdAt.split('T')[0])}</td>
                       <td>{formatRupiahTanpaDesimal(item.expectedSalary)}</td>
                       <td><SetStatusApplicant {...props} /></td>
+                      <td><div className="text-center">{item.selectionTestResult}</div></td>
                       <td><Link target="blank" href={item.resume} className="px-2 py-1 font-medium text-white bg-pink">Preview</Link></td>
                       <td>
                         <div className="flex items-center justify-center">
