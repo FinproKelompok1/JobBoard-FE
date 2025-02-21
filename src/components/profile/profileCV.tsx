@@ -1,8 +1,13 @@
-'use client'
-import { useState } from 'react';
-import { X, Upload } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, Upload, Mail, Lock, Save } from 'lucide-react';
 import { UserProfile, Gender, LastEdu } from '@/types/profile';
 import { UpdateProfile, uploadProfileImage } from '@/libs/auth';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 interface ProfileEditFormProps {
   user: UserProfile;
@@ -13,13 +18,26 @@ interface ProfileEditFormProps {
 export default function ProfileEditForm({ user, handleClose, onUpdate }: ProfileEditFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showEmailDialog, setShowEmailDialog] = useState(false);
+  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+  
   const [formData, setFormData] = useState({
     fullname: user.fullname || '',
-    email: user.email,
     gender: user.gender || '',
     dob: user.dob ? new Date(user.dob).toISOString().split('T')[0] : '',
     lastEdu: user.lastEdu || '',
     avatar: user.avatar,
+  });
+
+  const [emailData, setEmailData] = useState({
+    newEmail: '',
+    password: '',
+  });
+
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,7 +50,7 @@ export default function ProfileEditForm({ user, handleClose, onUpdate }: Profile
       handleClose();
     } catch (error) {
       console.error('Error updating profile:', error);
-      setError('Failed to update profile');
+      setError('Failed to update profile. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -56,12 +74,22 @@ export default function ProfileEditForm({ user, handleClose, onUpdate }: Profile
         onUpdate();
       } catch (error) {
         console.error('Error uploading image:', error);
-        setError('Failed to upload image');
+        setError('Failed to upload image. Please try again.');
         setFormData(prev => ({ ...prev, avatar: user.avatar }));
       } finally {
         setLoading(false);
       }
     }
+  };
+
+  const handleEmailChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Email change requested:', emailData);
+  };
+
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Password change requested:', passwordData);
   };
 
   return (
@@ -120,15 +148,24 @@ export default function ProfileEditForm({ user, handleClose, onUpdate }: Profile
             />
           </div>
 
-          {/* Email */}
+          {/* Current Email (Read-only) */}
           <div>
-            <label className="block text-sm font-medium mb-2">Email</label>
-            <input
-              type="email"
-              value={formData.email}
-              className="w-full p-2 border rounded-lg bg-gray-50"
-              disabled
-            />
+            <label className="block text-sm font-medium mb-2">Current Email</label>
+            <div className="flex gap-2">
+              <input
+                type="email"
+                value={user.email}
+                className="w-full p-2 border rounded-lg bg-gray-50"
+                disabled
+              />
+              <button
+                type="button"
+                onClick={() => setShowEmailDialog(true)}
+                className="px-3 py-2 text-[#E60278] hover:bg-pink-50 rounded-lg transition-colors"
+              >
+                <Mail className="w-4 h-4" />
+              </button>
+            </div>
           </div>
 
           {/* Gender */}
@@ -177,8 +214,20 @@ export default function ProfileEditForm({ user, handleClose, onUpdate }: Profile
           </div>
         </div>
 
+        {/* Password Change Button */}
+        <div className="flex justify-center">
+          <button
+            type="button"
+            onClick={() => setShowPasswordDialog(true)}
+            className="text-[#E60278] hover:bg-pink-50 px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+          >
+            <Lock className="w-4 h-4" />
+            Change Password
+          </button>
+        </div>
+
         {/* Submit Buttons */}
-        <div className="flex justify-end pt-4">
+        <div className="flex justify-end pt-4 border-t">
           <button 
             type="button"
             onClick={handleClose}
@@ -189,13 +238,116 @@ export default function ProfileEditForm({ user, handleClose, onUpdate }: Profile
           </button>
           <button 
             type="submit"
-            className="bg-[#E60278] text-white px-6 py-2 rounded-lg hover:bg-pink-700 transition-colors disabled:opacity-50"
+            className="bg-[#E60278] text-white px-6 py-2 rounded-lg hover:bg-pink-700 transition-colors disabled:opacity-50 flex items-center gap-2"
             disabled={loading}
           >
+            <Save className="w-4 h-4" />
             {loading ? 'Saving...' : 'Save Changes'}
           </button>
         </div>
       </form>
+
+      {/* Email Change Dialog */}
+      <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Change Email Address</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleEmailChange} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">New Email Address</label>
+              <input
+                type="email"
+                value={emailData.newEmail}
+                onChange={(e) => setEmailData(prev => ({ ...prev, newEmail: e.target.value }))}
+                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60278]"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Confirm Password</label>
+              <input
+                type="password"
+                value={emailData.password}
+                onChange={(e) => setEmailData(prev => ({ ...prev, password: e.target.value }))}
+                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60278]"
+                required
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setShowEmailDialog(false)}
+                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="bg-[#E60278] text-white px-4 py-2 rounded-lg hover:bg-pink-700"
+              >
+                Change Email
+              </button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Password Change Dialog */}
+      <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Change Password</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handlePasswordChange} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Current Password</label>
+              <input
+                type="password"
+                value={passwordData.currentPassword}
+                onChange={(e) => setPasswordData(prev => ({ ...prev, currentPassword: e.target.value }))}
+                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60278]"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">New Password</label>
+              <input
+                type="password"
+                value={passwordData.newPassword}
+                onChange={(e) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
+                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60278]"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Confirm New Password</label>
+              <input
+                type="password"
+                value={passwordData.confirmPassword}
+                onChange={(e) => setPasswordData(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60278]"
+                required
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setShowPasswordDialog(false)}
+                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="bg-[#E60278] text-white px-4 py-2 rounded-lg hover:bg-pink-700"
+              >
+                Change Password
+              </button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

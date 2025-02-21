@@ -166,9 +166,10 @@ export const getUserProfile = async () => {
 
 export const UpdateProfile = async (userId: string, data: any) => {
   try {
-    const response = await axios.put(`/auth/profile/${userId}`, data);
+    const response = await axios.put(`/auth/${userId}`, data);
     return response.data;
   } catch (error) {
+    console.error("Error in UpdateProfile:", error);
     throw error;
   }
 };
