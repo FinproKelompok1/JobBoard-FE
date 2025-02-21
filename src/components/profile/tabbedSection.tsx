@@ -57,6 +57,7 @@ export default function TabbedSection({ user, onUpdate }: TabbedSectionProps) {
           <CVInputSection
             initialCV={user.CurriculumVitae?.[0] || null}
             onSave={handleCVSave}
+            user={user}
           />
         )}
 

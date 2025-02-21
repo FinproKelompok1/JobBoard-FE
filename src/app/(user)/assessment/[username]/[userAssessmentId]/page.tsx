@@ -119,7 +119,7 @@ export default function UserAssessmentForm({
     userAssessment &&
     assessmentQuestions && (
       <main>
-        <div className="sticky top-0 w-screen border-b border-gray-500 bg-white p-5">
+        <div className="sticky top-0 w-screen border-b border-gray-300 bg-white p-5">
           <div className="flex flex-col items-center justify-center gap-5">
             <h1 className="text-3xl font-bold text-primary">
               {userAssessment.assessment.title}

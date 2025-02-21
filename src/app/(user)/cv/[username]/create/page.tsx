@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "@/helpers/axios";
+import { toastErrAxios } from "@/helpers/toast";
 import { ICvForm } from "@/types/types";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
@@ -40,7 +41,7 @@ export default function CreateCv({ params }: { params: { username: string } }) {
       router.refresh();
     } catch (error) {
       console.log("Error create CV:", error);
-      toast.error("Error create CV");
+      toastErrAxios(error);
     } finally {
       setIsLoading(false);
     }

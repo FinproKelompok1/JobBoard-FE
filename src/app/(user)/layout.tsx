@@ -19,6 +19,7 @@ export default function UserLayout({
     "/job-detail",
     "/jobs",
     "/certificate-verification",
+    "/review/company",
   ];
 
   const isPublicRoute = () => {

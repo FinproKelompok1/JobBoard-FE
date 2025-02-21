@@ -4,6 +4,7 @@ import { deleteSubscription, getSubscriptionUsers } from "@/libs/subscription";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { MdDeleteForever } from "react-icons/md";
+import { toastErrAxios } from "@/helpers/toast";
 
 export default function DeleteSubscription({
   subscriptionId,
@@ -41,7 +42,7 @@ export default function DeleteSubscription({
       toast.success(`Subscription ID ${deleteSubsId} deleted successfully`);
     } catch (error) {
       console.log("Error deleting subscription:", error);
-      toast.error("Error deleting subscription");
+      toastErrAxios(error);
     } finally {
       setIsDeleting(false);
       setDeleteSubsId(null);

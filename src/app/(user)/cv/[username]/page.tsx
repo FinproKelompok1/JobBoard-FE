@@ -1,6 +1,6 @@
 "use client";
 
-import axios from "@/helpers/axios";
+import { handleDownloadCv } from "@/components/cv/downloadCV";
 import { getUserCv } from "@/libs/cv";
 import { IUserCv } from "@/types/types";
 import Link from "next/link";
@@ -12,7 +12,7 @@ export default function CurriculumVitae({
   params: { username: string };
 }) {
   const [userCv, setUserCv] = useState<IUserCv | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isDownloading, setIsDownloading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchUserCv = async () => {
@@ -32,36 +32,14 @@ export default function CurriculumVitae({
 
   const skills = userCv?.CurriculumVitae[0]?.skill || "";
   const skillList = skills
-    ? skills.split(";").map((skill) => skill.trim())
+    ? skills.split(",").map((skill) => skill.trim())
     : [];
 
-  const handleDownload = async () => {
-    try {
-      setIsLoading(true);
-      const response = await axios.get(`/cv/download/${params.username}`, {
-        responseType: "blob",
-      });
-
-      const url = window.URL.createObjectURL(response.data);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `CV_${params.username}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Error downloading CV:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
-    <main className="flex min-h-screen flex-col items-center bg-gray-100 p-5 md:p-10">
+    <main className="flex min-h-screen flex-col items-center bg-gray-50 p-5 md:p-10">
       <section className="flex w-full flex-col">
         <div className="flex flex-col items-center justify-center">
-          <h1 className="w-full border-b border-gray-500 pb-5 text-center text-3xl font-bold text-primary">
+          <h1 className="w-full text-center text-3xl font-bold text-primary">
             My Curriculum Vitae
           </h1>
         </div>
@@ -87,11 +65,13 @@ export default function CurriculumVitae({
                 Update CV
               </Link>
               <button
-                onClick={handleDownload}
-                disabled={isLoading}
+                onClick={() =>
+                  handleDownloadCv(params.username, setIsDownloading)
+                }
+                disabled={isDownloading}
                 className="rounded-lg bg-accent px-4 py-2 font-medium text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/80"
               >
-                {isLoading ? "Downloading..." : "Download"}
+                {isDownloading ? "Downloading..." : "Download"}
               </button>
             </>
           )}

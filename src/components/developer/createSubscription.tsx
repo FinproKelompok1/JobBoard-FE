@@ -9,6 +9,7 @@ import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { FaPlus } from "react-icons/fa";
+import { toastErrAxios } from "@/helpers/toast";
 
 const initialValues: ISubscriptionForm = {
   category: "",
@@ -42,7 +43,7 @@ export default function CreateSubscription() {
       resetForm();
       router.refresh();
     } catch (error) {
-      toast.error("Error creating subscription");
+      toastErrAxios(error);
     } finally {
       setIsCreating(false);
       setIsModalOpen(false);

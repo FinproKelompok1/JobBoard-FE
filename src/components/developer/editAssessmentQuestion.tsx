@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "@/helpers/axios";
+import { toastErrAxios } from "@/helpers/toast";
 import { IAssessmentQuestion, IAssessmentQuestionForm } from "@/types/types";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useState } from "react";
@@ -52,7 +53,7 @@ export default function EditAssesmentQuestion({
       setIsModalOpen(false);
     } catch (error) {
       console.error("Failed to edit question:", error);
-      toast.error("Failed to edit question");
+      toastErrAxios(error);
     } finally {
       setIsEditing(false);
     }

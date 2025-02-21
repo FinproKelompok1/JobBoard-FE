@@ -24,6 +24,8 @@ export default function NavbarWrapper() {
       "/auth/login",
       "/assessment",
       "/certificate-verification",
+      "/review",
+      "/cv",
     ];
 
     return userRoutes.some((route) => pathname.startsWith(route));

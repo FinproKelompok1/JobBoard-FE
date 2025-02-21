@@ -47,7 +47,7 @@ export default function CreateUserAssessment({
       <button
         onClick={() => setIsModalOpen(true)}
         disabled={disabled}
-        className="w-full rounded-md border-2 border-accent bg-accent px-4 py-2 text-center font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 hover:text-white disabled:cursor-not-allowed disabled:bg-accent/80 md:w-fit"
+        className="w-full rounded-md border-2 border-accent bg-accent px-4 py-2 text-center font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 hover:text-white disabled:cursor-not-allowed disabled:bg-accent/70 md:w-fit"
       >
         Start assessment
       </button>
@@ -78,7 +78,7 @@ export default function CreateUserAssessment({
               <button
                 onClick={() => handleCreateUserAssessment()}
                 disabled={isCreating}
-                className="rounded-md border-2 border-accent bg-accent px-4 py-2 text-center font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 hover:text-white disabled:cursor-not-allowed disabled:bg-accent/80"
+                className="rounded-md border-2 border-accent bg-accent px-4 py-2 text-center font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 hover:text-white disabled:cursor-not-allowed disabled:bg-accent/70"
               >
                 {isCreating ? "Starting..." : "Start Assessment"}
               </button>

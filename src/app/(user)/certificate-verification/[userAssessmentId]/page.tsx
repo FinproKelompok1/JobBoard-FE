@@ -33,7 +33,9 @@ export default async function CertificateVerification({
     <div className="flex min-h-screen w-full flex-col p-5 md:items-center md:justify-center md:bg-gray-100">
       <div className="flex items-center justify-center">
         <div className="flex items-center gap-2">
-          <h1 className="text-3xl font-semibold text-green-600">Verified</h1>
+          <h1 className="text-3xl font-semibold text-green-600">
+            This certificate is verified
+          </h1>
           <MdVerified className="size-8 text-green-600" />
         </div>
       </div>

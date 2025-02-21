@@ -19,8 +19,6 @@ export default function DownloadCertificate({
         .find((row) => row.startsWith("token="))
         ?.split("=")[1];
 
-      console.log("token:", token);
-
       const response = await axios.get(
         `/user-assessments/download/${userAssessment.User.username}/${userAssessment.id}`,
         {

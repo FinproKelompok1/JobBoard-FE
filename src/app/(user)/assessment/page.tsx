@@ -6,7 +6,8 @@ import { getAssessments } from "@/libs/assessment";
 import { getUserProfile } from "@/libs/auth";
 import { getUserSubscription } from "@/libs/subscription";
 import { UserProfile } from "@/types/profile";
-import { IAssessment, IUserSubscription } from "@/types/types";
+import { IAssessment, IUserAssessment, IUserSubscription } from "@/types/types";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function SkillAssessment() {
@@ -59,6 +60,8 @@ export default function SkillAssessment() {
       userSubs.assessmentCount >= 2,
   );
 
+  console.log("assessments:", assessments);
+
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="w-screen p-5 md:p-10">
@@ -90,6 +93,9 @@ export default function SkillAssessment() {
               {assessments
                 .filter((assessment) => assessment.isActive)
                 .map((assessment, index) => {
+                  const userAssessment = assessment.UserAssessment.find(
+                    (item) => item.User.username === user.username,
+                  );
                   return (
                     <div
                       key={index}
@@ -99,16 +105,35 @@ export default function SkillAssessment() {
                         <h1 className="text-2xl font-bold text-primary">
                           {assessment.title}
                         </h1>
+                        <span
+                          className={`${userAssessment?.status === "failed" ? "bg-red-500" : "bg-green-500"} rounded-md px-2 py-1 font-semibold text-white`}
+                        >
+                          {userAssessment?.status === "failed"
+                            ? "Failed"
+                            : "Passed"}
+                        </span>{" "}
                       </div>
 
                       <p className="mt-4">{assessment.description}</p>
 
                       <div className="mt-5 flex gap-3 md:justify-end">
-                        <CreateUserAssessment
-                          username={user.username}
-                          assessmentId={assessment.id}
-                          disabled={isAssessmentLimit}
-                        />
+                        {userAssessment?.status === "passed" ? (
+                          <Link
+                            href={`/assessment/${userAssessment.User.username}/${userAssessment.id}/certificate`}
+                            className="w-full rounded-md border-2 border-accent bg-accent px-4 py-2 text-center font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 hover:text-white disabled:cursor-not-allowed disabled:bg-accent/70 md:w-fit"
+                          >
+                            View Certificate
+                          </Link>
+                        ) : (
+                          <CreateUserAssessment
+                            username={user.username}
+                            assessmentId={assessment.id}
+                            disabled={
+                              isAssessmentLimit ||
+                              userAssessment?.status === "passed"
+                            }
+                          />
+                        )}
                       </div>
                     </div>
                   );

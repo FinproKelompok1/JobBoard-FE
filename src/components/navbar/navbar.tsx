@@ -124,24 +124,30 @@ export default function Navbar({ isHomePage }: NavbarProps) {
               )}
               {isUser && (
                 <>
-                  <Link
+                  <a
                     href={`/subscription/${userH.username}`}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     My Subscription
-                  </Link>
-                  <Link
+                  </a>
+                  <a
                     href={`/transaction/${userH.username}`}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     My Transaction
-                  </Link>
-                  <Link
+                  </a>
+                  <a
                     href={`/assessment/${userH.username}`}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     My Assessment
-                  </Link>
+                  </a>
+                  <a
+                    href={`/review/${userH.username}`}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    My Review
+                  </a>
                 </>
               )}
               <button
@@ -245,9 +251,37 @@ export default function Navbar({ isHomePage }: NavbarProps) {
                       Profile
                     </a>
                   )}
+                  {userH.role === "user" && (
+                    <>
+                      <a
+                        href={`/subscription/${userH.username}`}
+                        className={`font-medium transition-colors hover:text-[#E60278] ${textColor}`}
+                      >
+                        My Subscription
+                      </a>
+                      <a
+                        href={`/transaction/${userH.username}`}
+                        className={`font-medium transition-colors hover:text-[#E60278] ${textColor}`}
+                      >
+                        My Transaction
+                      </a>
+                      <a
+                        href={`/assessment/${userH.username}`}
+                        className={`font-medium transition-colors hover:text-[#E60278] ${textColor}`}
+                      >
+                        My Assessment
+                      </a>
+                      <a
+                        href={`/review/${userH.username}`}
+                        className={`font-medium transition-colors hover:text-[#E60278] ${textColor}`}
+                      >
+                        My Review
+                      </a>
+                    </>
+                  )}
                   <button
                     onClick={logOut}
-                    className={`rounded-lg px-4 py-2 text-center font-medium transition-all ${
+                    className={`mt-2 rounded-lg px-4 py-2 text-center font-medium transition-all ${
                       isHomePage && !isScrolled
                         ? "bg-white text-[#0D3880] hover:bg-white/90"
                         : "bg-[#E60278] text-white hover:bg-[#E60278]/90"

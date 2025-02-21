@@ -14,7 +14,7 @@ export default async function DownloadCv({
   }
 
   const skills = userCv?.CurriculumVitae[0].skill;
-  const skillList = skills?.split(";").map((skill) => skill.trim());
+  const skillList = skills?.split(",").map((skill) => skill.trim());
 
   return (
     <main className="flex flex-col items-center">

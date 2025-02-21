@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "@/helpers/axios";
+import { toastErrAxios } from "@/helpers/toast";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
@@ -32,7 +33,7 @@ export default function StatusToggle({
       router.refresh();
     } catch (error) {
       console.error("Error switch assessment's status:", error);
-      toast.error("Error switch assessment's status");
+      toastErrAxios(error);
     }
   };
 

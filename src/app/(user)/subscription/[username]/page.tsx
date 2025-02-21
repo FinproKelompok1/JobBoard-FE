@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import { getUserSubscription } from "@/libs/subscription";
 import Link from "next/link";
 import LoadingPage from "@/components/loading";
+import { toastErrAxios } from "@/helpers/toast";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -57,7 +58,7 @@ export default function UserSubscription({
       router.push(`/transaction/${data.transactionId}`);
     } catch (error) {
       console.log("Error renew subscription:", error);
-      toast.error("Error renew subscription");
+      toastErrAxios(error);
     }
   };
 
