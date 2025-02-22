@@ -1,10 +1,10 @@
 import axios from "@/helpers/axios"
 import { toastErrAxios } from "@/helpers/toast"
 import UseOpen from "@/hooks/useOpen"
-import { jobSchema } from "@/libs/formSchemas"
+import { jobSchema } from "@/libs/jobSchemas"
 import { FormValueJob } from "@/types/form"
 import { ErrorMessage, Field, Form, Formik, FormikProps } from "formik"
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { FaPencilAlt } from "react-icons/fa"
 import { IoMdClose } from "react-icons/io"
 import { toast } from "react-toastify"
@@ -21,11 +21,6 @@ import { mutate } from "swr"
 import { sweetAlertWarning } from "@/helpers/sweetAlert"
 
 export default function EditJob({ job }: { job: IJob }) {
-  const context = useContext(QueryContext)
-  if (!context) {
-    throw new Error('There is no context')
-  }
-  const { sort, search } = context
   const { open, hidden, menuHandler } = UseOpen()
   const [isLoading, SetIsLoading] = useState<boolean>(false);
   const [provinceId, setProvinceId] = useState<string>('')
@@ -77,7 +72,7 @@ export default function EditJob({ job }: { job: IJob }) {
       }
       const { data } = await axios.patch(`/jobs/${job.id}`, formData)
       toast.success(data.message)
-      mutate(`/jobs?${sort}&${search}`)
+      mutate((key: string) => key.startsWith(`/jobs`));
     } catch (err: unknown) {
       toastErrAxios(err)
     } finally {

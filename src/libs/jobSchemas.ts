@@ -1,3 +1,4 @@
+import { FormValueJob } from "@/types/form";
 import * as Yup from "yup";
 
 export const jobSchema = Yup.object().shape({
@@ -8,7 +9,7 @@ export const jobSchema = Yup.object().shape({
       "filesize",
       "the image is too large",
       (value) =>
-        !value || (value instanceof File && value.size <= 2 * 1024 * 1024)
+        !value || (value instanceof File && value.size <= 2 * 1024 * 1024),
     )
     .test(
       "fileExtension",
@@ -17,8 +18,8 @@ export const jobSchema = Yup.object().shape({
         !value ||
         (value instanceof File &&
           ["image/jpeg", "image/png", "image/jpg", "image/webp"].includes(
-            value.type
-          ))
+            value.type,
+          )),
     )
     .nullable(),
   endDate: Yup.date().required("Deadline is required"),
@@ -41,3 +42,16 @@ export const jobSchema = Yup.object().shape({
   description: Yup.string().required("Enter your job detail"),
   tags: Yup.string().required("Tags is required"),
 });
+
+export const jobInitialValue: FormValueJob = {
+  title: "",
+  role: "",
+  banner: null,
+  endDate: "",
+  province: "",
+  salary: "",
+  city: "",
+  category: "",
+  description: "<h1>Requirements</h1><br/><h1>Responsibilities</h1>",
+  tags: "",
+};

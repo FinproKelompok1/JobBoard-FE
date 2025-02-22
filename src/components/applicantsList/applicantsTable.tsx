@@ -74,6 +74,7 @@ export default function ApplicantsTable({
                 <th>APPLY ON</th>
                 <th>EXPECTED SALARY</th>
                 <th>STATUS</th>
+                <th>TEST RESULT</th>
                 <th>RESUME</th>
                 <th>ACTION</th>
               </tr>
@@ -89,7 +90,9 @@ export default function ApplicantsTable({
                     <tr key={idx}>
                       <td>
                         <div className="flex items-center gap-2">
-                          <Image src={item.user.avatar} alt={item.user.fullname} width={40} height={40} className="rounded-full"></Image>
+                          <div className="relative w-[40px] h-[40px] rounded-full overflow-hidden">
+                            <Image src={item.user.avatar} alt={item.user.fullname} fill></Image>
+                          </div>
                           <div className="flex flex-col">
                             <div className="flex gap-2">
                               <p>{item.user.fullname}</p>
@@ -103,7 +106,8 @@ export default function ApplicantsTable({
                       <td>{formatDate(item.createdAt.split('T')[0])}</td>
                       <td>{formatRupiahTanpaDesimal(item.expectedSalary)}</td>
                       <td><SetStatusApplicant {...props} /></td>
-                      <td><Link href={item.resume} className="px-2 py-1 font-medium text-white bg-pink">Preview</Link></td>
+                      <td><div className="text-center">{item.selectionTestResult}</div></td>
+                      <td><Link target="blank" href={item.resume} className="px-2 py-1 font-medium text-white bg-pink">Preview</Link></td>
                       <td>
                         <div className="flex items-center justify-center">
                           {item.status === 'processed' ?

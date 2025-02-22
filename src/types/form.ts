@@ -10,3 +10,25 @@ export interface FormValueJob {
   description: string;
   tags: string;
 }
+
+export interface FormValuePreselection {
+  title: string;
+  description: string;
+  preselectionQuestions: IPreselectionQuestion[];
+}
+
+interface IPreselectionQuestion {
+  question: string;
+  options: string[];
+  correctAnswer: number | null;
+}
+
+export interface FormValueCompletingTask {
+  answer: IAnswer[];
+}
+
+interface IAnswer {
+  id: number;
+  correctAnswer: number;
+  selectedOption: number;
+}

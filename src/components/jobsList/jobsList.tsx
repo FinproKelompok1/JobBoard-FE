@@ -5,7 +5,7 @@ import JobsTable from "./jobsTable";
 import React, { createContext, useState } from "react";
 import { createQueryString } from "@/helpers/createQuery";
 import { useDebounce } from "use-debounce";
-import { IoFilterSharp } from "react-icons/io5";
+import { TbArrowsSort } from "react-icons/tb";
 
 export interface IQueryContext {
   search: string
@@ -41,11 +41,10 @@ export default function JobsList() {
         <Link href={'/admin/create-job'} className="text-white bg-pink py-2 px-4 font-medium hover:bg-pink/85">Create a job</Link>
       </div>
       <div className="dropdown mt-10">
-        <button tabIndex={0} role="button" className="p-2 hover:bg-slate-200 transition duration-200"><IoFilterSharp /></button>
-        <ul tabIndex={0} className="dropdown-content menu bg-base-100 z-[1] w-fit p-2 shadow">
-          <p className="text-xs font-medium text-black/50 mx-2">sorted by earliest entry</p>
-          <li><a onClick={(e) => handleSort(e, 'asc')}>ascending</a></li>
-          <li><a onClick={(e) => handleSort(e, 'desc')}>descending</a></li>
+        <button tabIndex={0} role="button" className="p-2 hover:bg-slate-200 transition duration-200 rounded-full"><TbArrowsSort /></button>
+        <ul tabIndex={0} className="dropdown-content menu bg-base-100 z-[1] p-2 w-[250px] shadow">
+          <li><a onClick={(e) => handleSort(e, 'asc')}>By Job created date (first)</a></li>
+          <li><a onClick={(e) => handleSort(e, 'desc')}>By Job created date (last)</a></li>
         </ul>
       </div>
       <QueryContext.Provider value={{ search, sort }}>
