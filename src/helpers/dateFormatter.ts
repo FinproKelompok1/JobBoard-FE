@@ -1,4 +1,4 @@
-export function FormatDate(dateString: string) {
+export function formatDate(dateString: string) {
   const date = new Date(dateString);
   return date.toLocaleDateString("id-ID", {
     day: "2-digit",
