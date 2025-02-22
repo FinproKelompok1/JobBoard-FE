@@ -16,13 +16,13 @@ import CreateCV from "../cv/createCV";
 import { SimpleDateFormatter } from "@/helpers/dateFormatter";
 import UpdateCV from "../cv/updateCV";
 
-export interface CVInputSectionProps {
+export interface CvSectionProps {
   user: UserProfile;
   initialCV: CurriculumVitae;
   onSave: (cvData: Omit<CurriculumVitae, "id">) => Promise<void>;
 }
 
-export default function CvSection({ user, initialCV }: CVInputSectionProps) {
+export default function CvSection({ user, initialCV }: CvSectionProps) {
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isCreating, setIsCreating] = useState<boolean>(false);
