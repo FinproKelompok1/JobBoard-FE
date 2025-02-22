@@ -1,4 +1,4 @@
-import { getCertificateById, getUserAssessmentById } from "@/libs/assessment";
+import { getUserAssessmentById } from "@/libs/assessment";
 import { IUserAssessment } from "@/types/types";
 import Image from "next/image";
 import Link from "next/link";
@@ -49,7 +49,7 @@ export default async function CertificateFormat({
         </div>
         <div className="mt-12 text-center">
           <p className="text-lg">
-            For completing Talent Bridge's Skill Assessment:
+            For completing Talent Bridge&apos;s Skill Assessment:
           </p>
           <div className="mt-5 flex flex-col items-center justify-center gap-2">
             <p className="text-3xl font-medium">

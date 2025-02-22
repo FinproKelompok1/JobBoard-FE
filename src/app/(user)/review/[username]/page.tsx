@@ -76,7 +76,9 @@ export default function CompanyReview() {
             {userReview?.map((data, index) => {
               return (
                 <div key={index} className="flex flex-col gap-3">
-                  <p className="text-xl font-medium">"{data.review}"</p>
+                  <p className="text-xl font-medium">
+                    &quot;{data.review}&quot;
+                  </p>
                   <div className="space-y-1">
                     <div className="flex justify-between border-b">
                       <p className="font-medium">Culture rating</p>

@@ -55,7 +55,7 @@ export default async function UserAssessmentCertificate({
         </div>
         <div className="mt-12 text-center">
           <p className="text-lg">
-            For completing Talent Bridge's Skill Assessment:
+            For completing Talent Bridge&apos;s Skill Assessment:
           </p>
           <div className="mt-5 flex flex-col items-center justify-center gap-2">
             <p className="text-3xl font-medium">

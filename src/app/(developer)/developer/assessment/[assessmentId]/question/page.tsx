@@ -86,7 +86,7 @@ export default function AssessmentQuestion({
                 </p>
               </div>
             ) : (
-              assessmentQuestion.questions.map((question, index) => (
+              assessmentQuestion.questions.map((question) => (
                 <div key={question.id} className="mb-5">
                   <div className="flex items-center gap-5">
                     <p className="text-xl font-semibold">

@@ -56,9 +56,13 @@ export default function TransactionDetail({
   const handlePaySubscribe = async () => {
     try {
       setIsLoading(true);
+      if (!transaction) {
+        console.error("Transaction is null or undefined");
+        return;
+      }
       const transactionToken = await getTransactionToken(
-        transaction?.id!,
-        transaction?.amount!,
+        transaction.id,
+        transaction.amount,
       );
       if (transactionToken) {
         window.snap.pay(transactionToken);

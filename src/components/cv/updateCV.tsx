@@ -5,7 +5,6 @@ import { toastErrAxios } from "@/helpers/toast";
 import { ICvForm } from "@/types/types";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Award, BriefcaseIcon, GraduationCap, RadioTower } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
@@ -31,7 +30,6 @@ export default function UpdateCV({
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [experienceString, setExperienceString] = useState("");
   const [educationString, setEducationString] = useState("");
-  const router = useRouter();
 
   const handleSaveExperience = (formattedExperience: string) => {
     setExperienceString(formattedExperience);

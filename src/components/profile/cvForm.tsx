@@ -26,12 +26,12 @@ export default function CvSection({ user, initialCV }: CVInputSectionProps) {
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isCreating, setIsCreating] = useState<boolean>(false);
-  const [cvData, setCvData] = useState({
+  const cvData = {
     summary: initialCV?.summary || "",
     workExperience: initialCV?.experience || "",
     skill: initialCV?.skill || "",
     education: initialCV?.education || "",
-  });
+  };
 
   const parseWorkExperiences = (workExperiences: string) => {
     return workExperiences

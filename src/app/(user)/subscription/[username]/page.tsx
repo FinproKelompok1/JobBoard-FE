@@ -73,7 +73,7 @@ export default function UserSubscription({
           <LoadingPage />
         ) : !userSubscription ? (
           <p className="text-lg font-medium">
-            You don't have a subscription yet. Please go to the{" "}
+            You don&apos;t have a subscription yet. Please go to the{" "}
             <span className="text-accent">
               <Link href={"/subscription"}>subscription page</Link>
             </span>{" "}

@@ -43,7 +43,6 @@ export default function EducationForm({
   const handleCheckboxChange = () => {
     setCurrentlyStudying(!currentlyStudying);
     setFormData({ ...formData, endDate: "" });
-    2;
   };
 
   const handleSaveEducation = () => {

@@ -1,4 +1,3 @@
-import axios from "@/helpers/axios";
 import { SimpleDateFormatter } from "@/helpers/dateFormatter";
 import { getUserCv } from "@/libs/cv";
 import { IUserCv } from "@/types/types";

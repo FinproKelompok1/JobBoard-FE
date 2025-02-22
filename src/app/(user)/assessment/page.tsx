@@ -6,7 +6,7 @@ import { getAssessments } from "@/libs/assessment";
 import { getUserProfile } from "@/libs/auth";
 import { getUserSubscription } from "@/libs/subscription";
 import { UserProfile } from "@/types/profile";
-import { IAssessment, IUserAssessment, IUserSubscription } from "@/types/types";
+import { IAssessment, IUserSubscription } from "@/types/types";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 

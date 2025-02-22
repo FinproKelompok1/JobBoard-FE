@@ -42,8 +42,8 @@ export default async function UserAssessmentResult({
           {userAssessment.status === "failed" ? (
             <>
               <p className="text-lg">
-                Don't worry! You have the opportunity to try again and improve
-                your score.{" "}
+                Don&apos;t worry! You have the opportunity to try again and
+                improve your score.{" "}
               </p>
               <p className="text-lg">
                 Keep going, each attempt brings you closer to success!{" "}

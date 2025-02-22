@@ -1,6 +1,6 @@
 "use client";
 
-import DateFormatter, { SimpleDateFormatter } from "@/helpers/dateFormatter";
+import { SimpleDateFormatter } from "@/helpers/dateFormatter";
 import { useEffect, useState } from "react";
 
 export default function WorkExperienceForm({

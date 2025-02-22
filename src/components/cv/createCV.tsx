@@ -5,7 +5,6 @@ import { toastErrAxios } from "@/helpers/toast";
 import { ICvForm } from "@/types/types";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Award, BriefcaseIcon, GraduationCap, RadioTower } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
@@ -33,17 +32,6 @@ export default function CreateCV({
 }) {
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [experienceString, setExperienceString] = useState("");
-  const [educationString, setEducationString] = useState("");
-  const router = useRouter();
-
-  const handleSaveExperience = (formattedExperience: string) => {
-    setExperienceString(formattedExperience);
-  };
-
-  const handleSaveEducation = (formattedEducation: string) => {
-    setEducationString(formattedEducation);
-  };
 
   const handleCreateCv = async (
     values: ICvForm,
@@ -107,7 +95,6 @@ export default function CreateCV({
               </div>
               <WorkExperienceForm
                 onSave={(formattedExperience) => {
-                  handleSaveExperience(formattedExperience);
                   setFieldValue("experience", formattedExperience);
                 }}
               />
@@ -125,7 +112,6 @@ export default function CreateCV({
               </div>
               <EducationForm
                 onSave={(formattedEducation) => {
-                  handleSaveEducation(formattedEducation);
                   setFieldValue("education", formattedEducation);
                 }}
               />

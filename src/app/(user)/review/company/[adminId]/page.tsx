@@ -2,7 +2,6 @@ import StarRating from "@/components/review/starRating";
 import { CurrencyFormatter } from "@/helpers/currencryFormatter";
 import { getCompanyReviews } from "@/libs/review";
 import { IReview } from "@/types/types";
-import { FaStar } from "react-icons/fa";
 
 export default async function CompanyReview({
   params,
@@ -36,7 +35,7 @@ export default async function CompanyReview({
                   <span className="font-bold text-accent">{data.jobTitle}</span>{" "}
                   at this company:
                 </p>
-                <p className="text-xl font-medium">"{data.review}"</p>
+                <p className="text-xl font-medium">&quot;{data.review}&quot:</p>
                 <div className="space-y-1">
                   <div className="flex justify-between border-b">
                     <p className="font-medium">Culture rating</p>
