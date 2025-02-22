@@ -43,8 +43,8 @@ export default function CompanyReview() {
 
       <div className="flex flex-col items-center justify-center">
         <div className="flex w-full flex-col items-center justify-center rounded-xl border border-gray-200 bg-white p-5 shadow-lg md:w-[450px]">
-          {acceptedJobs?.map((data, index) => {
-            return (
+          {acceptedJobs && acceptedJobs.length > 0 ? (
+            acceptedJobs.map((data, index) => (
               <div key={index} className="flex flex-col justify-between gap-3">
                 <h1 className="text-2xl font-bold">
                   Company: {data.job.admin.companyName}
@@ -70,8 +70,13 @@ export default function CompanyReview() {
                   </div>
                 )}
               </div>
-            );
-          })}
+            ))
+          ) : (
+            <p className="text-lg font-medium text-gray-500">
+              You don't have accepted jobs
+            </p>
+          )}
+
           <div className="mt-3">
             {userReview?.map((data, index) => {
               return (

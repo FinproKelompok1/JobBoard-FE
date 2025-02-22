@@ -66,14 +66,14 @@ export default function UpdateCV({
           Authorization: `Bearer ${token}`,
         },
       });
-      toast.success(data.message);
       resetForm();
-      setIsEditing(false);
       window.location.reload();
+      toast.success(data.message);
     } catch (error) {
       console.log("Error edit CV:", error);
       toastErrAxios(error);
     } finally {
+      setIsEditing(false);
       setIsSubmitting(false);
     }
   };
