@@ -58,7 +58,7 @@ export default async function TransactionList() {
                   </td>
                   <td className="border-r px-4 py-2">
                     <span
-                      className={`rounded-full px-3 py-1 text-left text-sm tracking-wide text-primary ${transaction.status === "pending" ? "bg-yellow-200" : transaction.status === "settlement" ? "bg-green-200" : "bg-red-200"} `}
+                      className={`rounded-full px-3 py-1 text-left text-sm tracking-wide ${transaction.status === "pending" ? "bg-yellow-200" : transaction.status === "settlement" ? "bg-green-200" : "bg-red-200"} `}
                     >
                       {transaction.status === "pending"
                         ? "Pending"

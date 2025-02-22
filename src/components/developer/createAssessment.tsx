@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { FaPlus } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
+import { toastErrAxios } from "@/helpers/toast";
 
 const initialValues: IAssessmentForm = {
   title: "",
@@ -43,7 +44,7 @@ export default function CreateAssessment() {
       router.push(`/developer/assessment/${data.assessmentId}/question`);
       router.refresh();
     } catch (error) {
-      toast.error("Error create assessment");
+      toastErrAxios(error);
     } finally {
       setIsCreating(false);
     }
@@ -122,7 +123,7 @@ export default function CreateAssessment() {
                   />
                 </div>
 
-                <div className="flex items-center">
+                <div className="mt-5 flex items-center">
                   <input
                     type="checkbox"
                     id="confirmation"

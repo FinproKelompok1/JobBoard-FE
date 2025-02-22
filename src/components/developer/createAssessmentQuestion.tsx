@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "@/helpers/axios";
+import { toastErrAxios } from "@/helpers/toast";
 import { IAssessmentQuestionForm } from "@/types/types";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useState } from "react";
@@ -65,7 +66,7 @@ export default function CreateAssessmentQuestion({
       setIsChecked(false);
       await mutate();
     } catch (error) {
-      toast.error("Error create assessment");
+      toastErrAxios(error);
     } finally {
       setIsCreating(false);
       setIsModalOpen(false);
@@ -103,7 +104,7 @@ export default function CreateAssessmentQuestion({
               validationSchema={validationSchema}
               onSubmit={handleCreateQuestion}
             >
-              {({ values, setFieldValue }) => (
+              {({ values }) => (
                 <Form className="mt-5 flex flex-col gap-5">
                   <div className="flex flex-col">
                     <label htmlFor="question" className="text-lg font-semibold">

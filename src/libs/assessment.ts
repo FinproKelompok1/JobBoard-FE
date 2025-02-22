@@ -36,9 +36,21 @@ export async function getAssessmentQuestions(
   }
 }
 
+export async function getUserAssessments(username: string) {
+  try {
+    const response = await axios.get(`/user-assessments/${username}`);
+
+    return response.data.userAssessments;
+  } catch (error) {
+    console.error("Error get user assessments:", error);
+  }
+}
+
 export async function getUserAssessmentById(userAssessmentId: number) {
   try {
-    const response = await axios.get(`/user-assessments/${userAssessmentId}`);
+    const response = await axios.get(
+      `/user-assessments/detail/${userAssessmentId}`,
+    );
 
     return response.data.userAssessment;
   } catch (error) {

@@ -1,3 +1,5 @@
+import { IReview, IUserAssessment } from "./types";
+
 export enum Gender {
   female = "female",
   male = "male",
@@ -22,9 +24,11 @@ export interface JobApplication {
   job: {
     title: string;
     admin: {
+      id: number;
       companyName: string;
     };
   };
+  jobId: string;
   status: JobApplicationStatus;
   expectedSalary: number;
   createdAt: string;
@@ -52,4 +56,7 @@ export interface UserProfile {
   lastEdu: LastEdu | null;
   CurriculumVitae: CurriculumVitae[];
   JobApplication: JobApplication[];
+  createdAt: string;
+  Review: IReview[];
+  UserAssessment: IUserAssessment[];
 }

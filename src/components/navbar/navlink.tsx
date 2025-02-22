@@ -1,5 +1,5 @@
-'use client'
-import React from 'react';
+"use client";
+import React from "react";
 
 interface NavLinksProps {
   isHomePage: boolean;
@@ -8,26 +8,25 @@ interface NavLinksProps {
 
 export default function NavLinks({ isHomePage, isScrolled }: NavLinksProps) {
   const navigationItems = [
-    { label: 'SUBSCRIPTION', path: '/subscription' },
-    { label: 'FIND GREAT JOBS', path: '/jobs' },
-    { label: 'FIND TOP EMPLOYERS', path: '/companies' },
-    { label: 'ABOUT US', path: '/about-us' }
+    { label: "SUBSCRIPTION", path: "/subscription" },
+    { label: "FIND GREAT JOBS", path: "/jobs" },
+    { label: "FIND TOP EMPLOYERS", path: "/companies" },
+    { label: "ABOUT US", path: "/about-us" },
   ];
 
-
   const textColor = isHomePage
-    ? (isScrolled ? 'text-[#0D3880]' : 'text-[#FFFFFF]')
-    : 'text-[#0D3880]';
+    ? isScrolled
+      ? "text-[#0D3880]"
+      : "text-[#FFFFFF]"
+    : "text-[#0D3880]";
 
-  return (
-    navigationItems.map(({ label, path }) => (
-      <a
-        key={label}
-        href={path}
-        className={`font-medium hover:text-[#E60278] transition-colors ${textColor}`}
-      >
-        {label}
-      </a>
-    ))
-  );
+  return navigationItems.map(({ label, path }) => (
+    <a
+      key={label}
+      href={path}
+      className={`font-medium transition-colors hover:text-[#E60278] ${textColor}`}
+    >
+      {label}
+    </a>
+  ));
 }

@@ -4,6 +4,7 @@ const nextConfig = {
     remotePatterns: [
       { hostname: "assets.loket.com" },
       { hostname: "res.cloudinary.com" },
+      { hostname: "api.qrserver.com" },
     ],
   },
 };

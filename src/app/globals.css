@@ -47,11 +47,11 @@
 }
 
 .table-head {
-  @apply px-4 py-2 text-left text-sm font-semibold uppercase tracking-wider text-primary;
+  @apply px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider text-primary md:text-base;
 }
 
 .table-data {
-  @apply whitespace-nowrap border-r border-gray-300 px-4 py-2 text-left text-sm text-primary;
+  @apply whitespace-nowrap border-r border-gray-300 px-6 py-3 text-left text-sm md:text-base;
 }
 
 @layer base {

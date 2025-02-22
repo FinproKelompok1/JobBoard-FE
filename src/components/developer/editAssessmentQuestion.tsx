@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "@/helpers/axios";
+import { toastErrAxios } from "@/helpers/toast";
 import { IAssessmentQuestion, IAssessmentQuestionForm } from "@/types/types";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useState } from "react";
@@ -27,8 +28,6 @@ export default function EditAssesmentQuestion({
   question: IAssessmentQuestion;
   mutate: () => void;
 }) {
-  const [assessmentQuestion, setAssessmentQuestion] =
-    useState<IAssessmentQuestion>(question);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isChecked, setIsChecked] = useState<boolean>(false);
@@ -52,7 +51,7 @@ export default function EditAssesmentQuestion({
       setIsModalOpen(false);
     } catch (error) {
       console.error("Failed to edit question:", error);
-      toast.error("Failed to edit question");
+      toastErrAxios(error);
     } finally {
       setIsEditing(false);
     }
@@ -86,7 +85,7 @@ export default function EditAssesmentQuestion({
               validationSchema={validationSchema}
               onSubmit={handleEditQuestion}
             >
-              {({ values, setFieldValue }) => (
+              {({ values }) => (
                 <Form className="mt-5 flex flex-col gap-5">
                   <div className="flex flex-col">
                     <label htmlFor="question" className="text-lg font-semibold">

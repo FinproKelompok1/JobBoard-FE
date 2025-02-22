@@ -85,7 +85,7 @@ export interface IAssessment {
   description: string;
   isActive: boolean;
   AssessmentQuestion: IAssessmentQuestion[];
-  UserAssessment: { User: { username: true } };
+  UserAssessment: IUserAssessment[];
 }
 
 export interface IAssessmentQuestionForm {
@@ -118,5 +118,31 @@ export interface IUserAssessment {
     };
   };
   User: { username: string; fullname: string };
-  certificate: { CertificateUrl: string; badgeName: string; badgeIcon: string };
+  certificate: {
+    id: number;
+    CertificateUrl: string;
+    badgeName: string;
+    badgeIcon: string;
+  };
+}
+
+export interface IReviewForm {
+  review: string;
+  CultureRating: number;
+  balanceRating: number;
+  facilityRating: number;
+  careerRating: number;
+  salary: number;
+}
+
+export interface IReview {
+  userId: number;
+  jobId: string;
+  review: string;
+  CultureRating: number;
+  balanceRating: number;
+  facilityRating: number;
+  careerRating: number;
+  salary: number;
+  jobTitle: string;
 }

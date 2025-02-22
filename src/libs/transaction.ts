@@ -22,13 +22,36 @@ export async function getTransactionsById(transactionId: string) {
 
 export async function getTransactionToken(id: string, amount: number) {
   try {
-    const { data } = await axios.post("/transactions/payment", {
-      order_id: id,
-      gross_amount: +amount,
-    });
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+
+    const { data } = await axios.post(
+      "/transactions/payment",
+      {
+        order_id: id,
+        gross_amount: +amount,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
 
     return data.transactionToken;
   } catch (error) {
     console.error("Error get transaction token:", error);
+  }
+}
+
+export async function getUserTransaction(username: string) {
+  try {
+    const response = await axios.get(`/user-transactions/${username}`);
+
+    return response.data.userTransactions;
+  } catch (error) {
+    console.error("Error get user transactions", error);
   }
 }
