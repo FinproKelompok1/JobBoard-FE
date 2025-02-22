@@ -6,14 +6,27 @@ import { applyJob } from '@/libs/jobdis';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
 import { FileText, ArrowLeft, Upload, Info, CheckCircle, AlertTriangle } from 'lucide-react';
+import useSWR from 'swr';
+import { IPreselection } from '@/types/preselection';
+import { getPreselection } from '@/libs/preselection';
+import Preselection from '@/components/completingTask/preselection';
 
 export default function ApplyPage({ params }: { params: { id: string } }) {
+  console.log(params)
+  const opt = {
+    revalidateOnFocus: false,
+    revalidateIfStale: false,
+    revalidateOnReconnect: false,
+    revalidateOnMount: true
+  }
+  const { data: preselectionData } = useSWR<IPreselection>(`/preselection/${params.id}`, getPreselection, opt)
   const router = useRouter();
   const [resume, setResume] = useState<File | null>(null);
   const [expectedSalary, setExpectedSalary] = useState<string>('');
   const [formattedSalary, setFormattedSalary] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
 
   const getUserData = () => {
     try {
@@ -27,8 +40,6 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
       return null;
     }
   };
-
-  
 
   useEffect(() => {
     const userData = getUserData();
@@ -113,7 +124,7 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
 
     try {
       setIsLoading(true);
-      
+
       const salary = expectedSalary.replace(/[^\d]/g, '');
       console.log('Processed salary:', salary);
 
@@ -140,16 +151,20 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
 
       const response = await applyJob(params.id, formData, token);
       console.log('Application response:', response);
-      
+
       toast.success('Application submitted successfully');
-      router.push('/jobs');
+      setIsSubmitted(true)
+
+      if (!preselectionData) {
+        router.push('/jobs');
+      }
     } catch (error: any) {
       console.error('Full submission error:', {
         error,
         response: error.response,
         data: error.response?.data,
       });
-      
+
       if (error.response?.status === 401) {
         toast.error('Session expired. Please login again');
         router.push('/auth/login');
@@ -162,11 +177,11 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
       setIsLoading(false);
     }
   };
-   return (
+  return (
     <main className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-8">
       <div className="container mx-auto px-4">
         <div className="mb-6">
-          <Link 
+          <Link
             href={`/job-detail/${params.id}`}
             className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors duration-200"
           >
@@ -180,16 +195,15 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
           <div className="lg:col-span-2">
             <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
               <h1 className="text-3xl font-bold text-[#0D3880] mb-6">Apply for Position</h1>
-              
+
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label className="block text-gray-700 font-medium mb-2">
                     Upload Resume (PDF, max 5MB)
                   </label>
-                  <div 
-                    className={`border-2 border-dashed rounded-lg p-6 transition-colors duration-200 ${
-                      dragActive ? 'border-[#E60278] bg-pink-50' : 'border-gray-300 hover:border-gray-400'
-                    }`}
+                  <div
+                    className={`border-2 border-dashed rounded-lg p-6 transition-colors duration-200 ${dragActive ? 'border-[#E60278] bg-pink-50' : 'border-gray-300 hover:border-gray-400'
+                      }`}
                     onDragEnter={handleDrag}
                     onDragLeave={handleDrag}
                     onDragOver={handleDrag}
@@ -256,23 +270,23 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
                 >
                   {isLoading ? (
                     <span className="inline-flex items-center justify-center">
-                      <svg 
-                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        fill="none" 
+                      <svg
+                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
                         viewBox="0 0 24 24"
                       >
-                        <circle 
-                          className="opacity-25" 
-                          cx="12" 
-                          cy="12" 
-                          r="10" 
-                          stroke="currentColor" 
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
                           strokeWidth="4"
                         />
-                        <path 
-                          className="opacity-75" 
-                          fill="currentColor" 
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                         />
                       </svg>
@@ -284,6 +298,9 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
                 </button>
               </form>
             </div>
+            {preselectionData && (
+              <Preselection data={preselectionData} jobId={params.id} isSubmitted={isSubmitted} />
+            )}
           </div>
 
           {/* Side Information Section */}
@@ -329,22 +346,22 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
               <p className="text-sm text-gray-600 mb-4">
                 If you're experiencing any issues, our support team is here to help. Click below to send us an email.
               </p>
-              <a 
-                href="mailto:finprokelompok1@gmail.com" 
+              <a
+                href="mailto:finprokelompok1@gmail.com"
                 className="inline-flex items-center text-[#E60278] hover:text-[#E60278]/90 text-sm font-medium group"
               >
-                Contact Support 
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
+                Contact Support
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1"
+                  fill="none"
+                  viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
                     d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                   />
                 </svg>

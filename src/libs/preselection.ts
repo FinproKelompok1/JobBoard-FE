@@ -1,9 +1,9 @@
 import axios from "@/helpers/axios";
 import { toastErrAxios } from "@/helpers/toast";
 
-export async function getPreselection(id: string) {
+export async function getPreselection(url: string) {
   try {
-    const { data } = await axios.get(`/preselection/${id}`);
+    const { data } = await axios.get(url);
     return data.result;
   } catch (err) {
     toastErrAxios(err);

@@ -8,21 +8,33 @@ import { useState } from "react"
 import { toast } from "react-toastify"
 import { toastErrAxios } from "@/helpers/toast"
 import axios from "@/helpers/axios"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { BsQuestionSquareFill } from "react-icons/bs"
 import Options from "./options"
 
 export default function Task({ data }: { data: IPreselectionQuestion[] }) {
   const [isLoading, SetIsLoading] = useState<boolean>(false);
-  const { jobId } = useParams()
-  // const router = useRouter()
+  const { id: jobId } = useParams()
+  const router = useRouter()
 
   const handleAdd = async (answer: FormValueCompletingTask) => {
     try {
+      const token = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('token='))
+        ?.split('=')[1];
+
+      if (!token) {
+        toast.error('Session expired. Please login again');
+        router.push('/auth/login');
+        return;
+      }
       SetIsLoading(true)
-      const { data } = await axios.post(`/preselection/questions/${jobId}`, answer)
+      const { data } = await axios.post(`/preselection/questions/${jobId}`, answer, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
       toast.success(data.message)
-      // router.push("/admin/job")
+      router.push("/jobs")
     } catch (err: unknown) {
       toastErrAxios(err)
     } finally {
@@ -34,9 +46,7 @@ export default function Task({ data }: { data: IPreselectionQuestion[] }) {
     <Formik
       initialValues={completingTaskInitialValue}
       validationSchema={completingTaskSchema}
-      onSubmit={(values, action) => {
-        // action.resetForm()
-        console.log(values)
+      onSubmit={(values) => {
         handleAdd(values)
       }}
     >

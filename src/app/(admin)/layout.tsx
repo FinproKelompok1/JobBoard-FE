@@ -22,7 +22,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     useEffect(() => {
         const user = getCookie('user')
         if (!user) {
-            router.push("/login");
+            router.push("/auth/login");
             return;
         }
 
