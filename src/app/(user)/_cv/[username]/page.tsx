@@ -1,6 +1,6 @@
 "use client";
 
-import { handleDownloadCv } from "@/components/cv/downloadCV";
+import { handleDownloadCV } from "@/components/cv/downloadCV";
 import { getUserCv } from "@/libs/cv";
 import { IUserCv } from "@/types/types";
 import Link from "next/link";
@@ -66,7 +66,7 @@ export default function CurriculumVitae({
               </Link>
               <button
                 onClick={() =>
-                  handleDownloadCv(params.username, setIsDownloading)
+                  handleDownloadCV(params.username, setIsDownloading)
                 }
                 disabled={isDownloading}
                 className="rounded-lg bg-accent px-4 py-2 font-medium text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/80"

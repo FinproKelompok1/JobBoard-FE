@@ -1,4 +1,4 @@
-export function formatDate(dateString: string) {
+export function FormatDate(dateString: string) {
   const date = new Date(dateString);
   return date.toLocaleDateString("id-ID", {
     day: "2-digit",
@@ -21,4 +21,12 @@ export default function DateFormatter(date: string) {
   };
 
   return new Intl.DateTimeFormat("en-US", options).format(dateObj);
+}
+
+export function SimpleDateFormatter(dateString: string) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    year: "numeric",
+  });
 }

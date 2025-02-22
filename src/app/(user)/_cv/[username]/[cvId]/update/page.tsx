@@ -63,8 +63,8 @@ export default function UpdateCv({
       router.push(`/${params.username}/cv`);
       router.refresh();
     } catch (error) {
-      console.log("Error create CV:", error);
-      toast.error("Error create CV");
+      console.log("Error edit CV:", error);
+      toast.error("Error edit CV");
     } finally {
       setIsLoading(false);
     }

@@ -1,4 +1,5 @@
 import axios from "@/helpers/axios";
+import { SimpleDateFormatter } from "@/helpers/dateFormatter";
 import { getUserCv } from "@/libs/cv";
 import { IUserCv } from "@/types/types";
 
@@ -24,8 +25,8 @@ export default async function DownloadCv({
             <h1 className="text-3xl font-bold">{userCv.fullname}</h1>
             <div className="flex gap-2">
               <p>
-                {toTitleCase(userCv.location.city)},{" "}
-                {toTitleCase(userCv.location.province)}
+                {toTitleCase(userCv.location?.city || "City")},{" "}
+                {toTitleCase(userCv.location?.province || "Province")}
               </p>
               <p>|</p>
               <p>{userCv.email}</p>
@@ -43,31 +44,37 @@ export default async function DownloadCv({
             <h1 className="border-b border-gray-500 pb-1 text-2xl font-bold">
               Work Experiences
             </h1>
-            {userCv.CurriculumVitae[0].experience
-              .split(";")
-              .map((experience, index) => {
-                const details = experience.split(",");
-                if (details.length < 5) return null;
+            <ul className="list-disc">
+              {userCv.CurriculumVitae[0].experience
+                .split(";")
+                .map((experience, index) => {
+                  const details = experience.split(",");
+                  if (details.length < 5) return null;
 
-                const [
-                  company,
-                  position,
-                  startDate,
-                  endDate,
-                  ...descriptionParts
-                ] = details;
-                const description = descriptionParts.join(",").trim();
+                  const [
+                    company,
+                    position,
+                    startDate,
+                    endDate,
+                    ...descriptionParts
+                  ] = details;
+                  const description = descriptionParts.join(",").trim();
 
-                return (
-                  <div key={index} className="mt-3">
-                    <h2 className="text-xl font-semibold">{position.trim()}</h2>
-                    <p className="font-medium">
-                      {company.trim()} | {startDate.trim()} - {endDate.trim()}
-                    </p>
-                    <p className="mt-2">{description}</p>
-                  </div>
-                );
-              })}
+                  return (
+                    <li key={index} className="mt-5">
+                      <h2 className="text-xl font-bold">{position.trim()}</h2>
+                      <h2 className="text-lg font-medium">{company.trim()}</h2>
+                      <p className="mt-1 text-lg font-medium text-gray-600">
+                        {SimpleDateFormatter(startDate.trim())} -{" "}
+                        {endDate.trim() === "Present"
+                          ? "Present"
+                          : SimpleDateFormatter(endDate.trim())}
+                      </p>
+                      <p className="mt-2">{description.trim()}</p>
+                    </li>
+                  );
+                })}
+            </ul>
           </div>
 
           <div className="mt-5">
@@ -78,17 +85,35 @@ export default async function DownloadCv({
               .split(";")
               .map((education, index) => {
                 const details = education.split(",");
-                if (details.length < 5) return null;
+                if (details.length < 6) return null;
 
-                const [school, degree, field, startDate, endDate] = details;
+                const [
+                  school,
+                  degree,
+                  field,
+                  startDate,
+                  endDate,
+                  ...descriptionParts
+                ] = details;
+
+                const description = descriptionParts.join(",").trim();
 
                 return (
-                  <div key={index} className="mt-3">
-                    <h2 className="text-xl font-semibold">{school.trim()}</h2>
-                    <p className="font-medium">
-                      {degree.trim()}, {field.trim()} | {startDate.trim()} -{" "}
-                      {endDate.trim()}
+                  <div key={index} className="mt-5">
+                    <h2 className="text-xl font-bold">{school.trim()}</h2>
+
+                    <div className="flex items-center gap-1">
+                      <h2 className="text-lg font-medium">{degree.trim()}</h2>
+                      <p>-</p>
+                      <h2 className="text-lg font-medium">{field.trim()}</h2>
+                    </div>
+                    <p className="mt-1 text-lg font-medium text-gray-600">
+                      {SimpleDateFormatter(startDate.trim())} -{" "}
+                      {endDate.trim() === "Present"
+                        ? "Present"
+                        : SimpleDateFormatter(endDate.trim())}
                     </p>
+                    <p className="mt-2">{description}</p>
                   </div>
                 );
               })}

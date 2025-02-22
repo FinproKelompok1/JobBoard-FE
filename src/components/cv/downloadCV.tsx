@@ -1,6 +1,6 @@
 import axios from "@/helpers/axios";
 
-export const handleDownloadCv = async (
+export const handleDownloadCV = async (
   username: string,
   setIsDownloading: (downloading: boolean) => void,
 ) => {
