@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { UserProfile, CurriculumVitae } from "@/types/profile";
 import { updateCV } from "@/libs/auth";
-import CVInputSection from "./cvForm";
 import ApplicationsSection from "./applicationSection";
+import CvSection from "./cvSection";
 
 interface TabbedSectionProps {
   user: UserProfile;
@@ -54,7 +54,7 @@ export default function TabbedSection({ user, onUpdate }: TabbedSectionProps) {
       {/* Tab Content */}
       <div className="p-6">
         {activeTab === "academic" && (
-          <CVInputSection
+          <CvSection
             initialCV={user.CurriculumVitae?.[0] || null}
             onSave={handleCVSave}
             user={user}
