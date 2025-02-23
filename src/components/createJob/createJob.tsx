@@ -14,6 +14,7 @@ import SelectCity from './selectCity'
 import SelectCategory from './selectCategory'
 import SelectWage from './selectWage'
 import { BannerUploader } from './bannerUploader'
+import { getToken } from '@/libs/token';
 
 export default function CreateJob() {
   const [isLoading, SetIsLoading] = useState<boolean>(false);
@@ -21,6 +22,7 @@ export default function CreateJob() {
 
   const handleAdd = async (job: FormValueJob) => {
     try {
+      const token = getToken()
       SetIsLoading(true)
       const formData = new FormData()
       for (const key in job) {
@@ -30,7 +32,9 @@ export default function CreateJob() {
           formData.append(key, value)
         }
       }
-      const { data } = await axios.post('/jobs', formData)
+      const { data } = await axios.post('/jobs', formData, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
       toast.success(data.message)
     } catch (err: unknown) {
       toastErrAxios(err)

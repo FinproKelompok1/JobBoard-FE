@@ -11,6 +11,7 @@ import axios from "@/helpers/axios"
 import { useParams, useRouter } from "next/navigation"
 import { BsQuestionSquareFill } from "react-icons/bs"
 import Options from "./options"
+import { getToken } from "@/libs/token"
 
 export default function Task({ data }: { data: IPreselectionQuestion[] }) {
   const [isLoading, SetIsLoading] = useState<boolean>(false);
@@ -19,16 +20,7 @@ export default function Task({ data }: { data: IPreselectionQuestion[] }) {
 
   const handleAdd = async (answer: FormValueCompletingTask) => {
     try {
-      const token = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('token='))
-        ?.split('=')[1];
-
-      if (!token) {
-        toast.error('Session expired. Please login again');
-        router.push('/auth/login');
-        return;
-      }
+      const token = getToken()
       SetIsLoading(true)
       const { data } = await axios.post(`/preselection/questions/${jobId}`, answer, {
         headers: { Authorization: `Bearer ${token}` }

@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import FormInput from '@/components/auth/shared/formInput';
 import { validationSchema } from './validation';
-import useCookie from '@/hooks/useCookie';
 import UserTypeToggle from '@/components/auth/shared/userTypeToggle';
 import { authService } from '@/libs/auth';
 

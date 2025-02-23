@@ -5,6 +5,7 @@ import Category from "./category";
 import { IApplicantsInterest } from "@/types/analytics";
 import { getApplicantsInterest } from "@/libs/graphics";
 import ExpectedSalary from "./expectedSalary";
+import { getToken } from "@/libs/token";
 
 export default function ApplicantsInterestGraph() {
   const opt = {
@@ -13,7 +14,9 @@ export default function ApplicantsInterestGraph() {
     revalidateOnReconnect: false,
     revalidateOnMount: true
   }
-  const { data } = useSWR<IApplicantsInterest>("/analytics/applicant-interest", getApplicantsInterest, opt)
+  const token = getToken()
+  const fetcher = (url: string) => getApplicantsInterest(url, token!);
+  const { data } = useSWR<IApplicantsInterest>("/analytics/applicant-interest", fetcher, opt)
 
   console.log(data)
 

@@ -53,3 +53,7 @@ export interface UserProfile {
   CurriculumVitae: CurriculumVitae[];
   JobApplication: JobApplication[];
 }
+
+export interface AdminProfile {
+  id: number;
+}
