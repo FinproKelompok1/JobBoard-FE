@@ -1,6 +1,7 @@
 import axios from "@/helpers/axios";
-import { CurriculumVitae } from "@/types/profile";
+import { AdminProfile, CurriculumVitae } from "@/types/profile";
 import { jwtDecode } from "jwt-decode";
+import { toast } from "react-toastify";
 
 interface AdminRegisterData {
   companyName: string;

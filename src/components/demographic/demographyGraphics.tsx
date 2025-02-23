@@ -7,6 +7,7 @@ import EducationGraphic from "./education";
 import GenderGraphic from "@/components/demographic/gender";
 import AgeGraphic from "@/components/demographic/age";
 import LocationGraphic from "@/components/demographic/location";
+import { getToken } from "@/libs/token";
 
 export default function demographyGraphics() {
   const opt = {
@@ -15,9 +16,9 @@ export default function demographyGraphics() {
     revalidateOnReconnect: false,
     revalidateOnMount: true
   }
-  const { data } = useSWR<IDemography>("/analytics/total-demographics", getDemography, opt)
-
-  console.log(data)
+  const token = getToken()
+  const fetcher = (url: string) => getDemography(url, token!);
+  const { data } = useSWR<IDemography>("/analytics/total-demographics", fetcher, opt)
 
   if (!data) {
     return (

@@ -60,3 +60,7 @@ export interface UserProfile {
   Review: IReview[];
   UserAssessment: IUserAssessment[];
 }
+
+export interface AdminProfile {
+  id: number;
+}

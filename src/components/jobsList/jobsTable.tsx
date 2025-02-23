@@ -16,6 +16,7 @@ import { sweetAlertWarning } from "@/helpers/sweetAlert"
 import Pagination from "../pagination"
 import SetPublish from "./setPublish"
 import SetPreTest from "./setPreTest"
+import { getToken } from "@/libs/token"
 
 interface ISWR {
   jobs: IJob[],
@@ -36,11 +37,13 @@ export default function JobsTable() {
   }
   const { sort, search } = context
   const [page, setPage] = useState<string>('page=1')
+  const token = getToken()
+  const fetcher = (url: string) => getJobs(url, token!);
   const {
     data,
     isLoading,
     isValidating
-  } = useSWR<ISWR>(`/jobs?${sort}&${search}&${page}`, getJobs, opt);
+  } = useSWR<ISWR>(`/jobs?${sort}&${search}&${page}`, fetcher, opt);
   const skeletons = useMemo(() => Array.from({ length: 5 }), []);
 
   const handleDelete = async (jobId: string) => {
@@ -83,7 +86,7 @@ export default function JobsTable() {
                         <SetPublish jobId={item.id} isJobPublished={item.isPublished} />
                       </td>
                       <td>
-                        <div className="font-medium border-b border-b-black w-fit">{item.title}</div>
+                        <div className="font-medium border-b border-b-black w-fit line-clamp-1">{item.title}</div>
                         <div>{item.category}</div>
                       </td>
                       <td><TotalApplicants jobId={item.id} /></td>
