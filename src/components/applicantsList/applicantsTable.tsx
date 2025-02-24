@@ -66,7 +66,7 @@ export default function ApplicantsTable({
       <>
         <div className="overflow-x-auto">
 
-          <table className="w-[1200px] mt-4 text-left applicants_table overflow-x-scroll">
+          <table className="w-[1500px] mt-4 text-left applicants_table overflow-x-scroll">
             <thead>
               <tr>
                 <th>APPLICANT</th>
@@ -102,8 +102,8 @@ export default function ApplicantsTable({
                           </div>
                         </div>
                       </td>
-                      <td>{eduFormatter(item.user.lastEdu)}</td>
-                      <td>{formatDate(item.createdAt.split('T')[0])}</td>
+                      <td className="w-[200px]">{eduFormatter(item.user.lastEdu)}</td>
+                      <td className="w-[150px]">{formatDate(item.createdAt.split('T')[0])}</td>
                       <td>{formatRupiahTanpaDesimal(item.expectedSalary)}</td>
                       <td><SetStatusApplicant {...props} /></td>
                       <td><div className="text-center">{item.selectionTestResult}</div></td>

@@ -1,6 +1,5 @@
 "use client";
 
-import useCookie from "@/hooks/useCookie";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 

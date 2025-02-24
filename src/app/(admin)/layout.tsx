@@ -1,6 +1,5 @@
 "use client";
 
-import useCookie from "@/hooks/useCookie";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -22,12 +21,12 @@ export default function AdminLayout({
     return null;
   };
 
-  useEffect(() => {
-    const user = getCookie("user");
-    if (!user) {
-      router.push("/login");
-      return;
-    }
+    useEffect(() => {
+        const user = getCookie('user')
+        if (!user) {
+            router.push("/auth/login");
+            return;
+        }
 
     try {
       const userObject = JSON.parse(user);

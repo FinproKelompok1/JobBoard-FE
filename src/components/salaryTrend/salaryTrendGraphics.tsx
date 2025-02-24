@@ -4,6 +4,7 @@ import { getSalaryTrend } from "@/libs/graphics";
 import { ISalaryTrend } from "@/types/analytics";
 import useSWR from "swr";
 import BarChartGraphic from "./barChartGraphic";
+import { getToken } from "@/libs/token";
 
 export default function SalaryTrendGraphics() {
 
@@ -13,9 +14,10 @@ export default function SalaryTrendGraphics() {
     revalidateOnReconnect: false,
     revalidateOnMount: true
   }
-  const { data } = useSWR<ISalaryTrend>("/analytics/salary-trends", getSalaryTrend, opt)
+  const token = getToken()
+  const fetcher = (url: string) => getSalaryTrend(url, token!);
 
-  console.log(data)
+  const { data } = useSWR<ISalaryTrend>("/analytics/salary-trends", fetcher, opt);
 
   if (!data) {
     return (

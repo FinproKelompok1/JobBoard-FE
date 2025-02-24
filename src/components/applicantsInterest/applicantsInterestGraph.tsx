@@ -5,6 +5,7 @@ import Category from "./category";
 import { IApplicantsInterest } from "@/types/analytics";
 import { getApplicantsInterest } from "@/libs/graphics";
 import ExpectedSalary from "./expectedSalary";
+import { getToken } from "@/libs/token";
 
 export default function ApplicantsInterestGraph() {
   const opt = {
@@ -13,9 +14,9 @@ export default function ApplicantsInterestGraph() {
     revalidateOnReconnect: false,
     revalidateOnMount: true
   }
-  const { data } = useSWR<IApplicantsInterest>("/analytics/applicant-interest", getApplicantsInterest, opt)
-
-  console.log(data)
+  const token = getToken()
+  const fetcher = (url: string) => getApplicantsInterest(url, token!);
+  const { data } = useSWR<IApplicantsInterest>("/analytics/applicant-interest", fetcher, opt)
 
   if (!data) {
     return (
@@ -24,7 +25,7 @@ export default function ApplicantsInterestGraph() {
   }
   return (
     <div className="flex flex-col gap-10 shadow-xl border pb-6 my-4 rounded-md">
-      <h1 className="text-xl font-medium mt-2 mb-10">APPLICANTS INTEREST</h1>
+      <h1 className="text-xl font-medium mt-2 mb-10 ml-4">APPLICANTS INTEREST</h1>
       <div className="h-[300px]">
         <Category data={data.basedOnJobCategory} />
       </div>
