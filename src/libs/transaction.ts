@@ -1,12 +1,25 @@
 import axios from "@/helpers/axios";
 
-export async function getTransactions() {
+export async function getTransactions({
+  page = 1,
+  limit = 10,
+  sort = "createdAt",
+  order = "desc",
+  status = "",
+  email = "",
+} = {}) {
   try {
-    const response = await axios.get("/transactions");
-
-    return response.data.transactions;
+    const response = await axios.get("/transactions", {
+      params: { page, limit, sort, order, status, email },
+    });
+    console.log("get transactions response:", response.data.transactions);
+    return {
+      transactions: response.data.transactions,
+      totalPages: response.data.totalPages,
+    };
   } catch (error) {
-    console.error("Error get transactions:", error);
+    console.error("Error fetching transactions:", error);
+    return { transactions: [], totalPages: 1 };
   }
 }
 
