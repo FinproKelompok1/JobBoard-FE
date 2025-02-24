@@ -73,7 +73,7 @@ export default function TransactionList() {
               id="status-filter"
               className="rounded-md border border-gray-300 px-2 py-1"
               value={sortCreateAt}
-              onChange={(e) =>
+              onChange={() =>
                 setSortCreateAt(sortCreateAt === "asc" ? "desc" : "asc")
               }
             >
