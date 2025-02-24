@@ -14,7 +14,6 @@ export default function NavLinks({ isHomePage, isScrolled }: NavLinksProps) {
     { label: 'ABOUT US', path: '/about-us' }
   ];
 
-
   const textColor = isHomePage
     ? (isScrolled ? 'text-[#0D3880]' : 'text-[#FFFFFF]')
     : 'text-[#0D3880]';

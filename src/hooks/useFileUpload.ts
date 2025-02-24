@@ -7,7 +7,7 @@ export const useFileUpload = () => {
   const isMounted = useRef(true);
 
   const validateAndSetFile = (file: File) => {
-    if (!isMounted.current) return;
+    // Hapus pengecekan isMounted untuk validasi file
     if (file.type !== "application/pdf") {
       toast.error("Please upload a PDF file");
       return;
@@ -21,20 +21,17 @@ export const useFileUpload = () => {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!isMounted.current) return;
     const file = e.target.files?.[0];
     if (file) validateAndSetFile(file);
   };
 
   const handleDrag = (e: React.DragEvent) => {
-    if (!isMounted.current) return;
     e.preventDefault();
     e.stopPropagation();
     setDragActive(e.type === "dragenter" || e.type === "dragover");
   };
 
   const handleDrop = (e: React.DragEvent) => {
-    if (!isMounted.current) return;
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);

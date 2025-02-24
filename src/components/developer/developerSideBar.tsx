@@ -1,5 +1,6 @@
 "use client";
 
+import { logOut } from "@/helpers/logout";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -69,9 +70,12 @@ export default function DeveloperSideBar() {
           </div>
 
           <div className="mb-5 mt-10">
-            <button className="w-full rounded-md border-2 border-white px-4 py-2 font-semibold transition-all duration-500 ease-in-out hover:border-accent hover:bg-accent hover:text-white">
-              Log out
-            </button>
+            <button 
+  onClick={logOut}
+  className="w-full rounded-md border-2 border-white px-4 py-2 font-semibold transition-all duration-500 ease-in-out hover:border-accent hover:bg-accent hover:text-white"
+>
+  Log out
+</button>
           </div>
         </nav>
       </div>

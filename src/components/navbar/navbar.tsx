@@ -59,15 +59,18 @@ export default function Navbar({ isHomePage }: NavbarProps) {
 
   const logOut = () => {
     document.cookie = 'user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+    document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
     setUserH(null);
     window.location.href = '/';
   };
 
-  const bgColor = isHomePage 
+  // Desktop background color
+  const desktopBgColor = isHomePage 
     ? (isScrolled ? 'bg-[#FFFFFF] shadow-lg' : 'bg-transparent')
     : 'bg-[#FFFFFF] shadow-lg';
 
-  const textColor = isHomePage
+  // Desktop text color
+  const desktopTextColor = isHomePage
     ? (isScrolled ? 'text-[#0D3880]' : 'text-[#FFFFFF]')
     : 'text-[#0D3880]';
 
@@ -92,12 +95,12 @@ export default function Navbar({ isHomePage }: NavbarProps) {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className={`w-full h-full flex items-center justify-center ${textColor}`}>
+              <div className={`w-full h-full flex items-center justify-center ${desktopTextColor}`}>
                 {userH.username?.charAt(0).toUpperCase() || 'U'}
               </div>
             )}
           </div>
-          <span className={`font-medium ${textColor}`}>
+          <span className={`font-medium ${desktopTextColor}`}>
             {userH?.companyName ?? userH?.username ?? 'admin'}
           </span>
         </button>
@@ -105,9 +108,18 @@ export default function Navbar({ isHomePage }: NavbarProps) {
         {showProfileMenu && (
           <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
             <div className="py-1" role="menu">
+              {(isAdmin || isDeveloper) && (
+                <a
+                  href={isAdmin ? '/admin/dashboard' : '/developer'}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  role="menuitem"
+                >
+                  Dashboard
+                </a>
+              )}
               {(isAdmin || isUser) && (
                 <a
-                  href="/profile"
+                  href={isAdmin ? '/admin/profile' : '/profile'}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   role="menuitem"
                 >
@@ -129,14 +141,19 @@ export default function Navbar({ isHomePage }: NavbarProps) {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 transition-all duration-300 z-50 ${bgColor}`}>
+    <nav className={`fixed top-0 left-0 right-0 transition-all duration-300 z-50 md:${desktopBgColor} bg-[#FFFFFF] shadow-lg`}>
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center">
             <img 
               src={isHomePage && !isScrolled ? "/logo-title-white.png" : "/logo-title-colored.png"}
               alt="TalentBridge Logo" 
-              className="h-12" 
+              className="h-12 hidden md:block" 
+            />
+            <img 
+              src="/logo-title-colored.png"
+              alt="TalentBridge Logo" 
+              className="h-12 md:hidden" 
             />
           </Link>
           
@@ -147,7 +164,7 @@ export default function Navbar({ isHomePage }: NavbarProps) {
                 <>
                   <a
                     href="/auth/login"
-                    className={`font-medium hover:text-[#E60278] transition-colors ${textColor}`}
+                    className={`font-medium hover:text-[#E60278] transition-colors ${desktopTextColor}`}
                   >
                     LOGIN
                   </a>
@@ -170,7 +187,7 @@ export default function Navbar({ isHomePage }: NavbarProps) {
 
           <button 
             onClick={() => setIsOpen(!isOpen)} 
-            className={`md:hidden ${textColor}`}
+            className="md:hidden text-[#0D3880]"
           >
             {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
           </button>
@@ -178,44 +195,44 @@ export default function Navbar({ isHomePage }: NavbarProps) {
 
         {isOpen && (
           <div className="md:hidden mt-4 pb-4 space-y-4 flex flex-col">
-            <NavLinks isHomePage={isHomePage} isScrolled={isScrolled} />
-            <div className="flex flex-col gap-4 pt-4 border-t border-white/10">
+            <NavLinks isHomePage={false} isScrolled={true} />
+            <div className="flex flex-col gap-4 pt-4 border-t border-gray-200">
               {!userH ? (
                 <>
                   <a
                     href="/auth/login"
-                    className={`font-medium hover:text-[#E60278] transition-colors ${textColor}`}
+                    className="font-medium hover:text-[#E60278] transition-colors text-[#0D3880]"
                   >
                     LOGIN
                   </a>
                   <a
                     href="/auth/register"
-                    className={`px-4 py-2 rounded-lg font-medium text-center transition-all ${
-                      isHomePage && !isScrolled
-                        ? 'bg-white text-[#0D3880] hover:bg-white/90'
-                        : 'bg-[#E60278] text-white hover:bg-[#E60278]/90'
-                    }`}
+                    className="px-4 py-2 rounded-lg font-medium text-center transition-all bg-[#E60278] text-white hover:bg-[#E60278]/90"
                   >
                     REGISTER
                   </a>
                 </>
               ) : (
                 <div className="flex flex-col gap-2">
+                  {(userH.role === 'admin' || userH.role === 'developer') && (
+                    <a
+                      href={userH.role === 'admin' ? '/admin/dashboard' : '/developer'}
+                      className="font-medium hover:text-[#E60278] transition-colors text-[#0D3880]"
+                    >
+                      Dashboard
+                    </a>
+                  )}
                   {(userH.role === 'admin' || userH.role === 'user') && (
                     <a
-                      href="/profile"
-                      className={`font-medium hover:text-[#E60278] transition-colors ${textColor}`}
+                      href={userH.role === 'admin' ? '/admin/profile' : '/profile'}
+                      className="font-medium hover:text-[#E60278] transition-colors text-[#0D3880]"
                     >
                       Profile
                     </a>
                   )}
                   <button
                     onClick={logOut}
-                    className={`px-4 py-2 rounded-lg font-medium text-center transition-all ${
-                      isHomePage && !isScrolled
-                        ? 'bg-white text-[#0D3880] hover:bg-white/90'
-                        : 'bg-[#E60278] text-white hover:bg-[#E60278]/90'
-                    }`}
+                    className="px-4 py-2 rounded-lg font-medium text-center transition-all bg-[#E60278] text-white hover:bg-[#E60278]/90"
                   >
                     LOGOUT
                   </button>

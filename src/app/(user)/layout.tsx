@@ -7,7 +7,6 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
     const router = useRouter();
     const pathname = usePathname();
 
-    // Define public routes that don't require authentication
     const publicRoutes = [
         '/about-us',
         '/companies',
@@ -32,14 +31,13 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
     };
 
     useEffect(() => {
-        // If it's a public route, don't check for authentication
         if (isPublicRoute()) {
             return;
         }
 
         const user = getCookie('user')
         if (!user) {
-            router.push("/login");
+            router.push("/auth/login");
             return;
         }
 

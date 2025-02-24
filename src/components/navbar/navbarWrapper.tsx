@@ -21,7 +21,8 @@ export default function NavbarWrapper() {
       '/about-us',
       '/contact',
       '/auth/register',
-      '/auth/login'
+      '/auth/login',
+      '/auth/forgot-password',
     ];
 
     return userRoutes.some(route => pathname.startsWith(route));

@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import { X, Upload, Mail, Lock, Save } from 'lucide-react';
 import { UserProfile, Gender, LastEdu } from '@/types/profile';
 import { UpdateProfile, uploadProfileImage } from '@/libs/auth';
+import { PasswordChangeForm } from '@/components/profile/PasswordChangeForm';
+import SelectProfileProvince from './SelectProfileProvince';
+import SelectProfileCity from './SelectProfileCity';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { changePassword } from '@/libs/changePassword';
 
 interface ProfileEditFormProps {
   user: UserProfile;
@@ -15,18 +19,36 @@ interface ProfileEditFormProps {
   onUpdate: () => void;
 }
 
+interface FormData {
+  fullname: string;
+  gender: string;
+  dob: string;
+  lastEdu: string;
+  avatar: string;
+  province: string;
+  city: string;
+  cityCoordinates?: {
+    latitude: number;
+    longitude: number;
+  };
+}
+
 export default function ProfileEditForm({ user, handleClose, onUpdate }: ProfileEditFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showEmailDialog, setShowEmailDialog] = useState(false);
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
-  
-  const [formData, setFormData] = useState({
+  const [provinceId, setProvinceId] = useState("");
+  const [passwordError, setPasswordError] = useState('');
+
+  const [formData, setFormData] = useState<FormData>({
     fullname: user.fullname || '',
     gender: user.gender || '',
     dob: user.dob ? new Date(user.dob).toISOString().split('T')[0] : '',
     lastEdu: user.lastEdu || '',
     avatar: user.avatar,
+    province: user.province || '',
+    city: user.city || '',
   });
 
   const [emailData, setEmailData] = useState({
@@ -82,22 +104,60 @@ export default function ProfileEditForm({ user, handleClose, onUpdate }: Profile
     }
   };
 
+  const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      city: e.target.value
+    }));
+  };
+
   const handleEmailChange = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Email change requested:', emailData);
+    try {
+      setLoading(true);
+      // Implement email change logic here
+      console.log('Email change requested:', emailData);
+      setShowEmailDialog(false);
+    } catch (error) {
+      console.error('Error changing email:', error);
+      setError('Failed to change email. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Password change requested:', passwordData);
+    try {
+      setLoading(true);
+      setPasswordError('');
+      
+      await changePassword({
+        currentPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword,
+        confirmPassword: passwordData.confirmPassword,
+      });
+      
+      // Reset form and close dialog on success
+      setPasswordData({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      });
+      setShowPasswordDialog(false);
+    } catch (error: any) {
+      setPasswordError(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-[#0D3880]">Edit Profile</h2>
-        <button 
-          onClick={handleClose} 
+        <button
+          onClick={handleClose}
           className="text-gray-500 hover:text-gray-700"
           disabled={loading}
         >
@@ -116,17 +176,17 @@ export default function ProfileEditForm({ user, handleClose, onUpdate }: Profile
         <div>
           <label className="block text-sm font-medium mb-2">Profile Picture</label>
           <div className="flex items-center gap-4">
-            <img 
-              src={formData.avatar} 
-              alt="Profile" 
+            <img
+              src={formData.avatar}
+              alt="Profile"
               className="w-20 h-20 rounded-full object-cover border border-gray-200"
             />
             <label className="cursor-pointer flex items-center gap-2 text-[#E60278] hover:bg-pink-50 px-4 py-2 rounded-lg">
               <Upload className="w-4 h-4" />
               Upload New Photo
-              <input 
-                type="file" 
-                className="hidden" 
+              <input
+                type="file"
+                className="hidden"
                 accept="image/*"
                 onChange={handleImageUpload}
                 disabled={loading}
@@ -212,6 +272,27 @@ export default function ProfileEditForm({ user, handleClose, onUpdate }: Profile
               <option value={LastEdu.doctoral}>Doctoral</option>
             </select>
           </div>
+
+          {/* Province & City */}
+          <div>
+            <label className="block text-sm font-medium mb-2">Province</label>
+            <SelectProfileProvince
+              values={formData}
+              handleChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                setFormData(prev => ({ ...prev, province: e.target.value }))
+              }
+              setProvinceId={setProvinceId}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">City</label>
+            <SelectProfileCity
+              values={formData}
+              handleChange={handleCityChange}
+              provinceId={provinceId}
+            />
+          </div>
         </div>
 
         {/* Password Change Button */}
@@ -228,7 +309,7 @@ export default function ProfileEditForm({ user, handleClose, onUpdate }: Profile
 
         {/* Submit Buttons */}
         <div className="flex justify-end pt-4 border-t">
-          <button 
+          <button
             type="button"
             onClick={handleClose}
             className="mr-3 px-6 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
@@ -236,7 +317,7 @@ export default function ProfileEditForm({ user, handleClose, onUpdate }: Profile
           >
             Cancel
           </button>
-          <button 
+          <button
             type="submit"
             className="bg-[#E60278] text-white px-6 py-2 rounded-lg hover:bg-pink-700 transition-colors disabled:opacity-50 flex items-center gap-2"
             disabled={loading}
@@ -299,50 +380,28 @@ export default function ProfileEditForm({ user, handleClose, onUpdate }: Profile
           <DialogHeader>
             <DialogTitle>Change Password</DialogTitle>
           </DialogHeader>
-          <form onSubmit={handlePasswordChange} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">Current Password</label>
-              <input
-                type="password"
-                value={passwordData.currentPassword}
-                onChange={(e) => setPasswordData(prev => ({ ...prev, currentPassword: e.target.value }))}
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60278]"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">New Password</label>
-              <input
-                type="password"
-                value={passwordData.newPassword}
-                onChange={(e) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60278]"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">Confirm New Password</label>
-              <input
-                type="password"
-                value={passwordData.confirmPassword}
-                onChange={(e) => setPasswordData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60278]"
-                required
-              />
-            </div>
-            <div className="flex justify-end gap-2">
+          <form onSubmit={handlePasswordChange}>
+            <PasswordChangeForm
+              passwordData={passwordData}
+              setPasswordData={setPasswordData}
+              loading={loading}
+              passwordError={passwordError}
+            />
+            <div className="flex justify-end gap-2 mt-4">
               <button
                 type="button"
                 onClick={() => setShowPasswordDialog(false)}
                 className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+                disabled={loading}
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="bg-[#E60278] text-white px-4 py-2 rounded-lg hover:bg-pink-700"
+                className="bg-[#E60278] text-white px-4 py-2 rounded-lg hover:bg-pink-700 disabled:opacity-50"
+                disabled={loading}
               >
-                Change Password
+                {loading ? 'Changing...' : 'Change Password'}
               </button>
             </div>
           </form>

@@ -58,24 +58,22 @@ export const applyJob = async (
   token: string,
 ) => {
   try {
-    if (!formData.has("jobId")) {
-      formData.append("jobId", jobId);
-    }
+    console.log("Submitting application:", {
+      jobId,
+      formData: Object.fromEntries(formData.entries()),
+    });
 
     const response = await axios.post(`/apply/submit/${jobId}`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
+        Accept: "application/json",
       },
     });
 
     return response.data;
   } catch (error: any) {
-    console.error("Application submission error:", {
-      status: error.response?.status,
-      data: error.response?.data,
-      message: error.message,
-    });
+    console.error("Application submission error:", error);
     throw error;
   }
 };
@@ -100,30 +98,22 @@ export const getJobApplications = async (jobId: string) => {
   }
 };
 
-export const checkUserApplication = async (
-  jobId: string,
-  userId: number,
-  token: string,
-) => {
+export const checkUserApplication = async (jobId: string) => {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/apply/check/${jobId}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId }),
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+
+    if (!token) return false;
+
+    const response = await axios.post(`/apply/check/${jobId}`, null, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    );
+    });
 
-    if (!response.ok) {
-      throw new Error("Failed to check application status");
-    }
-
-    const data = await response.json();
-    return data.hasApplied;
+    return response.data.hasApplied;
   } catch (error) {
     console.error("Error checking application:", error);
     return false;

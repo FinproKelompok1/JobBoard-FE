@@ -50,6 +50,18 @@ export interface UserProfile {
   gender: Gender | null;
   dob: string | null;
   lastEdu: LastEdu | null;
+  province: string | null; // tambah ini
+  city: string | null; // tambah ini
   CurriculumVitae: CurriculumVitae[];
   JobApplication: JobApplication[];
+}
+
+// Interface untuk form values
+export interface FormValueProfile {
+  fullname: string;
+  gender: string;
+  dob: string;
+  lastEdu: string;
+  province: string;
+  city: string;
 }

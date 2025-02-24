@@ -1,5 +1,4 @@
-import { FileText, Upload } from 'lucide-react';
-
+// components/apply/ResumeUpload.tsx
 interface ResumeUploadProps {
   resume: File | null;
   dragActive: boolean;
@@ -31,41 +30,36 @@ export function ResumeUpload({
         onDragOver={handleDrag}
         onDrop={handleDrop}
       >
-        <div className="flex flex-col items-center justify-center space-y-3">
-          <div className="p-3 bg-gray-100 rounded-full">
-            {resume ? <FileText className="w-6 h-6 text-[#E60278]" /> : <Upload className="w-6 h-6 text-gray-400" />}
-          </div>
-          <div className="text-center">
-            {resume ? (
-              <div className="space-y-2">
-                <p className="text-sm text-gray-600">
-                  Selected file: <span className="font-medium text-[#E60278]">{resume.name}</span>
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setResume(null)}
-                  className="text-sm text-gray-500 hover:text-[#E60278]"
-                >
-                  Change file
-                </button>
-              </div>
-            ) : (
-              <>
-                <p className="text-gray-600">Drag and drop your resume here, or</p>
-                <label className="mt-2 cursor-pointer">
-                  <span className="text-[#E60278] hover:text-[#E60278]/90 font-medium">
-                    browse files
-                  </span>
-                  <input
-                    type="file"
-                    accept=".pdf"
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
-                </label>
-              </>
-            )}
-          </div>
+        <div className="text-center">
+          {resume ? (
+            <div>
+              <p>Selected file: {resume.name}</p>
+              <button 
+                type="button"
+                onClick={() => setResume(null)}
+                className="text-[#E60278] hover:text-[#E60278]/80"
+              >
+                Change file
+              </button>
+            </div>
+          ) : (
+            <>
+              <p>Drag & drop your resume here or</p>
+              <input
+                type="file"
+                accept=".pdf"
+                onChange={handleFileChange}
+                className="hidden"
+                id="resume-upload"
+              />
+              <label 
+                htmlFor="resume-upload"
+                className="text-[#E60278] hover:text-[#E60278]/80 cursor-pointer"
+              >
+                browse file
+              </label>
+            </>
+          )}
         </div>
       </div>
     </div>

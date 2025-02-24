@@ -20,7 +20,8 @@ export default function FooterWrapper() {
         '/transaction',
         '/about-us',
       '/auth/register',
-      '/auth/login'
+      '/auth/login',
+      '/auth/forgot-password',
     ];
 
     return userRoutes.some(route => pathname.startsWith(route));

@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { ResumeUpload } from '@/components/apply/ResumeUpload';
@@ -14,20 +13,15 @@ import { useApplyForm } from '@/hooks/useApplyForm';
 import { getUserData } from '@/helpers/cookies';
 
 export default function ApplyPage({ params }: { params: { id: string } }) {
-  const router = useRouter();
-  const { resume, dragActive, handleFileChange, handleDrag, handleDrop, setResume, isMounted } = useFileUpload();
-  const { formattedSalary, isLoading, handleSalaryChange, handleSubmit } = useApplyForm(params.id, isMounted);
+  const { resume, dragActive, handleFileChange, handleDrag, handleDrop, setResume } = useFileUpload();
+  const { formattedSalary, isLoading, handleSalaryChange, handleSubmit } = useApplyForm(params.id);
 
   useEffect(() => {
     const userData = getUserData();
-    if (!userData && isMounted.current) {
+    if (!userData) {
       toast.error('Please login first');
-      router.push('/auth/login');
     }
-    return () => {
-      isMounted.current = false;
-    };
-  }, [router]);
+  }, []);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-8">
@@ -47,7 +41,7 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
             <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
               <h1 className="text-3xl font-bold text-[#0D3880] mb-6">Apply for Position</h1>
               
-              <form onSubmit={(e) => handleSubmit(e, resume)} className="space-y-6">
+              <form onSubmit={(e) => handleSubmit(e, resume)} className="space-y-6" encType="multipart/form-data">
                 <ResumeUpload
                   resume={resume}
                   dragActive={dragActive}

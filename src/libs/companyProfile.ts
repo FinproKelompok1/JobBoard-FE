@@ -39,11 +39,18 @@ export const updateAdminProfile = async (data: ProfileFormData) => {
     const token = userData.token;
 
     const formData = new FormData();
+
+    // Add basic fields
     Object.entries(data).forEach(([key, value]) => {
-      if (value !== undefined) {
+      if (value !== undefined && key !== "cityCoordinates") {
         formData.append(key, value);
       }
     });
+
+    if (data.cityCoordinates) {
+      formData.append("latitude", data.cityCoordinates.latitude.toString());
+      formData.append("longitude", data.cityCoordinates.longitude.toString());
+    }
 
     const response = await axios.put("/companies/profile", formData, {
       headers: {
@@ -51,6 +58,8 @@ export const updateAdminProfile = async (data: ProfileFormData) => {
         Authorization: `Bearer ${token}`,
       },
     });
+
+    toast.success("Profile updated successfully");
     return response.data;
   } catch (err) {
     console.error("Error updating admin profile:", err);
