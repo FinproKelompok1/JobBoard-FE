@@ -3,7 +3,7 @@ import { useState } from "react";
 import { UserProfile, CurriculumVitae } from "@/types/profile";
 import { updateCV } from "@/libs/auth";
 import ApplicationsSection from "./applicationSection";
-import CvSection from "./cvSection";
+import CvSection from "./CvSection";
 
 interface TabbedSectionProps {
   user: UserProfile;

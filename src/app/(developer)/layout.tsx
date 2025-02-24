@@ -25,7 +25,7 @@ export default function DeveloperLayout({
   useEffect(() => {
     const user = getCookie("user");
     if (!user) {
-      router.push("/login");
+      router.push("/auth/login");
       return;
     }
 
