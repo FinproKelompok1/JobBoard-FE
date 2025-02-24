@@ -117,4 +117,41 @@
   body {
     @apply bg-background text-foreground;
   }
+@import 'react-quill/dist/quill.snow.css';
+     .ql-toolbar.ql-snow {
+       @apply rounded-t-lg border-gray-200;
+     }
+  
+     .ql-container.ql-snow {
+       @apply rounded-b-lg border-gray-200;
+     }
+  
+     .ql-editor {
+       @apply min-h-[200px] text-base;
+     }
+  
+     .ql-snow .ql-stroke {
+       @apply transition-colors;
+     }
+  
+     .ql-snow.ql-toolbar button:hover .ql-stroke,
+     .ql-snow .ql-toolbar button:hover .ql-stroke {
+       @apply stroke-pink-500;
+     }
+  
+     .ql-snow.ql-toolbar button.ql-active .ql-stroke,
+     .ql-snow .ql-toolbar button.ql-active .ql-stroke {
+       @apply stroke-pink-600;
+     }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

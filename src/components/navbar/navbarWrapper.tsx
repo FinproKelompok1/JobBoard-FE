@@ -10,22 +10,23 @@ export default function NavbarWrapper() {
     if (pathname === "/") return true;
 
     const userRoutes = [
-      "/jobs",
-      "/companies",
-      "/companies-detail",
-      "/job-detail",
-      "/profile",
-      "/subscription",
-      "/apply-job",
-      "/transaction",
-      "/about-us",
-      "/contact",
-      "/auth/register",
-      "/auth/login",
+      '/jobs',
+      '/companies',
+      '/companies-detail',
+      '/job-detail',
+      '/profile',
+      '/subscription',
+      '/apply-job',
+      '/transaction',
+      '/about-us',
+      '/contact',
+      '/auth/register',
+      '/auth/login',
       "/assessment",
       "/certificate-verification",
       "/review",
       "/cv",
+      '/auth/forgot-password',
     ];
 
     return userRoutes.some((route) => pathname.startsWith(route));

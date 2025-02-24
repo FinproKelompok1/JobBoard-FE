@@ -9,6 +9,7 @@ import { FaPencil, FaUserTie } from "react-icons/fa6";
 // import UseClickOutside from "@/hooks/useClickOutside";
 import UseOpen from "@/hooks/useOpen";
 import { PiSignOutFill } from "react-icons/pi";
+import { logOut } from "@/helpers/logout";
 // import Image from "next/image";
 
 export default function MobileNav() {
@@ -69,7 +70,7 @@ export default function MobileNav() {
             <Link
               href={"#"}
               className="flex items-center text-red-500 font-semibold hover:bg-red-500 p-3 hover:text-white"
-            // onClick={onLogout}
+            onClick={logOut}
             >
               <PiSignOutFill className='text-[20px]' />
               <p className="ml-2">Log out</p>

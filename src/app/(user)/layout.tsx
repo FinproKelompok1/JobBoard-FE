@@ -11,7 +11,6 @@ export default function UserLayout({
   const router = useRouter();
   const pathname = usePathname();
 
-  // Define public routes that don't require authentication
   const publicRoutes = [
     "/about-us",
     "/companies",
@@ -28,8 +27,8 @@ export default function UserLayout({
 
   const getCookie = (key: string): string | null => {
     const cookies = document.cookie.split(";");
-    for (let cookie of cookies) {
-      let [cookieKey, cookieVal] = cookie.trim().split("=");
+    for (const cookie of cookies) {
+      const [cookieKey, cookieVal] = cookie.trim().split("=");
       if (cookieKey === key) {
         return decodeURIComponent(cookieVal);
       }
@@ -38,14 +37,13 @@ export default function UserLayout({
   };
 
   useEffect(() => {
-    // If it's a public route, don't check for authentication
     if (isPublicRoute()) {
       return;
     }
 
     const user = getCookie("user");
     if (!user) {
-      router.push("/login");
+      router.push("/auth/login");
       return;
     }
 
@@ -54,15 +52,16 @@ export default function UserLayout({
 
       if (userObject.role === "none") {
         router.push("/auth/verify-oauth");
+        return; 
       }
 
       if (userObject.role !== "user") {
         router.push("/unauthorized");
       }
-    } catch (error) {
+    } catch {
       router.push("/auth/login");
     }
-  }, [router, pathname]);
+  }, [router, pathname, isPublicRoute]); 
 
   return <>{children}</>;
 }

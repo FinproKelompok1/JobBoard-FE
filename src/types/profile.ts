@@ -5,6 +5,12 @@ export enum Gender {
   male = "male",
 }
 
+interface Interview {
+  startTime: string;
+  jobId: string;
+  userId: number;
+}
+
 export enum LastEdu {
   highSchoolDiploma = "highSchoolDiploma",
   bachelor = "bachelor",
@@ -32,6 +38,7 @@ export interface JobApplication {
   status: JobApplicationStatus;
   expectedSalary: number;
   createdAt: string;
+  interview?: Interview;
   rejectedReview?: string;
   selectionTestResult?: number;
 }
@@ -54,6 +61,8 @@ export interface UserProfile {
   gender: Gender | null;
   dob: string | null;
   lastEdu: LastEdu | null;
+  province: string | null; // tambah ini
+  city: string | null; // tambah ini
   CurriculumVitae: CurriculumVitae[];
   JobApplication: JobApplication[];
   createdAt: string;
@@ -63,4 +72,13 @@ export interface UserProfile {
 
 export interface AdminProfile {
   id: number;
+}
+
+export interface FormValueProfile {
+  fullname: string;
+  gender: string;
+  dob: string;
+  lastEdu: string;
+  province: string;
+  city: string;
 }

@@ -4,14 +4,20 @@ import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Formik, Form } from 'formik';
 import FormInput from '../shared/formInput';
-import SocialAuth from '../shared/socialAuth';
 import { validationSchema } from './validation';
 import { authService } from '@/libs/auth';
+import { toastErrAxios } from '@/helpers/toast';
+
+interface LoginValues {
+  email: string;
+  password: string;
+  otp: string;
+}
 
 export default function LoginDevForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const errorParam = searchParams.get('error');
@@ -20,27 +26,27 @@ export default function LoginDevForm() {
     }
   }, [searchParams]);
 
-  const initialValues = {
+  const initialValues: LoginValues = {
     email: '',
     password: '',
     otp: ''
   };
 
-  const handleSubmit = async (values: any, { setSubmitting }: any) => {
+  const handleSubmit = async (values: LoginValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     try {
       setError('');
-      console.log(values)
+      console.log(values);
       const response = await authService.loginDeveloper({
         email: values.email,
         password: values.password,
         otpToken: values.otp
       });
-      console.log(response)
+      console.log(response);
       router.push('/');
-    } catch (error: any) {
-      console.log(error)
-      const errorMessage = error.response?.data?.message || 'Login failed';
-      setError(errorMessage);
+    } catch (err) {
+      console.log(err);
+      toastErrAxios(err);
+      setError('Login failed');
     } finally {
       setSubmitting(false);
     }
@@ -64,7 +70,7 @@ export default function LoginDevForm() {
               validationSchema={validationSchema}
               onSubmit={handleSubmit}
             >
-              {({ values }) => (
+              {() => (
                 <Form className="space-y-4">
                   <FormInput
                     label="Email"

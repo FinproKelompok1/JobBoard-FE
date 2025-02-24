@@ -22,9 +22,9 @@ export async function discoverJobs(params?: DiscoveryParams): Promise<Job[]> {
 
     const response = await axios.get(url);
     return response.data.result || [];
-  } catch (err) {
-    console.error("API Error:", err);
-    toastErrAxios(err);
+  } catch (error) {
+    console.error("API Error:", error);
+    toastErrAxios(error);
     return [];
   }
 }
@@ -33,9 +33,9 @@ export async function getJobDetail(jobId: string): Promise<Job | null> {
   try {
     const response = await axios.get(`/discover/${jobId}`);
     return response.data.result;
-  } catch (err) {
-    console.error("API Error:", err);
-    toastErrAxios(err);
+  } catch (error) {
+    console.error("API Error:", error);
+    toastErrAxios(error);
     return null;
   }
 }
@@ -45,9 +45,9 @@ export async function getRelatedJobs(jobId: string): Promise<Job[]> {
     const url = `/discover/${jobId}/related`;
     const response = await axios.get(url);
     return response.data.result || [];
-  } catch (err) {
-    console.error("API Error:", err);
-    toastErrAxios(err);
+  } catch (error) {
+    console.error("API Error:", error);
+    toastErrAxios(error);
     return [];
   }
 }
@@ -58,24 +58,23 @@ export const applyJob = async (
   token: string,
 ) => {
   try {
-    if (!formData.has("jobId")) {
-      formData.append("jobId", jobId);
-    }
+    console.log("Submitting application:", {
+      jobId,
+      formData: Object.fromEntries(formData.entries()),
+    });
 
     const response = await axios.post(`/apply/submit/${jobId}`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
+        Accept: "application/json",
       },
     });
 
     return response.data;
-  } catch (error: any) {
-    console.error("Application submission error:", {
-      status: error.response?.status,
-      data: error.response?.data,
-      message: error.message,
-    });
+  } catch (error) {
+    console.error("Application submission error:", error);
+    toastErrAxios(error);
     throw error;
   }
 };
@@ -97,5 +96,28 @@ export const getJobApplications = async (jobId: string) => {
   } catch (error) {
     toastErrAxios(error);
     throw error;
+  }
+};
+
+export const checkUserApplication = async (jobId: string) => {
+  try {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+
+    if (!token) return false;
+
+    const response = await axios.post(`/apply/check/${jobId}`, null, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.hasApplied;
+  } catch (error) {
+    console.error("Error checking application:", error);
+    toastErrAxios(error);
+    return false;
   }
 };

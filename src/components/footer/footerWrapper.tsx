@@ -10,21 +10,22 @@ export default function FooterWrapper() {
     if (pathname === "/") return true;
 
     const userRoutes = [
-      "/jobs",
-      "/companies",
-      "/companies-detail",
-      "/job-detail",
-      "/profile",
-      "/subscription",
-      "/apply-job",
-      "/transaction",
-      "/about-us",
-      "/auth/register",
-      "/auth/login",
-      "/assessment",
-      "/certificate-verification",
-      "/review",
-      "/cv",
+      '/jobs',
+      '/companies',
+      '/companies-detail',
+      '/job-detail',
+      '/profile',
+      '/subscription',
+      '/apply-job',
+        '/transaction',
+        '/about-us',
+      '/auth/register',
+      '/auth/login',
+      '/auth/forgot-password',
+       '/assessment',
+      '/certificate-verification',
+      '/review',
+      '/cv',
     ];
 
     return userRoutes.some((route) => pathname.startsWith(route));

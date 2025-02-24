@@ -1,15 +1,18 @@
-'use client'
 import { useState } from 'react';
-import { Briefcase, Calendar, AlertCircle, Star, X } from 'lucide-react';
+import { Briefcase, Calendar, AlertCircle, Star, Clock } from 'lucide-react';
 import { JobApplication, JobApplicationStatus } from '@/types/profile';
 import { formatDate } from '@/helpers/dateFormatter';
 import { formatRupiahTanpaDesimal } from '@/helpers/formatCurrency';
+import axios from '@/helpers/axios';
+import { toast } from 'react-toastify';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 interface ApplicationsSectionProps {
   applications: JobApplication[];
@@ -17,27 +20,66 @@ interface ApplicationsSectionProps {
 
 export default function ApplicationsSection({ applications }: ApplicationsSectionProps) {
   const [selectedRejection, setSelectedRejection] = useState<string | null>(null);
+  const [showTakeJobModal, setShowTakeJobModal] = useState<boolean>(false);
+  const [selectedJob, setSelectedJob] = useState<JobApplication | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const getStatusColor = (status: JobApplicationStatus) => {
+  const getStatusColor = (status: JobApplicationStatus): string => {
     const colors: Record<JobApplicationStatus, string> = {
       rejected: 'bg-rose-50 text-rose-600',
-      accepted: 'bg-emerald-50 text-emerald-600',
+      accepted: 'bg-emerald-50 text-emerald-600 cursor-pointer hover:bg-emerald-100',
       processed: 'bg-amber-50 text-amber-600',
       interviewed: 'bg-blue-50 text-blue-600'
     };
     return colors[status];
   };
 
-  const handleRejectionClick = (rejectionReason: string | undefined) => {
+  const handleStatusClick = (application: JobApplication): void => {
+    if (application.status === JobApplicationStatus.accepted) {
+      setSelectedJob(application);
+      setShowTakeJobModal(true);
+    }
+  };
+
+  const handleRejectionClick = (rejectionReason: string | undefined): void => {
     if (rejectionReason) {
       setSelectedRejection(rejectionReason);
+    }
+  };
+
+  const takeJob = async (jobId: string) => {
+    try {
+      const response = await axios.put(`/auth/applications/${jobId}/take`);
+      if (response.data.success) {
+        toast.success('Job successfully accepted!');
+      }
+      return response.data;
+    } catch (error) {
+      console.error('Error taking job:', error);
+      toast.error('Failed to accept job. Please try again.');
+      throw error;
+    }
+  };
+
+  const handleTakeJob = async (): Promise<void> => {
+    if (!selectedJob) return;
+    
+    setIsLoading(true);
+    try {
+      await takeJob(selectedJob.jobId);
+      window.location.reload();
+    } catch (error) {
+      console.error('Error accepting job:', error);
+    } finally {
+      setIsLoading(false);
+      setShowTakeJobModal(false);
     }
   };
 
   if (!applications || applications.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
-        Belum ada aplikasi pekerjaan
+        No job applications yet
       </div>
     );
   }
@@ -69,7 +111,10 @@ export default function ApplicationsSection({ applications }: ApplicationsSectio
                   <span className="px-3 py-1 bg-blue-50 text-[#0D3880] rounded-full text-sm">
                     {application.job.admin.companyName}
                   </span>
-                  <span className={`px-3 py-1 rounded-full text-sm ${getStatusColor(application.status)}`}>
+                  <span 
+                    className={`px-3 py-1 rounded-full text-sm ${getStatusColor(application.status)}`}
+                    onClick={() => handleStatusClick(application)}
+                  >
                     {application.status.charAt(0).toUpperCase() + application.status.slice(1)}
                   </span>
                 </div>
@@ -84,6 +129,20 @@ export default function ApplicationsSection({ applications }: ApplicationsSectio
                 </div>
               </div>
             </div>
+
+            {application.status === JobApplicationStatus.interviewed && application.interview && (
+              <div className="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-100">
+                <div className="flex items-center">
+                  <Clock className="w-5 h-5 text-[#0D3880] mr-3" />
+                  <div>
+                    <span className="text-[#0D3880] font-medium">Interview Schedule: </span>
+                    <span className="text-blue-600">
+                      {formatDate(application.interview.startTime)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {application.status === JobApplicationStatus.rejected && application.rejectedReview && (
               <div 
@@ -112,10 +171,10 @@ export default function ApplicationsSection({ applications }: ApplicationsSectio
         ))}
       </div>
 
-      {/* Styled Rejection Dialog */}
-         <Dialog open={!!selectedRejection} onOpenChange={() => setSelectedRejection(null)}>
+      {/* Rejection Modal */}
+      <Dialog open={!!selectedRejection} onOpenChange={() => setSelectedRejection(null)}>
         <DialogContent className="sm:max-w-[425px] bg-white rounded-xl">
-          <DialogHeader className="flex flex-row items-center justify-between">
+          <DialogHeader>
             <DialogTitle className="text-xl font-bold text-[#0D3880]">
               Application Rejected
             </DialogTitle>
@@ -126,6 +185,38 @@ export default function ApplicationsSection({ applications }: ApplicationsSectio
               <p className="text-red-600">{selectedRejection}</p>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Take Job Modal */}
+      <Dialog open={showTakeJobModal} onOpenChange={setShowTakeJobModal}>
+        <DialogContent className="sm:max-w-[425px] bg-white rounded-xl">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-[#0D3880]">
+              Take Job Offer
+            </DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-gray-700">
+              Would you like to accept the job offer for the position of {selectedJob?.job.title} at {selectedJob?.job.admin.companyName}?
+            </p>
+          </div>
+          <DialogFooter>
+            <Button 
+              variant="outline" 
+              onClick={() => setShowTakeJobModal(false)}
+              disabled={isLoading}
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleTakeJob} 
+              className="bg-[#E60278] text-white hover:bg-pink-700"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Processing...' : 'Accept Offer'}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
