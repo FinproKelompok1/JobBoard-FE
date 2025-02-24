@@ -44,7 +44,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NavbarWrapper/>
+        <NavbarWrapper />
         <ToastContainer
           draggable
           closeOnClick
@@ -52,13 +52,7 @@ export default function RootLayout({
           position="bottom-right"
         />
         {children}
-        <ToastContainer
-          draggable
-          closeOnClick
-          autoClose={5000}
-          position="bottom-right"
-        />
-        <FooterWrapper/>
+        <FooterWrapper />
       </body>
     </html>
   );

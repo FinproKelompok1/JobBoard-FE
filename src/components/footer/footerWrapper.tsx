@@ -1,14 +1,14 @@
-'use client'
-import { usePathname } from 'next/navigation';
-import React from 'react';
-import Footer from './footer';
+"use client";
+import { usePathname } from "next/navigation";
+import React from "react";
+import Footer from "./footer";
 
 export default function FooterWrapper() {
   const pathname = usePathname();
-  
+
   const shouldShowFooter = () => {
-    if (pathname === '/') return true;
-    
+    if (pathname === "/") return true;
+
     const userRoutes = [
       '/jobs',
       '/companies',
@@ -22,9 +22,13 @@ export default function FooterWrapper() {
       '/auth/register',
       '/auth/login',
       '/auth/forgot-password',
+       '/assessment',
+      '/certificate-verification',
+      '/review',
+      '/cv',
     ];
 
-    return userRoutes.some(route => pathname.startsWith(route));
+    return userRoutes.some((route) => pathname.startsWith(route));
   };
 
   if (!shouldShowFooter()) {

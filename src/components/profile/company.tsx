@@ -9,13 +9,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 
-interface InitialData {
-  companyName: string;
-  email: string;
-  noHandphone: string;
-  description: string;
-  logo: string | null;
-}
+
 
 interface AdminProfileFormProps {
   initialData: AdminProfile;
@@ -145,13 +139,12 @@ export default function AdminProfileForm({ initialData, onSubmit }: AdminProfile
             <div className="flex items-center justify-between mb-8">
                 <div>
                     <h2 className="text-2xl font-bold text-gray-900">Company Profile</h2>
-                    <p className="text-gray-500 mt-1">Manage your company's public information</p>
+<p className="text-gray-500 mt-1">Manage your company&apos;s public information</p>
                 </div>
                 <div className="hidden sm:block w-32 h-1 bg-gradient-to-r from-[#E60278] to-[#0D3880] rounded-full" />
             </div>
       
             <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Logo Upload Section */}
                 <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm relative group">
                     <div className="absolute right-4 top-4">
                         {!editMode.logo ? (

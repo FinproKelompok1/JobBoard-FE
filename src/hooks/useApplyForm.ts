@@ -15,7 +15,6 @@ export const useApplyForm = (jobId: string) => {
 
   const handleSalaryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^\d]/g, "");
-    // Convert ke number dulu sebelum disimpan di state
     setExpectedSalary(Number(value).toString());
     setFormattedSalary(formatToRupiah(value));
   };
@@ -49,15 +48,29 @@ export const useApplyForm = (jobId: string) => {
 
       const formData = new FormData();
       formData.append("resume", resume);
-      formData.append("expectedSalary", expectedSalary); // BE akan parse ini sebagai number
+      formData.append("expectedSalary", expectedSalary);
 
       await applyJob(jobId, formData, token);
       toast.success("Application submitted successfully");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Submit error:", error);
-      toast.error(
-        error.response?.data?.message || "Failed to submit application",
-      );
+
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else if (
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error &&
+        typeof (error as { response?: { data?: { message?: string } } })
+          .response?.data?.message === "string"
+      ) {
+        toast.error(
+          (error as { response: { data: { message: string } } }).response.data
+            .message,
+        );
+      } else {
+        toast.error("Failed to submit application");
+      }
     } finally {
       setIsLoading(false);
     }

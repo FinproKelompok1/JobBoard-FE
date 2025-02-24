@@ -15,7 +15,6 @@ export const buildShareMessage = ({
 
 export const buildShareUrl = (platform: string, data: ShareData): string => {
   const message = buildShareMessage(data);
-  const fullMessage = `${message}\n\n${data.jobUrl}`;
   const encodedMessage = encodeURIComponent(message);
   const encodedUrl = encodeURIComponent(data.jobUrl);
 

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import SelectDate from './selectDate';
 import RichTextEditor from './textEditor';
 import { FormValueJob } from '@/types/form';
-import { jobSchema } from '@/libs/formSchemas';
+import { jobInitialValue, jobSchema } from '@/libs/jobSchemas';
 import axios from '@/helpers/axios'
 import { toastErrAxios } from '@/helpers/toast'
 import SelectProvince from './selectProvince'
@@ -14,26 +14,15 @@ import SelectCity from './selectCity'
 import SelectCategory from './selectCategory'
 import SelectWage from './selectWage'
 import { BannerUploader } from './bannerUploader'
+import { getToken } from '@/libs/token';
 
 export default function CreateJob() {
   const [isLoading, SetIsLoading] = useState<boolean>(false);
   const [provinceId, setProvinceId] = useState<string>('')
 
-  const initialValue: FormValueJob = {
-    title: '',
-    role: '',
-    banner: null,
-    endDate: '',
-    province: '',
-    salary: '',
-    city: '',
-    category: '',
-    description: '<h1>Requirements</h1><br/><h1>Responsibilities</h1>',
-    tags: '',
-  }
-
   const handleAdd = async (job: FormValueJob) => {
     try {
+      const token = getToken()
       SetIsLoading(true)
       const formData = new FormData()
       for (const key in job) {
@@ -43,7 +32,9 @@ export default function CreateJob() {
           formData.append(key, value)
         }
       }
-      const { data } = await axios.post('/jobs', formData)
+      const { data } = await axios.post('/jobs', formData, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
       toast.success(data.message)
     } catch (err: unknown) {
       toastErrAxios(err)
@@ -55,7 +46,7 @@ export default function CreateJob() {
   return (
     <div className='max-w-[940px] xl:mx-auto mx-4'>
       <Formik
-        initialValues={initialValue}
+        initialValues={jobInitialValue}
         validationSchema={jobSchema}
         onSubmit={(values, action) => {
           action.resetForm()
@@ -88,7 +79,7 @@ export default function CreateJob() {
                     placeholder='Enter job title'
                     className='outline-none p-2 border bg-white'
                   />
-                  <ErrorMessage name="name" >{msg => <div className='text-red-500 text-xs mt-1 ml-1'><sup>*</sup>{msg}</div>}</ErrorMessage>
+                  <ErrorMessage name="title" >{msg => <div className='text-red-500 text-xs mt-1 ml-1'><sup>*</sup>{msg}</div>}</ErrorMessage>
                 </div>
                 <div className='flex flex-col'>
                   <label htmlFor='role' className='text-normal sm:text-xl font-medium mb-2 w-fit'>Role</label>
@@ -101,7 +92,7 @@ export default function CreateJob() {
                     placeholder='Enter job role'
                     className='outline-none p-2 border bg-white'
                   />
-                  <ErrorMessage name="name" >{msg => <div className='text-red-500 text-xs mt-1 ml-1'><sup>*</sup>{msg}</div>}</ErrorMessage>
+                  <ErrorMessage name="role" >{msg => <div className='text-red-500 text-xs mt-1 ml-1'><sup>*</sup>{msg}</div>}</ErrorMessage>
                 </div>
                 <div className='flex flex-col'>
                   <label htmlFor='province' className='text-normal sm:text-xl font-medium mb-2 w-fit'>Location</label>

@@ -1,5 +1,5 @@
-// src/services/password.service.ts
 import axios from "@/helpers/axios";
+import { toastErrAxios } from "@/helpers/toast";
 import { toast } from "react-toastify";
 
 interface PasswordChangeData {
@@ -32,7 +32,7 @@ export const forgotPassword = async ({
   isCompany: boolean;
 }) => {
   try {
-    const endpoint = "/password/forgot-password"; // Updated endpoint
+    const endpoint = "/password/forgot-password";
     const response = await axios.post(endpoint, {
       email,
       userType: isCompany ? "admin" : "user",
@@ -41,13 +41,9 @@ export const forgotPassword = async ({
       "If an account exists with this email, you will receive password reset instructions.",
     );
     return response.data;
-  } catch (err: any) {
-    const errorMessage =
-      err.response?.data?.message ||
-      err.message ||
-      "Failed to process forgot password request";
-    toast.error(errorMessage);
-    throw err;
+  } catch (error) {
+    toastErrAxios(error);
+    throw error;
   }
 };
 
@@ -61,7 +57,7 @@ export const resetPassword = async ({
   isCompany: boolean;
 }) => {
   try {
-    const endpoint = "/password/reset-password"; // Updated endpoint
+    const endpoint = "/password/reset-password";
     const response = await axios.post(endpoint, {
       token,
       password,
@@ -69,39 +65,32 @@ export const resetPassword = async ({
     });
     toast.success("Password has been reset successfully");
     return response.data;
-  } catch (err: any) {
-    const errorMessage =
-      err.response?.data?.message || err.message || "Failed to reset password";
-    toast.error(errorMessage);
-    throw err;
+  } catch (error) {
+    toastErrAxios(error);
+    throw error;
   }
 };
 
 export const changePassword = async (data: PasswordChangeData) => {
   try {
-    // Validate passwords match
     if (data.newPassword !== data.confirmPassword) {
       throw new Error("New passwords do not match");
     }
 
-    // Validate password requirements
     const passwordError = validatePassword(data.newPassword);
     if (passwordError) {
       throw new Error(passwordError);
     }
 
     const response = await axios.put("/password/change-password", {
-      // Updated endpoint
       currentPassword: data.currentPassword,
       newPassword: data.newPassword,
     });
 
     toast.success("Password changed successfully");
     return response.data;
-  } catch (err: any) {
-    const errorMessage =
-      err.response?.data?.message || err.message || "Failed to change password";
-    toast.error(errorMessage);
-    throw err;
+  } catch (error) {
+    toastErrAxios(error);
+    throw error;
   }
 };

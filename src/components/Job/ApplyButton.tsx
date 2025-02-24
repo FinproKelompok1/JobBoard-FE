@@ -1,4 +1,3 @@
-import { ClipboardCheck } from 'lucide-react';
 import ShareButton from './shareButton';
 import { useState, useEffect, useRef } from 'react';
 
@@ -12,8 +11,6 @@ interface ApplyButtonProps {
 }
 
 export function ApplyButton({ 
-  jobId, 
-  isTestActive, 
   hasApplied, 
   isLoggedIn,
   onApply,

@@ -4,8 +4,8 @@ import { useDebounce } from "use-debounce"
 import AgeRange from "./ageRange"
 import SalaryRange from "./salaryRange"
 import { FiFilter } from "react-icons/fi"
-import { LiaSortAlphaDownSolid, LiaSortAlphaUpAltSolid } from "react-icons/lia"
 import { IoMdClose } from "react-icons/io"
+import { TbArrowsSort } from "react-icons/tb"
 
 interface IProps {
   setSearch: (param: string) => void
@@ -116,18 +116,16 @@ export default function ApplicantFilter({
         )}
       </div>
       <div className="dropdown">
-        <button tabIndex={0} role="button" className="p-2 hover:bg-slate-200 transition duration-200">
-          <LiaSortAlphaDownSolid />
-          <LiaSortAlphaUpAltSolid />
+        <button tabIndex={0} role="button" className="p-2 rounded-full hover:bg-slate-200 transition duration-200">
+          <TbArrowsSort />
         </button>
-        <ul tabIndex={0} className="dropdown-content menu bg-base-100 z-[1] w-fit p-2 shadow">
-          <p className="text-xs font-medium text-black/50 mx-2">sorted by earliest appliment</p>
-          <li><a onClick={(e) => handleSort(e, 'asc')}>ascending</a></li>
-          <li><a onClick={(e) => handleSort(e, 'desc')}>descending</a></li>
+        <ul tabIndex={0} className="dropdown-content menu bg-base-100 z-[1] w-[250px] p-2 shadow">
+          <li><a onClick={(e) => handleSort(e, 'asc')}>By erliest appliement (first)</a></li>
+          <li><a onClick={(e) => handleSort(e, 'desc')}>By erliest appliement (last)</a></li>
         </ul>
       </div>
       <div className="dropdown">
-        <button tabIndex={0} role="button" className="p-2 hover:bg-slate-200 transition duration-200"><FiFilter /></button>
+        <button tabIndex={0} role="button" className="p-2 rounded-full hover:bg-slate-200 transition duration-200"><FiFilter /></button>
         <ul tabIndex={0} className="dropdown-content menu bg-base-100 z-[1] w-fit p-2 shadow">
           <div className="flex items-center gap-2">
             <SalaryRange

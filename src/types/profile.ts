@@ -1,6 +1,14 @@
+import { IReview, IUserAssessment } from "./types";
+
 export enum Gender {
   female = "female",
   male = "male",
+}
+
+interface Interview {
+  startTime: string;
+  jobId: string;
+  userId: number;
 }
 
 export enum LastEdu {
@@ -22,12 +30,15 @@ export interface JobApplication {
   job: {
     title: string;
     admin: {
+      id: number;
       companyName: string;
     };
   };
+  jobId: string;
   status: JobApplicationStatus;
   expectedSalary: number;
   createdAt: string;
+  interview?: Interview;
   rejectedReview?: string;
   selectionTestResult?: number;
 }
@@ -54,9 +65,15 @@ export interface UserProfile {
   city: string | null; // tambah ini
   CurriculumVitae: CurriculumVitae[];
   JobApplication: JobApplication[];
+  createdAt: string;
+  Review: IReview[];
+  UserAssessment: IUserAssessment[];
 }
 
-// Interface untuk form values
+export interface AdminProfile {
+  id: number;
+}
+
 export interface FormValueProfile {
   fullname: string;
   gender: string;

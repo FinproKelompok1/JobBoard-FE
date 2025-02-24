@@ -9,11 +9,18 @@ interface NavbarProps {
   isHomePage: boolean;
 }
 
+interface User {
+  role: string;
+  username: string;
+  profilePicture?: string;
+  companyName?: string;
+}
+
 export default function Navbar({ isHomePage }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [userH, setUserH] = useState<any | null>(null);
+  const [userH, setUserH] = useState<User | null>(null);
   const user = useCookie('user');
 
   useEffect(() => {
@@ -64,12 +71,15 @@ export default function Navbar({ isHomePage }: NavbarProps) {
     window.location.href = '/';
   };
 
-  // Desktop background color
-  const desktopBgColor = isHomePage 
-    ? (isScrolled ? 'bg-[#FFFFFF] shadow-lg' : 'bg-transparent')
-    : 'bg-[#FFFFFF] shadow-lg';
+  // Get navbar background class based on conditions
+  const getNavbarClass = () => {
+    if (isHomePage && !isScrolled) {
+      return 'bg-transparent';
+    }
+    return 'bg-[#FFFFFF] shadow-lg';
+  };
 
-  // Desktop text color
+  // Get desktop text color
   const desktopTextColor = isHomePage
     ? (isScrolled ? 'text-[#0D3880]' : 'text-[#FFFFFF]')
     : 'text-[#0D3880]';
@@ -141,7 +151,7 @@ export default function Navbar({ isHomePage }: NavbarProps) {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 transition-all duration-300 z-50 md:${desktopBgColor} bg-[#FFFFFF] shadow-lg`}>
+    <nav className={`fixed top-0 left-0 right-0 transition-all duration-300 z-50 ${getNavbarClass()}`}>
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center">
@@ -187,7 +197,7 @@ export default function Navbar({ isHomePage }: NavbarProps) {
 
           <button 
             onClick={() => setIsOpen(!isOpen)} 
-            className="md:hidden text-[#0D3880]"
+            className={`md:hidden ${desktopTextColor}`}
           >
             {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
           </button>

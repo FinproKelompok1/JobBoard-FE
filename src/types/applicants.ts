@@ -3,6 +3,7 @@ export interface IApplicants {
   createdAt: string;
   expectedSalary: number;
   rejectedReview: string;
+  selectionTestResult: number | null;
   resume: string;
   status: string;
   user: IUser;

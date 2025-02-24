@@ -1,5 +1,4 @@
 import { Job, JobCategory } from '@/types/jobdis';
-import { CurrencyFormatter } from '../../helpers/currencryFormatter';
 import Link from 'next/link';
 import DOMPurify from 'dompurify';
 

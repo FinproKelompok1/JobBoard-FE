@@ -1,6 +1,5 @@
 import { Job, JobCategory } from '@/types/jobdis';
 import JobCard from './jobCards';
-import { CurrencyFormatter } from '@/helpers/currencryFormatter';
 
 interface JobsListProps {
   jobs: Job[];

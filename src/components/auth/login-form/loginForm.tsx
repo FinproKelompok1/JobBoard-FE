@@ -1,11 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Formik, Form } from 'formik';
+import { Formik, Form, FormikHelpers } from 'formik';
 import FormInput from '../shared/formInput';
 import SocialAuth from '../shared/socialAuth';
 import { validationSchema } from './validation';
 import { authService } from '@/libs/auth';
 import UserTypeToggle from '../shared/userTypeToggle';
+
+interface LoginValues {
+  email: string;
+  password: string;
+  isCompany: boolean;
+}
 
 export default function LoginForm() {
   const router = useRouter();
@@ -19,13 +25,16 @@ export default function LoginForm() {
     }
   }, [searchParams]);
 
-  const initialValues = {
+  const initialValues: LoginValues = {
     email: '',
     password: '',
     isCompany: false
   };
 
-  const handleSubmit = async (values: any, { setSubmitting }: any) => {
+  const handleSubmit = async (
+    values: LoginValues,
+    { setSubmitting }: FormikHelpers<LoginValues>
+  ) => {
     try {
       setError('');
       
@@ -48,9 +57,12 @@ export default function LoginForm() {
         });
         router.push('/admin/dashboard');
       }
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Login failed';
-      setError(errorMessage);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message || 'Login failed');
+      } else {
+        setError('An unknown error occurred');
+      }
     } finally {
       setSubmitting(false);
     }
@@ -117,10 +129,10 @@ export default function LoginForm() {
                   Sign in
                 </button>
 
-                <SocialAuth role='' />
+                <SocialAuth role="" />
                 
                 <p className="text-sm text-center text-gray-600 pt-4">
-                  Don't have an account?{' '}
+                  Don&apos;t have an account?{' '}
                   <a 
                     href="/auth/register" 
                     className="text-[#E60278] hover:text-[#E60278]/80 transition-colors font-medium"

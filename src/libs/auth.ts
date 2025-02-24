@@ -1,6 +1,7 @@
 import axios from "@/helpers/axios";
+import { toastErrAxios } from "@/helpers/toast";
 import { CurriculumVitae } from "@/types/profile";
-import { jwtDecode } from "jwt-decode";
+import { toast } from "react-toastify";
 
 interface AdminRegisterData {
   companyName: string;
@@ -20,31 +21,6 @@ interface LoginData {
   email: string;
   password: string;
   otpToken?: string;
-}
-
-interface UserData {
-  id: string;
-  email: string;
-  username?: string;
-  role: string;
-  isEmailVerified: boolean;
-  profile?: {
-    fullName?: string;
-    avatar?: string;
-  };
-}
-
-interface AuthResponse {
-  token: string;
-  user: UserData;
-}
-
-interface DecodedToken {
-  id: number;
-  email: string;
-  role: string;
-  iat: number;
-  exp: number;
 }
 
 axios.interceptors.request.use(
@@ -147,14 +123,6 @@ export const authService = {
   },
 };
 
-interface DecodedToken {
-  id: number;
-  email: string;
-  role: string;
-  iat: number;
-  exp: number;
-}
-
 export const getUserProfile = async () => {
   try {
     const response = await axios.get("/auth/me");
@@ -199,6 +167,27 @@ export const updateCV = async (
     return response.data;
   } catch (error) {
     console.error("Error updating CV:", error);
+    throw error;
+  }
+};
+
+export const changeEmail = async ({
+  newEmail,
+  password,
+}: {
+  newEmail: string;
+  password: string;
+}) => {
+  try {
+    const response = await axios.put("/auth/change-email", {
+      newEmail,
+      password,
+    });
+
+    toast.success("Please check your new email for verification link");
+    return response.data;
+  } catch (error) {
+    toastErrAxios(error);
     throw error;
   }
 };

@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { authService } from '@/libs/auth';
+import { toastErrAxios } from '@/helpers/toast';
+import axios from 'axios';
 
 type VerificationStatus = 'loading' | 'success' | 'error' | 'already-verified';
 
@@ -29,13 +31,20 @@ export default function VerifyPage() {
         setTimeout(() => {
           router.push('/auth/login');
         }, 3000);
-      } catch (error: any) {
-        setStatus(
-          error.response?.data?.message === 'Email already verified' 
-            ? 'already-verified' 
-            : 'error'
-        );
-        setMessage(error.response?.data?.message || 'Verification failed');
+      } catch (error) {
+        toastErrAxios(error);
+
+        if (axios.isAxiosError(error) && error.response?.data) {
+          setStatus(
+            error.response.data.message === 'Email already verified'
+              ? 'already-verified'
+              : 'error'
+          );
+          setMessage(error.response.data.message);
+        } else {
+          setStatus('error');
+          setMessage('Verification failed');
+        }
       }
     };
 
