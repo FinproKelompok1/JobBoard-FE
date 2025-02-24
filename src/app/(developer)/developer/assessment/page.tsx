@@ -12,8 +12,8 @@ export default async function Assessment() {
     <main className="flex">
       <DeveloperSideBar />
 
-      <div className="w-screen p-5 md:p-10">
-        <div className="flex flex-col gap-2 border-b border-gray-500 pb-5 md:flex-row md:items-center md:justify-between">
+      <div className="w-screen p-5 md:bg-gray-50 md:p-10">
+        <div className="flex flex-col gap-2 border-b border-gray-300 pb-5 md:flex-row md:items-center md:justify-between">
           <h1 className="w-full text-3xl font-bold text-primary">
             Skill Assessment
           </h1>
@@ -35,7 +35,7 @@ export default async function Assessment() {
                 return (
                   <div
                     key={index}
-                    className="flex min-h-56 w-full flex-col justify-between rounded-xl border border-gray-500 p-5 shadow-md md:max-w-[700px]"
+                    className="flex min-h-56 w-full flex-col justify-between rounded-xl border border-gray-300 bg-white p-5 shadow-md md:max-w-[700px]"
                   >
                     <div className="flex flex-col-reverse items-start gap-3 md:flex-row md:items-center md:justify-between">
                       <h1 className="text-2xl font-bold text-primary">

@@ -3,16 +3,49 @@
 import { logOut } from "@/helpers/logout";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { IoMenu, IoClose } from "react-icons/io5";
 
 export default function DeveloperSideBar() {
   const [isSideBarOpen, setIsSideBarOpen] = useState<boolean>(false);
   const toggleSideBar = () => setIsSideBarOpen(!isSideBarOpen);
-
   const pathname = usePathname();
   const isActive = (path: string): boolean => pathname === path;
+  const [userH, setUserH] = useState<any | null>(null);
+
+  useEffect(() => {
+    const checkUserCookie = () => {
+      const userCookie = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("user="));
+
+      if (userCookie) {
+        const userData = userCookie.split("=")[1];
+        try {
+          setUserH(JSON.parse(userData));
+        } catch (e) {
+          console.error("Error parsing user cookie:", e);
+        }
+      } else {
+        setUserH(null);
+      }
+    };
+
+    checkUserCookie();
+
+    const interval = setInterval(checkUserCookie, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleLogOut = () => {
+    document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+    window.location.href = "/";
+    document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+    setUserH(null);
+    window.location.href = "/";
+  };
 
   return (
     <>
@@ -34,7 +67,7 @@ export default function DeveloperSideBar() {
               className="h-auto w-full max-w-52"
             />
             <Link href={"/developer"}>
-              <h1 className="mt-10 text-xl font-bold text-white hover:text-accent">
+              <h1 className="mt-10 text-lg font-bold text-white hover:text-accent">
                 Developer Dashboard
               </h1>
             </Link>
@@ -70,12 +103,12 @@ export default function DeveloperSideBar() {
           </div>
 
           <div className="mb-5 mt-10">
-            <button 
-  onClick={logOut}
-  className="w-full rounded-md border-2 border-white px-4 py-2 font-semibold transition-all duration-500 ease-in-out hover:border-accent hover:bg-accent hover:text-white"
->
-  Log out
-</button>
+            <button
+              onClick={handleLogOut}
+              className="w-full rounded-md bg-accent px-4 py-2 font-semibold text-white transition-all duration-500 ease-in-out hover:bg-accent/80"
+            >
+              Log out
+            </button>
           </div>
         </nav>
       </div>
