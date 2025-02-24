@@ -12,8 +12,8 @@ export default function DeveloperLayout({
 
   const getCookie = (key: string): string | null => {
     const cookies = document.cookie.split(";");
-    for (let cookie of cookies) {
-      let [cookieKey, cookieVal] = cookie.trim().split("=");
+    for (const cookie of cookies) {
+      const [cookieKey, cookieVal] = cookie.trim().split("=");
       if (cookieKey === key) {
         return decodeURIComponent(cookieVal);
       }
@@ -31,16 +31,18 @@ export default function DeveloperLayout({
     try {
       const userObject = JSON.parse(user ?? "{}");
 
-      if (userObject.role === "none") router.push("/auth/verify-oauth");
+      if (userObject.role === "none") {
+        router.push("/auth/verify-oauth");
+        return; 
+      }
 
       if (userObject.role !== "developer") {
         router.push("/unauthorized");
       }
     } catch (error) {
       console.log(error);
-      // router.push("/auth/login");
     }
-  }, []);
+  }, [router]); 
 
   return <>{children}</>;
 }

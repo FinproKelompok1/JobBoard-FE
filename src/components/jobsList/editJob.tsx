@@ -16,7 +16,6 @@ import SelectWage from "../createJob/selectWage"
 import SelectDate from "../createJob/selectDate"
 import RichTextEditor from "../createJob/textEditor"
 import { IJob } from "@/types/jobs"
-import { QueryContext } from "./jobsList"
 import { mutate } from "swr"
 import { sweetAlertWarning } from "@/helpers/sweetAlert"
 

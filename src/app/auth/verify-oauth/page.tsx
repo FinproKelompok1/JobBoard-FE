@@ -2,20 +2,30 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik';
 import FormInput from '@/components/auth/shared/formInput';
 import { validationSchema } from './validation';
 import UserTypeToggle from '@/components/auth/shared/userTypeToggle';
 import { authService } from '@/libs/auth';
+import Image from 'next/image';
+import axios from 'axios';
+
+interface FormValues {
+    username: string;
+    companyName: string;
+    phoneNumber: string;
+    isCompany: boolean;
+    terms: boolean;
+}
 
 export default function VerifyOauthPage() {
     const router = useRouter();
-    const [error, setError] = useState('');
+    const [error, setError] = useState<string>('');
 
     const getCookie = (key: string): string | null => {
         const cookies = document.cookie.split(';');
-        for (let cookie of cookies) {
-            let [cookieKey, cookieVal] = cookie.trim().split('=');
+        for (const cookie of cookies) {
+            const [cookieKey, cookieVal] = cookie.trim().split('=');
             if (cookieKey === key) {
                 return decodeURIComponent(cookieVal);
             }
@@ -24,27 +34,24 @@ export default function VerifyOauthPage() {
     };
 
     useEffect(() => {
-        const user = getCookie('user')
+        const user = getCookie('user');
         if (!user) {
             router.push("/login");
             return;
         }
 
-
         try {
             const userObject = JSON.parse(user);
 
-            if (userObject.role === 'none')
-                return
+            if (userObject.role === 'none') return;
 
-                router.push("/");
-        } catch (error) {
-            console.log(error)
-            // router.push("/auth/login");
+            router.push("/");
+        } catch (err) {
+            console.error(err);
         }
-    }, []);
+    }, [router]);
 
-    const initialValues = {
+    const initialValues: FormValues = {
         username: '',
         companyName: '',
         phoneNumber: '',
@@ -52,28 +59,30 @@ export default function VerifyOauthPage() {
         terms: false
     };
 
-    const handleSubmit = async (values: any, { setSubmitting, setFieldError }: any) => {
-        console.log(values)
+    const handleSubmit = async (values: FormValues, { setSubmitting, setFieldError }: FormikHelpers<FormValues>) => {
         try {
-            console.log(values)
-            const response = await authService.completeOauth({
+            await authService.completeOauth({
                 type: values.isCompany ? 'admin' : 'user',
                 username: values.username,
                 company: values.companyName,
                 phone: values.phoneNumber,
-            })
-            router.push('/')
+            });
+
+            router.push('/');
             setError('');
-        } catch (error: any) {
-            const errorMessage = error.response?.data?.message || 'Registration failed';
-            if (errorMessage.includes('Email already registered')) {
-                setFieldError('email', 'Email already registered');
-            } else if (errorMessage.includes('Username already taken')) {
-                setFieldError('username', 'Username already taken');
+        } catch (err) {
+            if (axios.isAxiosError(err) && err.response?.data) {
+                const errorMessage = err.response.data.message || 'Registration failed';
+                if (errorMessage.includes('Email already registered')) {
+                    setFieldError('email', 'Email already registered');
+                } else if (errorMessage.includes('Username already taken')) {
+                    setFieldError('username', 'Username already taken');
+                } else {
+                    setError(errorMessage);
+                }
             } else {
-                setError(errorMessage);
+                setError('An unexpected error occurred');
             }
-            console.log(error)
         } finally {
             setSubmitting(false);
         }
@@ -142,9 +151,11 @@ export default function VerifyOauthPage() {
                 </div>
 
                 <div className="hidden lg:block flex-1">
-                    <img
+                    <Image
                         src="/api/placeholder/600/800"
                         alt="Decorative"
+                        width={600}
+                        height={800}
                         className="w-full h-full object-cover rounded-lg"
                     />
                 </div>

@@ -12,7 +12,7 @@ export default function LoginAdminPage() {
 
     useEffect(() => {
         if (user)
-            router.push("/");
+            router.push("/developer");
     }, [user, router]);
 
     return (

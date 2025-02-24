@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { User, Calendar, GraduationCap, Mail, Edit, Check } from "lucide-react";
+import { User, Calendar, GraduationCap, Mail, Edit, Check, MapPin } from "lucide-react";
 import { UserProfile } from "@/types/profile";
 import { formatDate } from "@/helpers/dateFormatter";
 import { eduFormatter } from "@/helpers/educationFormatter";
@@ -16,6 +16,8 @@ interface ProfileInfoProps {
 
 export default function ProfileInfo({ user, onUpdate }: ProfileInfoProps) {
   const [showEditForm, setShowEditForm] = useState(false);
+
+  console.log("User data:", user); // Debug log
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -50,36 +52,37 @@ export default function ProfileInfo({ user, onUpdate }: ProfileInfoProps) {
                   <p className="text-lg text-gray-500">@{user.username}</p>
                 </div>
                 <div>
-                  {user.UserAssessment.filter(
-                    (data) => data.status === "passed",
-                  ).map((data, index) => {
-                    return (
-                      <Link
-                        href={`/assessment/${data.User.username}/${data.id}/certificate`}
-                        key={index}
-                        className="flex flex-col items-center justify-center rounded-xl border bg-primary p-1"
-                      >
-                        <Image
-                          src={`${data.certificate.badgeIcon}`}
-                          alt="badge image"
-                          width={100}
-                          height={100}
-                          className="w-10"
-                        />
-                        <span className="font-bold tracking-widest text-white">
-                          {data.assessment.title
-                            .split(" ")
-                            .map((word) => word[0])
-                            .join("")
-                            .toUpperCase()}
-                        </span>
-                      </Link>
-                    );
-                  })}
+                  {user.UserAssessment && user.UserAssessment.length > 0 &&
+                    user.UserAssessment
+                      .filter((data) => data.status === "passed")
+                      .map((data, index) => (
+                        <Link
+                          href={`/assessment/${data.User?.username}/${data.id}/certificate`}
+                          key={index}
+                          className="flex flex-col items-center justify-center rounded-xl border bg-primary p-1"
+                        >
+                          <Image
+                            src={data.certificate?.badgeIcon || ''}
+                            alt="badge image"
+                            width={100}
+                            height={100}
+                            className="w-10"
+                          />
+                          <span className="font-bold tracking-widest text-white">
+                            {data.assessment?.title
+                              ? data.assessment.title
+                                .split(" ")
+                                .map((word) => word[0])
+                                .join("")
+                                .toUpperCase()
+                              : ''}
+                          </span>
+                        </Link>
+                      ))}
                 </div>
               </div>
 
-              {/* User Details */}
+              {/* User Details Grid */}
               <div className="grid gap-4 md:grid-cols-2">
                 {/* Email */}
                 <div className="flex items-center rounded-lg bg-gray-50 p-3">
@@ -120,6 +123,19 @@ export default function ProfileInfo({ user, onUpdate }: ProfileInfoProps) {
                       <p className="text-sm text-gray-500">Education</p>
                       <p className="text-gray-700">
                         {eduFormatter(user.lastEdu)}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Location */}
+                {(user.province || user.city) && (
+                  <div className="flex items-center rounded-lg bg-gray-50 p-3">
+                    <MapPin className="mr-3 h-5 w-5 text-[#E60278]" />
+                    <div>
+                      <p className="text-sm text-gray-500">Location</p>
+                      <p className="text-gray-700">
+                        {[user.province, user.city].filter(Boolean).join(", ")}
                       </p>
                     </div>
                   </div>

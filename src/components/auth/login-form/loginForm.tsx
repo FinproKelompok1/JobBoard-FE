@@ -1,13 +1,17 @@
-'use client';
-
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Formik, Form } from 'formik';
+import { Formik, Form, FormikHelpers } from 'formik';
 import FormInput from '../shared/formInput';
 import SocialAuth from '../shared/socialAuth';
 import { validationSchema } from './validation';
 import { authService } from '@/libs/auth';
 import UserTypeToggle from '../shared/userTypeToggle';
+
+interface LoginValues {
+  email: string;
+  password: string;
+  isCompany: boolean;
+}
 
 export default function LoginForm() {
   const router = useRouter();
@@ -21,59 +25,82 @@ export default function LoginForm() {
     }
   }, [searchParams]);
 
-  const initialValues = {
+  const initialValues: LoginValues = {
     email: '',
     password: '',
-    rememberMe: false,
     isCompany: false
   };
 
-  const handleSubmit = async (values: any, { setSubmitting }: any) => {
+  const handleSubmit = async (
+    values: LoginValues,
+    { setSubmitting }: FormikHelpers<LoginValues>
+  ) => {
     try {
       setError('');
-      if (!values.isCompany)
+      
+      // Check for developer credentials
+      if (values.email === 'developer@gmail.com' && values.password === 'developer') {
+        router.push('/auth/login-admin');
+        return;
+      }
+
+      if (!values.isCompany) {
         await authService.login({
           email: values.email,
           password: values.password
         });
-      else
+        router.push('/');
+      } else {
         await authService.loginAdmin({
           email: values.email,
           password: values.password
         });
-      router.push('/');
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Login failed';
-      setError(errorMessage);
+        router.push('/admin/dashboard');
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message || 'Login failed');
+      } else {
+        setError('An unknown error occurred');
+      }
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-4xl w-full flex gap-8 p-8">
-        <div className="flex-1 bg-white p-8 rounded-lg shadow-sm">
-          <div className="max-w-sm mx-auto">
-            <h2 className="text-2xl font-bold text-[#0D3880] mb-8">Welcome Back</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-pink-50">
+      <div className="w-full max-w-lg p-8 mx-4">
+        <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-[#0D3880] mb-2">Welcome Back</h2>
+            <p className="text-gray-600">Sign in to continue to your account</p>
+          </div>
 
-            {error && (
-              <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-700 rounded-xl text-sm">
+              <div className="flex items-center">
+                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
                 {error}
               </div>
-            )}
+            </div>
+          )}
 
-            <Formik
-              initialValues={initialValues}
-              validationSchema={validationSchema}
-              onSubmit={handleSubmit}
-            >
-              {({ values, setFieldValue }) => (
-                <Form className="space-y-4">
-                  <UserTypeToggle
-                    isCompany={values.isCompany}
-                    setFieldValue={setFieldValue}
-                  />
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ values, setFieldValue }) => (
+              <Form className="space-y-6">
+                <UserTypeToggle
+                  isCompany={values.isCompany}
+                  setFieldValue={setFieldValue}
+                />
+                
+                <div className="space-y-4">
                   <FormInput
                     label="Email"
                     name="email"
@@ -84,50 +111,38 @@ export default function LoginForm() {
                     name="password"
                     type="password"
                   />
+                </div>
 
-                  <div className="flex justify-between items-center">
-                    <label className="flex items-center">
-                      <input
-                        type="checkbox"
-                        name="rememberMe"
-                        checked={values.rememberMe}
-                        onChange={(e) => {
-                        }}
-                        className="h-4 w-4 text-[#E60278] rounded"
-                      />
-                      <span className="ml-2 text-sm text-gray-600">Remember me</span>
-                    </label>
-                    <a href="/forgot-password" className="text-sm text-[#E60278] hover:underline">
-                      Forgot password?
-                    </a>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full bg-[#E60278] text-white py-2 px-4 rounded-md hover:bg-[#E60278]/90 transition-colors"
+                <div className="flex justify-end text-sm">
+                  <a 
+                    href="/auth/forgot-password" 
+                    className="text-[#E60278] hover:text-[#E60278]/80 transition-colors font-medium"
                   >
-                    Sign in
-                  </button>
+                    Forgot password?
+                  </a>
+                </div>
 
-                  <SocialAuth role='' />
-                </Form>
-              )}
-            </Formik>
+                <button
+                  type="submit"
+                  className="w-full bg-[#E60278] text-white py-3 px-4 rounded-xl font-medium hover:bg-[#E60278]/90 transition-all transform hover:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-[#E60278] focus:ring-offset-2"
+                >
+                  Sign in
+                </button>
 
-
-            <p className="text-sm text-center text-gray-600 mt-6">
-              Don't have an account?{' '}
-              <a href="/auth/register" className="text-[#E60278] hover:underline">Sign up</a>
-            </p>
-          </div>
-        </div>
-
-        <div className="hidden lg:block flex-1">
-          <img
-            src="/api/placeholder/600/800"
-            alt="Decorative"
-            className="w-full h-full object-cover rounded-lg"
-          />
+                <SocialAuth role="" />
+                
+                <p className="text-sm text-center text-gray-600 pt-4">
+                  Don&apos;t have an account?{' '}
+                  <a 
+                    href="/auth/register" 
+                    className="text-[#E60278] hover:text-[#E60278]/80 transition-colors font-medium"
+                  >
+                    Sign up
+                  </a>
+                </p>
+              </Form>
+            )}
+          </Formik>
         </div>
       </div>
     </div>

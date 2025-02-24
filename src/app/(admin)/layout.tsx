@@ -12,8 +12,8 @@ export default function AdminLayout({
 
   const getCookie = (key: string): string | null => {
     const cookies = document.cookie.split(";");
-    for (let cookie of cookies) {
-      let [cookieKey, cookieVal] = cookie.trim().split("=");
+    for (const cookie of cookies) {
+      const [cookieKey, cookieVal] = cookie.trim().split("=");
       if (cookieKey === key) {
         return decodeURIComponent(cookieVal);
       }
@@ -21,25 +21,28 @@ export default function AdminLayout({
     return null;
   };
 
-    useEffect(() => {
-        const user = getCookie('user')
-        if (!user) {
-            router.push("/auth/login");
-            return;
-        }
+  useEffect(() => {
+    const user = getCookie("user");
+    if (!user) {
+      router.push("/auth/login");
+      return;
+    }
 
     try {
       const userObject = JSON.parse(user);
 
-      if (userObject.role === "none") router.push("/auth/verify-oauth");
+      if (userObject.role === "none") {
+        router.push("/auth/verify-oauth");
+        return; 
+      }
 
       if (userObject.role !== "admin") {
         router.push("/unauthorized");
       }
-    } catch (error) {
+    } catch {
       router.push("/auth/login");
     }
-  }, []);
+  }, [router]);
 
   return <>{children}</>;
 }

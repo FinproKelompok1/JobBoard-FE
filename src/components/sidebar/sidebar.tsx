@@ -9,6 +9,7 @@ import { RiHome4Fill } from "react-icons/ri";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { PiSignOutFill } from "react-icons/pi";
+import { logOut } from "@/helpers/logout";
 
 export default function Sidebar() {
   const [SidebarOpen, setSidebarOpen] = useState<boolean>(true);
@@ -105,14 +106,17 @@ export default function Sidebar() {
               <p className={`ml-2 ${!contentOpen && "m-0 hidden"}`}>Profile</p>
             </div>
           </Link>
-          <Link className="my-1" href={"/admin/profile"}>
-            <div
-              className={`flex items-center py-2 pl-2 transition-all hover:bg-red-500`}
-            >
-              <PiSignOutFill className="text-[20px]" />
-              <p className={`ml-2 ${!contentOpen && "m-0 hidden"}`}>Log out</p>
-            </div>
-          </Link>
+       <button 
+  onClick={logOut} 
+  className="my-1 w-full text-left"
+>
+  <div
+    className={`flex items-center py-2 pl-2 transition-all hover:bg-red-500`}
+  >
+    <PiSignOutFill className="text-[20px]" />
+    <p className={`ml-2 ${!contentOpen && "m-0 hidden"}`}>Log out</p>
+  </div>
+</button>
         </div>
       </div>
 
