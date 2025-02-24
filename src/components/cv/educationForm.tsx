@@ -1,8 +1,6 @@
 "use client";
-
 import { SimpleDateFormatter } from "@/helpers/dateFormatter";
 import { useEffect, useState } from "react";
-
 export default function EducationForm({
   onSave,
   initialEducation = "",
@@ -23,38 +21,29 @@ export default function EducationForm({
     endDate: "",
     description: "",
   });
-
   useEffect(() => {
     setEducations(initialEducation ? initialEducation.split(" ; ") : []);
   }, [initialEducation]);
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
-
     if (name === "endDate" && currentlyStudying) {
       return;
     }
-
     setFormData({ ...formData, [name]: value });
   };
-
   const handleCheckboxChange = () => {
     setCurrentlyStudying(!currentlyStudying);
     setFormData({ ...formData, endDate: "" });
   };
-
   const handleSaveEducation = () => {
     const educationString = `${formData.schoolName}, ${formData.degree}, ${formData.field}, ${formData.startDate}, ${
       currentlyStudying ? "Present" : formData.endDate
     }, ${formData.description}`;
-
     const updatedEducations = [...educations, educationString];
-
     setEducations(updatedEducations);
     onSave(updatedEducations.join(" ; "));
-
     setFormData({
       schoolName: "",
       degree: "",
@@ -63,19 +52,14 @@ export default function EducationForm({
       endDate: "",
       description: "",
     });
-
     setCurrentlyStudying(false);
     setShowForm(false);
   };
-
   const handleDelete = (index: number) => {
     const updatedExperiences = educations.filter((_, i) => i !== index);
     setEducations(updatedExperiences);
     onSave(updatedExperiences.join(" ; "));
   };
-
-  console.log("Current educations state:", educations);
-
   return (
     <div>
       {!showForm && (
@@ -86,12 +70,10 @@ export default function EducationForm({
           Add Education
         </button>
       )}
-
       {showForm && (
         <div className="mt-4 rounded-lg border bg-gray-100 p-4 shadow-md">
           <h3 className="text-lg font-semibold">Add Education</h3>
           <p>Please add education in order from oldest to newest</p>
-
           <div className="mt-3 flex flex-col">
             <label className="font-medium">School or University Name</label>
             <input
@@ -103,7 +85,6 @@ export default function EducationForm({
               className="w-full rounded border p-2"
             />
           </div>
-
           <div className="mt-3 flex flex-col">
             <label className="font-medium">Degree</label>
             <input
@@ -115,7 +96,6 @@ export default function EducationForm({
               className="w-full rounded border p-2"
             />
           </div>
-
           <div className="mt-3 flex flex-col">
             <label className="font-medium">Field of Study</label>
             <input
@@ -127,7 +107,6 @@ export default function EducationForm({
               className="w-full rounded border p-2"
             />
           </div>
-
           <div className="mt-3 flex gap-5">
             <div className="flex flex-col">
               <label className="font-medium">Start Date</label>
@@ -139,7 +118,6 @@ export default function EducationForm({
                 className="w-fit rounded border p-2"
               />
             </div>
-
             {!currentlyStudying && (
               <div className="flex flex-col">
                 <label className="font-medium">End Date</label>
@@ -162,7 +140,6 @@ export default function EducationForm({
               <label htmlFor="currentlyWorking">Currently studying here</label>
             </div>
           </div>
-
           <div className="mt-3 flex flex-col">
             <label className="font-medium">Description</label>
             <textarea
@@ -173,7 +150,6 @@ export default function EducationForm({
               className="h-40 w-full rounded border p-2"
             ></textarea>
           </div>
-
           <div className="mt-3 flex gap-2">
             <button
               onClick={handleSaveEducation}
@@ -190,14 +166,12 @@ export default function EducationForm({
           </div>
         </div>
       )}
-
       {educations.length > 0 && (
         <div className="ml-4 mt-5">
           <ul className="list-disc space-y-4">
             {educations.map((edu, index) => {
               const parts = edu.split(", ");
               if (parts.length < 6) return null;
-
               const [
                 schoolName,
                 degree,
@@ -206,9 +180,7 @@ export default function EducationForm({
                 endDate,
                 ...descriptionArray
               ] = parts;
-
               const description = descriptionArray.join(", ");
-
               return (
                 <li key={index} className="border-b pb-3">
                   <h1 className="text-lg font-bold">{schoolName}</h1>

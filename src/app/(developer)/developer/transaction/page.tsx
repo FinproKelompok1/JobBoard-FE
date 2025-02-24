@@ -1,12 +1,12 @@
 "use client";
 
 import DeveloperSideBar from "@/components/developer/developerSideBar";
-import axios from "@/helpers/axios";
 import { CurrencyFormatter } from "@/helpers/currencryFormatter";
 import DateFormatter from "@/helpers/dateFormatter";
 import { getTransactions } from "@/libs/transaction";
 import { ITransaction } from "@/types/types";
 import { useEffect, useState } from "react";
+import { FaSortAlphaDown, FaSortAlphaUpAlt } from "react-icons/fa";
 
 export default function TransactionList() {
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
@@ -48,26 +48,44 @@ export default function TransactionList() {
           Transaction List
         </h1>
 
-        <div className="mt-5 flex items-center gap-2">
-          <label htmlFor="status-filter" className="font-medium">
-            Filter by status:
-          </label>
-          <select
-            id="status-filter"
-            className="rounded-md border border-gray-300 px-2 py-1"
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-          >
-            <option value="">All</option>
-            <option value="pending">Pending</option>
-            <option value="settlement">Settlement</option>
-            <option value="cancel">Cancel</option>
-          </select>
+        <div className="flex gap-5">
+          <div className="mt-5 flex items-center gap-2">
+            <label htmlFor="status-filter" className="font-medium">
+              Filter by status:
+            </label>
+            <select
+              id="status-filter"
+              className="rounded-md border border-gray-300 px-2 py-1"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <option value="">All</option>
+              <option value="pending">Pending</option>
+              <option value="settlement">Settlement</option>
+              <option value="cancel">Cancel</option>
+            </select>
+          </div>
+          <div className="mt-5 flex items-center gap-2">
+            <label htmlFor="date-sorting" className="font-medium">
+              Sort by date:
+            </label>
+            <select
+              id="status-filter"
+              className="rounded-md border border-gray-300 px-2 py-1"
+              value={sortCreateAt}
+              onChange={(e) =>
+                setSortCreateAt(sortCreateAt === "asc" ? "desc" : "asc")
+              }
+            >
+              <option value="asc">Oldest</option>
+              <option value="desc">Newest</option>
+            </select>
+          </div>
         </div>
 
-        <div className="mt-5 max-w-full overflow-x-auto rounded-lg border border-gray-500">
+        <div className="mt-5 max-w-full overflow-x-auto rounded-lg border border-gray-300">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-primary">
+            <thead className="bg-primary/90">
               <tr>
                 <th className="table-head border-b border-r border-gray-300">
                   Transaction ID
@@ -89,8 +107,16 @@ export default function TransactionList() {
                     onClick={() =>
                       setSortCreateAt(sortCreateAt === "asc" ? "desc" : "asc")
                     }
+                    className="flex items-center gap-2"
                   >
-                    Created At {sortCreateAt === "asc" ? "🔼" : "🔽"}
+                    Created At{" "}
+                    <span className="hover:text-accent">
+                      {sortCreateAt === "asc" ? (
+                        <FaSortAlphaDown className="size-5" />
+                      ) : (
+                        <FaSortAlphaUpAlt className="size-5" />
+                      )}
+                    </span>
                   </button>
                 </th>
                 <th className="table-head border-b border-gray-300">

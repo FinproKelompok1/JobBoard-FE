@@ -12,16 +12,14 @@ export default async function UserAssessmentResult({
   );
 
   return (
-    <main>
-      <div className="w-screen p-5 md:p-10">
-        <div className="flex flex-col items-center justify-center gap-2">
-          <h1 className="text-3xl font-bold text-primary">
-            {userAssessment.assessment.title} - Assessment Result
-          </h1>
-        </div>
+    <main className="min-h-screen w-screen p-5 md:p-10">
+      <div className="flex flex-col items-center justify-center gap-2">
+        <h1 className="text-3xl font-bold text-primary">
+          {userAssessment.assessment.title} - Assessment Result
+        </h1>
       </div>
 
-      <div className="flex flex-col items-center justify-center gap-5">
+      <div className="mt-5 flex flex-col items-center justify-center gap-5 md:mt-10">
         <div className="flex flex-col items-center">
           <span
             className={`${userAssessment.status === "failed" ? "bg-red-500" : "bg-green-500"} rounded-md px-4 py-2 text-3xl font-bold text-white`}

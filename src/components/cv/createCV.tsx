@@ -50,11 +50,12 @@ export default function CreateCV({
       });
       toast.success(data.message);
       resetForm();
-      setIsCreating(false);
+      window.location.reload();
     } catch (error) {
       console.log("Error create CV:", error);
       toastErrAxios(error);
     } finally {
+      setIsCreating(false);
       setIsSubmitting(false);
     }
   };
@@ -128,7 +129,7 @@ export default function CreateCV({
                 <label className="font-medium text-gray-700">Skills</label>
               </div>
               <p className="text-sm text-gray-700">
-                Format: Skill 1 ; Skill 2 ; Skill 3 ; etc
+                Format: Skill 1 , Skill 2 , Skill 3 , etc
               </p>
               <Field
                 name="skill"
@@ -171,7 +172,7 @@ export default function CreateCV({
               <button
                 type="submit"
                 disabled={isSubmitting || !isChecked}
-                className="w-full rounded-md bg-accent px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/80 md:w-fit"
+                className="w-full rounded-md bg-accent px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/50 md:w-fit"
               >
                 {isSubmitting ? "Creating..." : "Create CV"}
               </button>

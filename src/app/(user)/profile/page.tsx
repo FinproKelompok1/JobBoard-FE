@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { getUserProfile } from '@/libs/auth';
-import { UserProfile } from '@/types/profile';
-import ProfileInfo from '@/components/profile/profileInfo';
-import Loading from '@/components/loading';
+import { useEffect, useState } from "react";
+import { getUserProfile } from "@/libs/auth";
+import { UserProfile } from "@/types/profile";
+import ProfileInfo from "@/components/profile/profileInfo";
+import Loading from "@/components/loading";
 
 export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
@@ -17,7 +17,7 @@ export default function ProfilePage() {
       const { data } = await getUserProfile();
       setUser(data);
     } catch (err) {
-      setError('Failed to load profile');
+      setError("Failed to load profile");
       console.error(err);
     } finally {
       setLoading(false);
@@ -34,11 +34,8 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4 max-w-7xl">
-        <ProfileInfo 
-          user={user} 
-          onUpdate={fetchUserProfile} 
-        />
+      <div className="container mx-auto max-w-7xl px-4">
+        <ProfileInfo user={user} onUpdate={fetchUserProfile} />
       </div>
     </div>
   );

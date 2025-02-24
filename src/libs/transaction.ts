@@ -1,4 +1,5 @@
 import axios from "@/helpers/axios";
+import { toastErrAxios } from "@/helpers/toast";
 
 export async function getTransactions({
   page = 1,
@@ -39,7 +40,7 @@ export async function getTransactionToken(id: string, amount: number) {
       .split("; ")
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
-
+    console.log("token", token);
     const { data } = await axios.post(
       "/transactions/payment",
       {
@@ -52,10 +53,10 @@ export async function getTransactionToken(id: string, amount: number) {
         },
       },
     );
-
     return data.transactionToken;
   } catch (error) {
     console.error("Error get transaction token:", error);
+    toastErrAxios(error);
   }
 }
 

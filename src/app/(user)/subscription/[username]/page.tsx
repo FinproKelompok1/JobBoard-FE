@@ -1,5 +1,4 @@
 "use client";
-
 import DateFormatter from "@/helpers/dateFormatter";
 import { IUserSubscription } from "@/types/types";
 import dayjs from "dayjs";
@@ -13,10 +12,8 @@ import { getUserSubscription } from "@/libs/subscription";
 import Link from "next/link";
 import LoadingPage from "@/components/loading";
 import { toastErrAxios } from "@/helpers/toast";
-
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
-
 export default function UserSubscription({
   params,
 }: {
@@ -62,6 +59,8 @@ export default function UserSubscription({
     }
   };
 
+  console.log("user subs:", userSubscription);
+
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="flex flex-col items-center justify-center p-5 md:p-10">
@@ -71,13 +70,14 @@ export default function UserSubscription({
 
         {isFetching ? (
           <LoadingPage />
-        ) : !userSubscription ? (
-          <p className="text-lg font-medium">
-            You don&apos;t have a subscription yet. Please go to the{" "}
+        ) : userSubscription.length === 0 ? (
+          <p className="text-lg font-medium md:text-center">
+            You don&apos;t have an subscription yet. <br />
+            Please visit the{" "}
             <span className="text-accent">
               <Link href={"/subscription"}>subscription page</Link>
             </span>{" "}
-            to start a subscription.
+            to start your subscription.
           </p>
         ) : (
           userSubscription.map((item, index) => {
@@ -91,7 +91,7 @@ export default function UserSubscription({
             return (
               <div
                 key={index}
-                className="w-full rounded-xl border border-gray-200 bg-white p-5 shadow-lg md:w-[400px] md:border"
+                className="mt-5 w-full rounded-xl border border-gray-200 bg-white p-5 shadow-lg md:w-[400px] md:border"
               >
                 <div className="flex items-center justify-between gap-5">
                   <h1 className="text-2xl font-bold text-primary">
@@ -160,7 +160,7 @@ export default function UserSubscription({
                       </button>
 
                       <button
-                        onClick={() => router.push(`/cv/${params.username}`)}
+                        onClick={() => router.push(`/profile`)}
                         className="rounded-md bg-accent py-2 text-center font-medium text-white transition duration-300 ease-in-out hover:bg-accent/80"
                       >
                         Generate Curriculum Vitae

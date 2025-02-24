@@ -26,7 +26,6 @@ export default function SkillAssessment() {
         const userSubscriptionData = await getUserSubscription(
           userData.data.username,
         );
-
         setAssessments(assessmentsData);
         setUser(userData.data);
         setUserSubscription(userSubscriptionData);
@@ -36,14 +35,11 @@ export default function SkillAssessment() {
         setLoading(false);
       }
     }
-
     fetchData();
   }, []);
-
   if (loading) {
     return <LoadingPage />;
   }
-
   if (!user) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-gray-50">
@@ -59,8 +55,6 @@ export default function SkillAssessment() {
       userSubs.subscription.category === "standard" &&
       userSubs.assessmentCount >= 2,
   );
-
-  console.log("assessments:", assessments);
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -105,13 +99,19 @@ export default function SkillAssessment() {
                         <h1 className="text-2xl font-bold text-primary">
                           {assessment.title}
                         </h1>
-                        <span
-                          className={`${userAssessment?.status === "failed" ? "bg-red-500" : "bg-green-500"} rounded-md px-2 py-1 font-semibold text-white`}
-                        >
-                          {userAssessment?.status === "failed"
-                            ? "Failed"
-                            : "Passed"}
-                        </span>{" "}
+                        {userAssessment && (
+                          <span
+                            className={`${
+                              userAssessment.status === "failed"
+                                ? "bg-red-500"
+                                : "bg-green-500"
+                            } rounded-md px-2 py-1 font-semibold text-white`}
+                          >
+                            {userAssessment.status === "failed"
+                              ? "Failed"
+                              : "Passed"}
+                          </span>
+                        )}
                       </div>
 
                       <p className="mt-4">{assessment.description}</p>
