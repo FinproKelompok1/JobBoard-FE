@@ -36,6 +36,7 @@ axios.interceptors.request.use(
   },
   (error) => Promise.reject(error),
 );
+
 export const authService = {
   login: async (data: LoginData) => {
     const response = await axios.post("/auth/login/user", data, {
@@ -103,14 +104,11 @@ export const authService = {
     return axios.post("/auth/logout");
   },
 
-  handleSocialAuth: async (provider: "google" | "facebook") => {
+  handleSocialAuth: async (provider: "google") => {
     window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL_BE}/auth/${provider}`;
   },
 
-  handleSocialAuthCallback: async (
-    provider: "google" | "facebook",
-    code: string,
-  ) => {
+  handleSocialAuthCallback: async (provider: "google", code: string) => {
     try {
       const response = await axios.get(`/auth/${provider}/callback`, {
         params: { code },

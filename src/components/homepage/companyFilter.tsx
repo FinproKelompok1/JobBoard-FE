@@ -2,7 +2,7 @@
 
 import React, { useCallback } from 'react';
 import { Search, MapPin } from 'lucide-react';
-import { useDebounce } from '@/hooks/useDebounce'; 
+import { useDebounce } from '@/hooks/useDebounce';
 
 interface CompaniesFilterProps {
   searchQuery: string;
@@ -21,11 +21,14 @@ export default function CompaniesFilter({
   onLocationChange,
   onSortChange
 }: CompaniesFilterProps) {
-  const debouncedSearch = useDebounce((value: string) => {
+  // Mengubah signature function untuk menerima ...args: unknown[]
+  const debouncedSearch = useDebounce((...args: unknown[]) => {
+    const value = args[0] as string;
     onSearchChange(value);
   }, 300);
 
-  const debouncedLocation = useDebounce((value: string) => {
+  const debouncedLocation = useDebounce((...args: unknown[]) => {
+    const value = args[0] as string;
     onLocationChange(value);
   }, 300);
 

@@ -88,8 +88,13 @@ export default function RegisterForm() {
             validationSchema={userType === 'admin' ? adminValidationSchema : userValidationSchema}
             onSubmit={handleSubmit}
           >
-            {({ values }) => (
+            {({ values, errors, touched, isValid }) => (
               <Form className="space-y-4" key={userType === 'admin' ? 'admin' : 'user'}>
+                {/* Uncomment for debugging */}
+                {/* <div className="text-xs bg-gray-100 p-2 mb-2">
+                  <p>Form errors: {JSON.stringify(errors)}</p>
+                  <p>Is valid: {isValid ? 'Yes' : 'No'}</p>
+                </div> */}
 
                 {userType === 'admin' ? (
                   <>
@@ -112,12 +117,12 @@ export default function RegisterForm() {
                   <label className="ml-2 text-sm text-gray-600">
                     I agree to the Terms & Policy
                   </label>
-                  <ErrorMessage
-                    name="terms"
-                    component="div"
-                    className="text-red-500 text-sm ml-2"
-                  />
                 </div>
+                <ErrorMessage
+                  name="terms"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
 
                 <button
                   type="submit"

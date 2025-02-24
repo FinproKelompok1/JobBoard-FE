@@ -13,9 +13,10 @@ export default function CompanyDiscovery() {
     const fetchCompanies = async () => {
       try {
         setIsLoading(true);
-        const data = await getCompanies();
-        console.log('Fetched companies:', data);
-        setCompanies(data);
+        const response = await getCompanies();
+        console.log('Fetched companies:', response);
+        // Now we extract the data array from the response
+        setCompanies(response.data);
       } catch (err) {
         setError('Failed to fetch companies');
         console.error(err);

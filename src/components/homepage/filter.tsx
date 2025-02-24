@@ -30,7 +30,7 @@ export default function JobFilter({
   onSearch, 
   isHero = false, 
   className = "",
-  initialFilters
+  initialFilters = { searchTerm: '', category: '', province: '', city: '' }
 }: JobFilterProps) {
   const router = useRouter();
   const [provinces, setProvinces] = useState<Province[]>([]);
@@ -39,6 +39,7 @@ export default function JobFilter({
   const [selectedCity, setSelectedCity] = useState<string>(initialFilters?.city || '');
   const [searchTerm, setSearchTerm] = useState<string>(initialFilters?.searchTerm || '');
   const [selectedCategory, setSelectedCategory] = useState<string>(initialFilters?.category || '');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const categories = [
     'Accountancy',
@@ -52,14 +53,30 @@ export default function JobFilter({
     'Informatics'
   ];
 
+  // Update state when initialFilters change
+  useEffect(() => {
+    if (initialFilters) {
+      setSearchTerm(initialFilters.searchTerm || '');
+      setSelectedCategory(initialFilters.category || '');
+      setSelectedProvince(initialFilters.province || '');
+      setSelectedCity(initialFilters.city || '');
+    }
+  }, [initialFilters]);
+
   useEffect(() => {
     const fetchProvinces = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch('https://muhammadwildansapoetro.github.io/api-wilayah-indonesia/api/provinces.json');
+        if (!response.ok) {
+          throw new Error('Failed to fetch provinces');
+        }
         const data = await response.json();
         setProvinces(data);
       } catch (error) {
         console.error('Error fetching provinces:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchProvinces();
@@ -68,12 +85,19 @@ export default function JobFilter({
   useEffect(() => {
     const fetchCities = async () => {
       if (selectedProvince) {
+        setIsLoading(true);
         try {
           const response = await fetch(`https://muhammadwildansapoetro.github.io/api-wilayah-indonesia/api/regencies/${selectedProvince}.json`);
+          if (!response.ok) {
+            throw new Error('Failed to fetch cities');
+          }
           const data = await response.json();
           setCities(data);
         } catch (error) {
           console.error('Error fetching cities:', error);
+          setCities([]);
+        } finally {
+          setIsLoading(false);
         }
       } else {
         setCities([]);
@@ -84,41 +108,45 @@ export default function JobFilter({
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    const filters = {
-      searchTerm,
-      category: selectedCategory,
-      province: selectedProvince,
-      city: selectedCity
+    
+    // Ensure all values are strings to avoid any potential issues
+    const filters: FilterParams = {
+      searchTerm: searchTerm || '',
+      category: selectedCategory || '',
+      province: selectedProvince || '',
+      city: selectedCity || ''
     };
 
     if (isHero) {
-      const queryString = new URLSearchParams({
-        search: searchTerm,
-        category: selectedCategory,
-        province: selectedProvince,
-        city: selectedCity
-      }).toString();
+      // Create query string with only non-empty parameters
+      const params = new URLSearchParams();
+      if (searchTerm) params.append('search', searchTerm);
+      if (selectedCategory) params.append('category', selectedCategory);
+      if (selectedProvince) params.append('province', selectedProvince);
+      if (selectedCity) params.append('city', selectedCity);
       
-      router.push(`/jobs?${queryString}`);
-    } else {
-      onSearch?.(filters);
+      const queryString = params.toString();
+      router.push(`/jobs${queryString ? `?${queryString}` : ''}`);
+    } else if (onSearch) {
+      // Only call onSearch if it exists
+      onSearch(filters);
     }
   };
 
   return (
-    <form onSubmit={handleSearch} className={`flex items-center gap-4 ${className}`}>
+    <form onSubmit={handleSearch} className={`flex flex-col md:flex-row items-center gap-4 ${className}`}>
       <input
         type="text"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         placeholder="Job Title, Skills, Keywords"
-        className="flex-1 p-3 rounded bg-white/80 backdrop-blur border border-white/20 placeholder:text-gray-500 text-gray-800"
+        className="w-full md:flex-1 p-3 rounded bg-white/80 backdrop-blur border border-white/20 placeholder:text-gray-500 text-gray-800"
       />
 
       <select
         value={selectedCategory}
         onChange={(e) => setSelectedCategory(e.target.value)}
-        className="p-3 rounded bg-white/80 backdrop-blur border border-white/20 text-gray-800"
+        className="w-full md:w-auto p-3 rounded bg-white/80 backdrop-blur border border-white/20 text-gray-800"
       >
         <option value="">Any Category</option>
         {categories.map(category => (
@@ -134,7 +162,8 @@ export default function JobFilter({
           setSelectedProvince(e.target.value);
           setSelectedCity('');
         }}
-        className="p-3 rounded bg-white/80 backdrop-blur border border-white/20 text-gray-800"
+        className="w-full md:w-auto p-3 rounded bg-white/80 backdrop-blur border border-white/20 text-gray-800"
+        disabled={isLoading}
       >
         <option value="">Any Province</option>
         {provinces.map(province => (
@@ -147,8 +176,8 @@ export default function JobFilter({
       <select
         value={selectedCity}
         onChange={(e) => setSelectedCity(e.target.value)}
-        className="p-3 rounded bg-white/80 backdrop-blur border border-white/20 text-gray-800"
-        disabled={!selectedProvince}
+        className="w-full md:w-auto p-3 rounded bg-white/80 backdrop-blur border border-white/20 text-gray-800"
+        disabled={!selectedProvince || isLoading}
       >
         <option value="">Any City</option>
         {cities.map(city => (
@@ -160,7 +189,7 @@ export default function JobFilter({
 
       <button
         type="submit"
-        className="bg-[#E60278] text-white px-8 py-3 rounded hover:bg-[#E60278]/90 transition-colors"
+        className="w-full md:w-auto bg-[#E60278] text-white px-8 py-3 rounded hover:bg-[#E60278]/90 transition-colors"
       >
         Search
       </button>

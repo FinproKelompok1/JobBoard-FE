@@ -6,6 +6,8 @@ import CompaniesList from '@/components/homepage/companyList';
 import CompaniesFilter from '@/components/homepage/companyFilter';
 import { Building2 } from 'lucide-react';
 import LoadingPage from '@/components/loading';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { createQueryString } from "@/helpers/createQuery";
 
 interface Company {
   id: number;
@@ -21,23 +23,43 @@ interface Company {
   }>;
 }
 
+interface PaginationMeta {
+  page: number;
+  limit: number;
+  totalItems: number;
+  totalPages: number;
+}
+
 export default function CompaniesPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  
   const [companies, setCompanies] = useState<Company[]>([]);
   const [filteredCompanies, setFilteredCompanies] = useState<Company[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [paginationMeta, setPaginationMeta] = useState<PaginationMeta>({
+    page: 1,
+    limit: 3, // Konsisten menampilkan 3 perusahaan per halaman
+    totalItems: 0,
+    totalPages: 1
+  });
 
   const [searchQuery, setSearchQuery] = useState('');
   const [location, setLocation] = useState('');
   const [sortBy, setSortBy] = useState('');
 
   useEffect(() => {
+    const currentPage = parseInt(searchParams.get('page') || '1');
+    
     const fetchCompanies = async () => {
       try {
         setIsLoading(true);
-        const data = await getCompanies();
-        setCompanies(data);
-        setFilteredCompanies(data);
+        const response = await getCompanies(currentPage, 2); // Limit 3 perusahaan per halaman
+        
+        setCompanies(response.data);
+        setFilteredCompanies(response.data);
+        setPaginationMeta(response.meta);
       } catch (err) {
         setError('Failed to fetch companies');
         console.error(err);
@@ -47,56 +69,104 @@ export default function CompaniesPage() {
     };
 
     fetchCompanies();
-  }, []);
+  }, [searchParams]);
 
-useEffect(() => {
-  const filterCompanies = () => {
-    let result = [...companies];
+  useEffect(() => {
+    const filterCompanies = () => {
+      let result = [...companies];
 
-    if (searchQuery.trim()) {
-      result = result.filter(company =>
-        company.companyName.toLowerCase().includes(searchQuery.toLowerCase().trim())
-      );
-    }
+      if (searchQuery.trim()) {
+        result = result.filter(company =>
+          company.companyName.toLowerCase().includes(searchQuery.toLowerCase().trim())
+        );
+      }
 
-    if (location.trim()) {
-      result = result.filter(company => {
-        return company.Job?.some(job => {
-          if (!job.location) return false;
-          
-          const locationLower = location.toLowerCase().trim();
-          const cityMatch = job.location.city?.toLowerCase().includes(locationLower) || false;
-          const provinceMatch = job.location.province?.toLowerCase().includes(locationLower) || false;
-          
-          return cityMatch || provinceMatch;
+      if (location.trim()) {
+        result = result.filter(company => {
+          return company.Job?.some(job => {
+            if (!job.location) return false;
+            
+            const locationLower = location.toLowerCase().trim();
+            const cityMatch = job.location.city?.toLowerCase().includes(locationLower) || false;
+            const provinceMatch = job.location.province?.toLowerCase().includes(locationLower) || false;
+            
+            return cityMatch || provinceMatch;
+          });
         });
-      });
-    }
+      }
 
-    if (sortBy) {
-      switch (sortBy) {
-        case 'nameAsc':
-          result.sort((a, b) => a.companyName.localeCompare(b.companyName));
-          break;
-        case 'nameDesc':
-          result.sort((a, b) => b.companyName.localeCompare(a.companyName));
-          break;
-        case 'jobsDesc':
-          result.sort((a, b) => b.jobCount - a.jobCount);
-          break;
-        case 'jobsAsc':
-          result.sort((a, b) => a.jobCount - b.jobCount);
-          break;
+      if (sortBy) {
+        switch (sortBy) {
+          case 'nameAsc':
+            result.sort((a, b) => a.companyName.localeCompare(b.companyName));
+            break;
+          case 'nameDesc':
+            result.sort((a, b) => b.companyName.localeCompare(a.companyName));
+            break;
+          case 'jobsDesc':
+            result.sort((a, b) => b.jobCount - a.jobCount);
+            break;
+          case 'jobsAsc':
+            result.sort((a, b) => a.jobCount - b.jobCount);
+            break;
+        }
+      }
+
+      setFilteredCompanies(result);
+    };
+
+    filterCompanies();
+  }, [companies, searchQuery, location, sortBy]);
+
+  // Function untuk pagination
+  const handlePageChange = (page: number) => {
+    if (page < 1 || page > paginationMeta.totalPages) return;
+    const query = createQueryString('page', `${page}`);
+    router.push(`/companies?${query}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Generate page numbers for pagination - sama seperti di JobsList
+  const getPageNumbers = () => {
+    const pages: (number | string)[] = [];
+    const totalPages = paginationMeta.totalPages;
+    const currentPage = paginationMeta.page;
+    const showEllipsis = totalPages > 7;
+
+    if (showEllipsis) {
+      // Always show first page
+      pages.push(1);
+
+      // Show ellipsis or numbers after first page
+      if (currentPage > 3) {
+        pages.push('...');
+      }
+
+      // Show current page and surrounding pages
+      for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+        pages.push(i);
+      }
+
+      // Show ellipsis before last page
+      if (currentPage < totalPages - 2) {
+        pages.push('...');
+      }
+
+      // Always show last page
+      if (totalPages > 1) {
+        pages.push(totalPages);
+      }
+    } else {
+      // Show all pages if total pages is 7 or less
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
       }
     }
 
-    setFilteredCompanies(result);
+    return pages;
   };
 
-  filterCompanies();
-}, [companies, searchQuery, location, sortBy]);
-
-  if (isLoading) {
+  if (isLoading && companies.length === 0) {
     return (
       <div className="min-h-screen pt-20 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -108,7 +178,7 @@ useEffect(() => {
     );
   }
 
-  if (error) {
+  if (error && companies.length === 0) {
     return (
       <div className="min-h-screen pt-20 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -120,25 +190,9 @@ useEffect(() => {
     );
   }
 
-   if (isLoading) {
-    return (
-      <div className="min-h-screen fixed inset-0 flex items-center justify-center bg-gray-50/50 z-50">
-        <LoadingPage/>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-red-500">{error}</div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section - Removed pt-20 */}
+      {/* Hero Section */}
       <div className="relative bg-gradient-to-br from-gray-900 to-gray-800">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#E60278]/10 rounded-full blur-2xl" />
@@ -150,7 +204,7 @@ useEffect(() => {
             <div className="flex-1 max-w-2xl">
               <div className="inline-block px-4 py-1 bg-[#E60278]/10 rounded-full mb-6">
                 <span className="text-[#E60278] text-sm font-medium">
-                  {companies.length}+ Companies Hiring
+                  {paginationMeta.totalItems}+ Companies Hiring
                 </span>
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
@@ -164,7 +218,7 @@ useEffect(() => {
               <div className="mt-8 flex flex-wrap items-center gap-6">
                 <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg">
                   <Building2 className="w-5 h-5 text-[#E60278]" />
-                  <span className="text-white">{companies.length}+ Companies</span>
+                  <span className="text-white">{paginationMeta.totalItems}+ Companies</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg">
                   <span className="text-white">{companies.reduce((total, company) => total + company.jobCount, 0)}+ Open Positions</span>
@@ -195,12 +249,79 @@ useEffect(() => {
           </div>
 
           <div className="md:col-span-3">
-            {filteredCompanies.length === 0 ? (
+            {isLoading && companies.length > 0 ? (
+              <div className="flex justify-center my-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-4 border-[#E60278] border-t-transparent"></div>
+              </div>
+            ) : filteredCompanies.length === 0 ? (
               <div className="bg-white rounded-lg p-8 text-center">
                 <p className="text-gray-500">No companies found matching your criteria.</p>
               </div>
             ) : (
-              <CompaniesList companies={filteredCompanies} />
+              <>
+                <CompaniesList companies={filteredCompanies} />
+                
+                {/* Pagination styled like JobsList */}
+                {paginationMeta.totalPages > 1 && (
+                  <div className="flex justify-center pt-8">
+                    <div className="flex gap-2">
+                      {/* Previous Button */}
+                      <button
+                        onClick={() => handlePageChange(paginationMeta.page - 1)}
+                        disabled={paginationMeta.page === 1}
+                        className={`border rounded-md px-4 py-2 ${
+                          paginationMeta.page === 1
+                            ? 'text-gray-400 border-gray-200 cursor-not-allowed'
+                            : 'text-black/60 hover:border-[#E60278] hover:text-[#E60278]'
+                        }`}
+                      >
+                        Previous
+                      </button>
+
+                      {/* Page Numbers */}
+                      {getPageNumbers().map((pageNum, idx) => {
+                        if (pageNum === '...') {
+                          return (
+                            <span 
+                              key={`ellipsis-${idx}`} 
+                              className="flex items-center px-2"
+                            >
+                              ...
+                            </span>
+                          );
+                        }
+
+                        return (
+                          <button
+                            key={`page-${pageNum}`}
+                            onClick={() => handlePageChange(Number(pageNum))}
+                            className={`border rounded-md px-4 py-2 ${
+                              paginationMeta.page === pageNum
+                                ? 'bg-[#E60278] text-white border-[#E60278]'
+                                : 'text-black/60 hover:border-[#E60278] hover:text-[#E60278]'
+                            }`}
+                          >
+                            {pageNum}
+                          </button>
+                        );
+                      })}
+
+                      {/* Next Button */}
+                      <button
+                        onClick={() => handlePageChange(paginationMeta.page + 1)}
+                        disabled={paginationMeta.page === paginationMeta.totalPages}
+                        className={`border rounded-md px-4 py-2 ${
+                          paginationMeta.page === paginationMeta.totalPages
+                            ? 'text-gray-400 border-gray-200 cursor-not-allowed'
+                            : 'text-black/60 hover:border-[#E60278] hover:text-[#E60278]'
+                        }`}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

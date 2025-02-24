@@ -1,14 +1,10 @@
 import { useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
-import { BsFacebook } from 'react-icons/bs';
 
 export default function SocialAuth({ role }: { role: string }) {
-  const [isLoading, setIsLoading] = useState({
-    google: false,
-    facebook: false
-  });
+  const [isLoading, setIsLoading] = useState({ google: false });
 
-  const handleSocialLogin = async (provider: 'google' | 'facebook') => {
+  const handleSocialLogin = async (provider: 'google') => {
     try {
       setIsLoading(prev => ({ ...prev, [provider]: true }));
 
@@ -16,7 +12,6 @@ export default function SocialAuth({ role }: { role: string }) {
       const authUrl = `${baseUrl}/auth/${provider}`;
 
       window.location.href = authUrl;
-
     } catch (error) {
       console.error(`${provider} login error:`, error);
     }
@@ -33,7 +28,7 @@ export default function SocialAuth({ role }: { role: string }) {
         </div>
       </div>
 
-      <div className="flex justify-center gap-4">
+      <div className="flex justify-center">
         <button
           type="button"
           onClick={() => handleSocialLogin('google')}
@@ -42,16 +37,6 @@ export default function SocialAuth({ role }: { role: string }) {
         >
           <FcGoogle className="w-5 h-5" />
           <span>{isLoading.google ? 'Loading...' : 'Google'}</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => handleSocialLogin('facebook')}
-          disabled={isLoading.facebook}
-          className="flex items-center gap-2 px-4 py-2 border rounded-md hover:bg-gray-50"
-        >
-          <BsFacebook className="w-5 h-5 text-blue-600" />
-          <span>{isLoading.facebook ? 'Loading...' : 'Facebook'}</span>
         </button>
       </div>
     </>
