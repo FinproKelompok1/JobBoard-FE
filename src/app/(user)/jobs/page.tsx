@@ -38,7 +38,7 @@ export default function AllJobsPage() {
           if (location && location.city && location.province) {
             setUserLocation(location);
           }
-        } catch (e) {
+        } catch {
           localStorage.removeItem('userLocation');
         }
       }

@@ -56,7 +56,7 @@ export const useAllJobs = (initialLimit: number = 3) => {
 
         setJobs(response.jobs);
         setPagination(response.pagination);
-      } catch (error) {
+      } catch {
         setJobs([]);
         setPagination({
           currentPage: 1,

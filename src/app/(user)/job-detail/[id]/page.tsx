@@ -21,7 +21,6 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
  const [hasApplied, setHasApplied] = useState(false);
  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
- // Fetch Job Data
  useEffect(() => {
    const fetchData = async () => {
      try {
@@ -48,27 +47,24 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
    fetchData();
  }, [params.id, router]);
 
- // Check Login & Application Status
  useEffect(() => {
    const token = document.cookie
      .split('; ')
      .find(row => row.startsWith('token='))
      ?.split('=')[1];
 
-   // If no token, set not logged in and reset hasApplied
    if (!token) {
      setIsLoggedIn(false);
      setHasApplied(false);
      return;
    }
 
-   // If token exists, set logged in and check application status
    setIsLoggedIn(true);
    const checkApplicationStatus = async () => {
      try {
        const result = await checkUserApplication(params.id);
        setHasApplied(result);
-     } catch (error) {
+     } catch  {
        setHasApplied(false);
      }
    };

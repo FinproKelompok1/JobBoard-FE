@@ -20,7 +20,7 @@ export default function AdminProfilePage() {
         setIsLoading(true);
         const data = await getAdminProfile();
         setProfile(data);
-      } catch (error) {
+      } catch  {
         toast.error("Failed to load profile");
       } finally {
         setIsLoading(false);
@@ -35,7 +35,7 @@ export default function AdminProfilePage() {
       await updateAdminProfile(formData);
       toast.success("Profile updated successfully");
       router.refresh();
-    } catch (error) {
+    } catch  {
       toast.error("Failed to update profile");
     }
   };

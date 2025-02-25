@@ -61,7 +61,7 @@ export default function CompaniesPage() {
         setCompanies(response.data);
         setFilteredCompanies(response.data);
         setPaginationMeta(response.meta);
-      } catch (err) {
+      } catch {
         setError('Failed to fetch companies');
       } finally {
         setIsLoading(false);

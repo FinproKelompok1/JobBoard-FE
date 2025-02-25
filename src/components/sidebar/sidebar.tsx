@@ -9,7 +9,7 @@ import { RiHome4Fill } from "react-icons/ri";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { PiSignOutFill } from "react-icons/pi";
-import { logOut } from "@/helpers/logout";
+import logOut from "@/helpers/logout";
 
 export default function Sidebar() {
   const [SidebarOpen, setSidebarOpen] = useState<boolean>(false);

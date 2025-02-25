@@ -20,7 +20,7 @@ export function useLocation() {
           setUserLocation(parsed);
           setShowLocationPrompt(false);
         }
-      } catch (e) {
+      } catch {
         localStorage.removeItem("userLocation");
       }
     }
@@ -165,7 +165,7 @@ export function useLocation() {
       }
 
       setShowLocationPrompt(false);
-    } catch (error) {
+    } catch {
       toast.error("An error occurred. Showing latest jobs instead.", {
         autoClose: 5000,
       });
