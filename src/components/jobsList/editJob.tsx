@@ -89,8 +89,7 @@ export default function EditJob({ job }: { job: IJob }) {
           initialValues={initialValue}
           validationSchema={jobSchema}
           enableReinitialize={true}
-          onSubmit={(values, action) => {
-            action.resetForm()
+          onSubmit={(values) => {
             handleUpdate(values)
           }}
         >

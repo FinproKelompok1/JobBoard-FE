@@ -57,7 +57,7 @@ export const BannerUploader: React.FC<BannerUploader> = ({
       ) : (
         <div
           onClick={() => imgRef.current?.click()}
-          className="overflow-hidden w-full h-full relative cursor-pointer"
+          className="overflow-hidden w-full h-full relative cursor-pointer rounded-lg"
         >
           <Image
             src={previewUrl}
