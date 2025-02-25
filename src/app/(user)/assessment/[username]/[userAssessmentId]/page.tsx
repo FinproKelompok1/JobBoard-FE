@@ -118,8 +118,8 @@ export default function UserAssessmentForm({
   return (
     userAssessment &&
     assessmentQuestions && (
-      <main>
-        <div className="sticky top-0 w-screen border-b border-gray-300 bg-white p-5">
+      <main className="min-h-screen w-screen">
+        <div className="sticky top-0 border-b border-gray-300 bg-white p-5">
           <div className="flex flex-col items-center justify-center gap-5">
             <h1 className="text-3xl font-bold text-primary">
               {userAssessment.assessment.title}
@@ -182,7 +182,7 @@ export default function UserAssessmentForm({
               <button
                 onClick={handleSubmitAnswer}
                 disabled={isSubmitting || !isChecked}
-                className="w-full rounded-md bg-accent px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/70 md:w-fit"
+                className="w-full rounded-md bg-accent px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/50 md:w-fit"
               >
                 {isSubmitting ? "Submitting..." : "Submit Answer"}
               </button>

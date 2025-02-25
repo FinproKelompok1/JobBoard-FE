@@ -2,14 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.applicants_table th,
-.applicants_table td,
-.jobs_table th,
-.jobs_table td {
-  padding: 0.5rem 1rem;
-  border: 1px black solid;
-}
-
 .description {
   h1 {
     font-size: xx-large;
@@ -31,6 +23,9 @@
   ol,
   ul {
     list-style-position: inside;
+    li {
+      margin-left: 1rem;
+    }
   }
 
   ul {

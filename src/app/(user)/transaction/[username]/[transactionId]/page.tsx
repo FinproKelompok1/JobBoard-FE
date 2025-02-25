@@ -2,6 +2,7 @@
 
 import { CurrencyFormatter } from "@/helpers/currencryFormatter";
 import DateFormatter from "@/helpers/dateFormatter";
+import { toastErrAxios } from "@/helpers/toast";
 import { getTransactionsById, getTransactionToken } from "@/libs/transaction";
 import { ITransaction } from "@/types/types";
 import { useEffect, useState } from "react";
@@ -64,11 +65,15 @@ export default function TransactionDetail({
         transaction.id,
         transaction.amount,
       );
+      console.log("transaction token:", transactionToken);
+      console.log("transaction id:", transaction.id);
+      console.log("transaction amount:", transaction.amount);
       if (transactionToken) {
         window.snap.pay(transactionToken);
       }
     } catch (error) {
-      console.log("Error get transaction token:", error);
+      console.log("Error pay subscribe:", error);
+      toastErrAxios(error);
     } finally {
       setIsLoading(false);
     }

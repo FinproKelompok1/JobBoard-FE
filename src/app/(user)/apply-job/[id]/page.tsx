@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { toast } from 'react-toastify';
@@ -11,10 +11,12 @@ import { ApplicationGuidelines, SuccessTips, ContactSupport } from '@/components
 import { useFileUpload } from '@/hooks/useFileUpload';
 import { useApplyForm } from '@/hooks/useApplyForm';
 import { getUserData } from '@/helpers/cookies';
+import Preselection from '@/components/completingTask/preselection';
 
 export default function ApplyPage({ params }: { params: { id: string } }) {
   const { resume, dragActive, handleFileChange, handleDrag, handleDrop, setResume } = useFileUpload();
-  const { formattedSalary, isLoading, handleSalaryChange, handleSubmit } = useApplyForm(params.id);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
+  const { formattedSalary, isLoading, handleSalaryChange, handleSubmit } = useApplyForm(params.id, setIsSubmitted);
 
   useEffect(() => {
     const userData = getUserData();
@@ -27,7 +29,7 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
     <main className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-8">
       <div className="container mx-auto px-4">
         <div className="mb-6">
-          <Link 
+          <Link
             href={`/job-detail/${params.id}`}
             className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors duration-200"
           >
@@ -40,7 +42,7 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
           <div className="lg:col-span-2">
             <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
               <h1 className="text-3xl font-bold text-[#0D3880] mb-6">Apply for Position</h1>
-              
+
               <form onSubmit={(e) => handleSubmit(e, resume)} className="space-y-6" encType="multipart/form-data">
                 <ResumeUpload
                   resume={resume}
@@ -59,6 +61,7 @@ export default function ApplyPage({ params }: { params: { id: string } }) {
                 <SubmitButton isLoading={isLoading} />
               </form>
             </div>
+            <Preselection jobId={params.id} isSubmitted={isSubmitted} />
           </div>
 
           <div className="lg:col-span-1 space-y-6">

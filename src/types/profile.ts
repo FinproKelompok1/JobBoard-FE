@@ -68,6 +68,11 @@ export interface UserProfile {
   createdAt: string;
   Review: IReview[];
   UserAssessment: IUserAssessment[];
+  UserSubscription: {
+    subscriptionId: number;
+    isActive: boolean;
+    endDate: string;
+  }[];
 }
 
 export interface AdminProfile {

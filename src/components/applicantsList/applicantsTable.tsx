@@ -64,74 +64,89 @@ export default function ApplicantsTable({
   if (isValidating || isLoading || (data && data.applicants.length > 0)) {
     return (
       <>
-        <div className="overflow-x-auto">
-
-          <table className="w-[1500px] mt-4 text-left applicants_table overflow-x-scroll">
+        <div className="overflow-x-auto rounded-lg shadow-lg border border-gray-200 p-4 bg-white">
+          <table className="w-full border-collapse text-left min-w-[1200px]">
             <thead>
-              <tr>
-                <th>APPLICANT</th>
-                <th>EDUCATION</th>
-                <th>APPLY ON</th>
-                <th>EXPECTED SALARY</th>
-                <th>STATUS</th>
-                <th>TEST RESULT</th>
-                <th>RESUME</th>
-                <th>ACTION</th>
+              <tr className="bg-gray-100 text-gray-600 text-sm uppercase tracking-wide">
+                <th className="p-3">Applicant</th>
+                <th className="p-3">Education</th>
+                <th className="p-3">Apply On</th>
+                <th className="p-3">Expected Salary</th>
+                <th className="p-3">Status</th>
+                <th className="p-3">Test Result</th>
+                <th className="p-3">Resume</th>
+                <th className="p-3">Action</th>
               </tr>
             </thead>
             <tbody>
               {isValidating || isLoading ? (
                 skeletons.map((_, idx) => <ApplicantSekeleton key={idx} />)
               ) : (
-                data && data.applicants.map((item, idx) => {
-                  const props = { status: item.status, jobId, userId: item.userId }
-                  const age = new Date().getFullYear() - new Date(item.user.dob).getFullYear()
+                data &&
+                data.applicants.map((item, idx) => {
+                  const props = { status: item.status, jobId, userId: item.userId };
+                  const age = new Date().getFullYear() - new Date(item.user.dob).getFullYear();
                   return (
-                    <tr key={idx}>
-                      <td>
-                        <div className="flex items-center gap-2">
-                          <div className="relative w-[40px] h-[40px] rounded-full overflow-hidden">
-                            <Image src={item.user.avatar} alt={item.user.fullname} fill></Image>
+                    <tr
+                      key={idx}
+                      className="border-b hover:bg-gray-50 transition-colors text-gray-800"
+                    >
+                      <td className="p-3 flex items-center gap-2">
+                        <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                          <Image src={item.user.avatar} alt={item.user.fullname} fill />
+                        </div>
+                        <div>
+                          <div className="flex gap-2">
+                            <p>{item.user.fullname}</p>
+                            <span className="text-blueNavy font-medium">({age})</span>
                           </div>
-                          <div className="flex flex-col">
-                            <div className="flex gap-2">
-                              <p>{item.user.fullname}</p>
-                              <span className="text-blueNavy font-medium">{age}</span>
-                            </div>
-                            <p className="text-sm font-medium text-black/50">{item.user.email}</p>
-                          </div>
+                          <p className="text-sm text-gray-500">{item.user.email}</p>
                         </div>
                       </td>
-                      <td className="w-[200px]">{eduFormatter(item.user.lastEdu)}</td>
-                      <td className="w-[150px]">{formatDate(item.createdAt.split('T')[0])}</td>
-                      <td>{formatRupiahTanpaDesimal(item.expectedSalary)}</td>
-                      <td><SetStatusApplicant {...props} /></td>
-                      <td><div className="text-center">{item.selectionTestResult}</div></td>
-                      <td><Link target="blank" href={item.resume} className="px-2 py-1 font-medium text-white bg-pink">Preview</Link></td>
-                      <td>
-                        <div className="flex items-center justify-center">
-                          {item.status === 'processed' ?
-                            (<FcProcess className="text-xl text-black" />) : item.status === 'accepted' ?
-                              (<GoChecklist className="text-xl text-green-400" />) : item.status === 'interviewed' ?
-                                (<SetSchedule userId={item.userId} jobId={jobId} />) : !item.rejectedReview ?
-                                  (<SetReviewRejection userId={item.userId} jobId={jobId} />) : <RxCrossCircled className="text-xl text-red-500" />
-                          }
-                        </div>
+                      <td className="p-3">{eduFormatter(item.user.lastEdu)}</td>
+                      <td className="p-3">{formatDate(item.createdAt.split('T')[0])}</td>
+                      <td className="p-3">{formatRupiahTanpaDesimal(item.expectedSalary)}</td>
+                      <td className="p-3"><SetStatusApplicant {...props} /></td>
+                      <td className="p-3 text-center">{item.selectionTestResult}</td>
+                      <td className="p-3">
+                        <Link
+                          target="_blank"
+                          href={item.resume}
+                          className="px-3 py-1 font-medium text-white bg-pink/80 rounded-md hover:bg-pink transition"
+                        >
+                          Preview
+                        </Link>
+                      </td>
+                      <td className="p-3 flex justify-center items-center gap-2">
+                        {item.status === 'processed' ? (
+                          <FcProcess className="text-xl" />
+                        ) : item.status === 'accepted' ? (
+                          <GoChecklist className="text-xl text-green-400" />
+                        ) : item.status === 'interviewed' ? (
+                          <SetSchedule userId={item.userId} jobId={jobId} />
+                        ) : !item.rejectedReview ? (
+                          <SetReviewRejection userId={item.userId} jobId={jobId} />
+                        ) : (
+                          <RxCrossCircled className="text-xl text-red-500" />
+                        )}
                       </td>
                     </tr>
-                  )
+                  );
                 })
               )}
             </tbody>
           </table>
         </div>
-        <Pagination totalPage={data?.totalPage} setPage={setPage} />
+        <Pagination totalPage={data?.totalPage} currentPage={Number(data?.page)} setPage={setPage} />
       </>
     )
   }
   return (
-    <div className="mt-10">
-      <h1 className="font-medium text-2xl text-center">THERE IS NO APPLICANT</h1>
+    <div className="mt-10 flex flex-col items-center">
+      <h1 className="font-medium text-2xl">THERE IS NO APPLICANT</h1>
+      <div className="relative w-[20rem] h-[20rem] opacity-60">
+        <Image src={'/applicant-table-empty.svg'} alt="Table Empty" fill />
+      </div>
     </div>
   )
 }

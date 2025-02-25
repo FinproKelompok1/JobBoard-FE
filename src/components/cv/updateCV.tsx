@@ -67,8 +67,8 @@ export default function UpdateCV({
         },
       });
       resetForm();
-      window.location.reload();
       toast.success(data.message);
+      window.location.reload();
     } catch (error) {
       console.log("Error edit CV:", error);
       toastErrAxios(error);
@@ -194,7 +194,7 @@ export default function UpdateCV({
               <button
                 type="submit"
                 disabled={isSubmitting || !isChecked}
-                className="w-full rounded-md bg-accent px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/80 md:w-fit"
+                className="w-full rounded-md bg-accent px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/50 md:w-fit"
               >
                 {isSubmitting ? "Updating..." : "Update CV"}
               </button>

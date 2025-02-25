@@ -17,6 +17,7 @@ import Pagination from "../pagination"
 import SetPublish from "./setPublish"
 import SetPreTest from "./setPreTest"
 import { getToken } from "@/libs/token"
+import Image from "next/image"
 
 interface ISWR {
   jobs: IJob[],
@@ -61,62 +62,78 @@ export default function JobsTable() {
   if (isValidating || isLoading || (data && data.jobs.length > 0)) {
     return (
       <>
-        <div className="overflow-x-auto">
-
-          <table className="w-full mt-2text-left jobs_table">
+        <div className="overflow-x-auto rounded-lg shadow-lg border border-gray-200 p-4 bg-white">
+          <table className="w-full border-collapse text-left min-w-[600px]">
             <thead>
-              <tr>
-                <th>PUBLISH</th>
-                <th>JOB</th>
-                <th>APPLICANTS</th>
-                <th>PRE SELECTION TEST</th>
-                <th>STATUS</th>
-                <th>ACTIONS</th>
+              <tr className="bg-gray-100 text-gray-600 text-sm uppercase tracking-wide">
+                <th className="p-3">Publish</th>
+                <th className="p-3">Job</th>
+                <th className="p-3">Applicants</th>
+                <th className="p-3">Pre Test</th>
+                <th className="p-3">Status</th>
+                <th className="p-3">Actions</th>
               </tr>
             </thead>
             <tbody>
               {isValidating || isLoading ? (
                 skeletons.map((_, idx) => <JobSekeleton key={idx} />)
               ) : (
-                data && data.jobs.map((item) => {
-                  const isExpired = new Date() > new Date(item.endDate)
+                data &&
+                data.jobs.map((item) => {
+                  const isExpired = new Date() > new Date(item.endDate);
                   return (
-                    <tr key={item.id}>
-                      <td>
+                    <tr
+                      key={item.id}
+                      className="border-b hover:bg-gray-50 transition-colors text-gray-800"
+                    >
+                      <td className="p-3">
                         <SetPublish jobId={item.id} isJobPublished={item.isPublished} />
                       </td>
-                      <td>
-                        <div className="font-medium border-b border-b-black w-fit line-clamp-1">{item.title}</div>
-                        <div>{item.category}</div>
+                      <td className="p-3">
+                        <div className="font-medium text-gray-900 truncate w-40">{item.title}</div>
+                        <div className="text-sm text-gray-500">{item.category}</div>
                       </td>
-                      <td><TotalApplicants jobId={item.id} /></td>
-                      <td><SetPreTest jobId={item.id} isTestValue={item.isTestActive} /></td>
-                      <td>{isExpired ? (
-                        <span className="font-medium text-red-500">Expired</span>
-                      ) : (
-                        <span className="font-medium text-blue-500">Active</span>)
-                      }</td>
-                      <td>
-                        <div className="flex items-center gap-4">
+                      <td className="p-3">
+                        <TotalApplicants jobId={item.id} />
+                      </td>
+                      <td className="p-3">
+                        <SetPreTest jobId={item.id} isTestValue={item.isTestActive} />
+                      </td>
+                      <td className="p-3">
+                        {isExpired ? (
+                          <span className="text-red-500 font-medium">Expired</span>
+                        ) : (
+                          <span className="text-blue-500 font-medium">Active</span>
+                        )}
+                      </td>
+                      <td className="p-3">
+                        <div className="flex items-center gap-3">
                           <EditJob job={item} />
-                          <button onClick={() => handleDelete(item.id)}><FaTrash className="text-red-500" /></button>
-                          <Link href={`/admin/job/${item.id}`}><MdMoreHoriz className="text-xl" /></Link>
+                          <button onClick={() => handleDelete(item.id)}>
+                            <FaTrash className="text-red-500 hover:text-red-700 transition-colors" />
+                          </button>
+                          <Link href={`/admin/job/${item.id}`}>
+                            <MdMoreHoriz className="text-xl text-gray-600 hover:text-gray-900 transition-colors" />
+                          </Link>
                         </div>
                       </td>
                     </tr>
-                  )
+                  );
                 })
               )}
             </tbody>
           </table>
         </div>
-        <Pagination totalPage={data?.totalPage} setPage={setPage} />
+        <Pagination totalPage={data?.totalPage} currentPage={Number(data?.page)} setPage={setPage} />
       </>
     )
   }
   return (
-    <div className="mt-10">
-      <h1 className="font-medium text-2xl text-center">THERE IS NO JOB CREATED</h1>
+    <div className="mt-10 flex flex-col items-center">
+      <h1 className="font-medium text-2xl">THERE IS NO JOB CREATED</h1>
+      <div className="relative w-[20rem] h-[20rem] opacity-60">
+        <Image src={'/job-table-empty.svg'} alt="Table Empty" fill/>
+      </div>
     </div>
   )
 }

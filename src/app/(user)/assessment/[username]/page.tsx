@@ -25,7 +25,7 @@ export default async function UserAssessmentResultList({
         <div className="flex items-center justify-center p-5">
           <div className="max-w-full overflow-x-auto rounded-xl border">
             <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-primary/10">
+              <thead className="bg-primary/90">
                 <tr>
                   <th className="table-head border-b border-r border-gray-300">
                     Badge
@@ -48,61 +48,83 @@ export default async function UserAssessmentResultList({
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {userAssessments.map((data, index) => (
-                  <tr key={index}>
-                    <td className="table-data">
-                      {data.status === "failed" ? (
-                        <p className="text-center text-xl font-bold">-</p>
-                      ) : (
-                        <div className="flex flex-col items-center justify-center rounded-xl border bg-primary p-1">
-                          <Image
-                            src={`${data.certificate.badgeIcon}`}
-                            alt="badge image"
-                            width={100}
-                            height={100}
-                            className="w-10"
-                          />
-                          <span className="font-bold tracking-widest text-white">
-                            {data.assessment.title
+                {userAssessments.map((data, index) => {
+                  console.log("user assessment status:", data.status);
+
+                  return (
+                    <tr key={index}>
+                      <td className="table-data">
+                        {data.status === "failed" ? (
+                          <p className="text-center text-xl font-bold">-</p>
+                        ) : (
+                          <div className="flex flex-col items-center justify-center rounded-xl border bg-primary p-1">
+                            {data.certificate?.badgeIcon ? (
+                              <Image
+                                src={data.certificate.badgeIcon}
+                                alt="badge image"
+                                width={100}
+                                height={100}
+                                className="w-10"
+                              />
+                            ) : (
+                              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-300">
+                                <span className="text-sm font-bold text-gray-700">
+                                  N/A
+                                </span>
+                              </div>
+                            )}
+                            <span className="font-bold tracking-widest text-white">
+                              {data.assessment.title
+                                .split(" ")
+                                .map((word) => word[0])
+                                .join("")
+                                .toUpperCase()}
+                            </span>
+                          </div>
+                        )}
+                      </td>
+                      <td className="table-data">{data.assessment.title}</td>
+                      <td className="table-data">{data.score}</td>
+                      <td className="table-data">
+                        <span
+                          className={`${
+                            data.status === "failed"
+                              ? "bg-red-500"
+                              : "bg-green-500"
+                          } rounded-md px-2 py-1 font-semibold text-white`}
+                        >
+                          {data.status === "null"
+                            ? ""
+                            : data.status === "failed"
+                              ? "Failed"
+                              : "Passed"}
+                        </span>
+                      </td>
+                      <td className="table-data">
+                        {DateFormatter(data.endTime)}
+                      </td>
+                      <td className="table-data">
+                        {data.status === "failed" ? (
+                          <p className="text-center text-xl font-bold">-</p>
+                        ) : (
+                          <Link
+                            href={`/assessment/${data.User.username}/${data.id}/certificate`}
+                            className="text-accent hover:underline hover:underline-offset-2"
+                          >
+                            {`TB-${data.assessment.title
                               .split(" ")
                               .map((word) => word[0])
-                              .join("")
-                              .toUpperCase()}
-                          </span>
-                        </div>
-                      )}
-                    </td>
-                    <td className="table-data">{data.assessment.title}</td>
-                    <td className="table-data text-center">{data.score}</td>
-                    <td className="table-data">
-                      <span
-                        className={`${data.status === "failed" ? "bg-red-500" : "bg-green-500"} rounded-md px-2 py-1 font-semibold text-white`}
-                      >
-                        {data.status === "failed" ? "Failed" : "Passed"}
-                      </span>
-                    </td>
-                    <td className="table-data">
-                      {DateFormatter(data.endTime)}
-                    </td>
-                    <td className="table-data">
-                      {data.status === "failed" ? (
-                        <p className="text-center text-xl font-bold">-</p>
-                      ) : (
-                        <Link
-                          href={`/assessment/${data.User.username}/${data.id}/certificate`}
-                          className="text-accent hover:underline hover:underline-offset-2"
-                        >
-                          {`TB-${data.assessment.title
-                            .split(" ")
-                            .map((word) => word[0])
-                            .join(
-                              "",
-                            )}-${data.endTime.slice(0, 10).replace(/-/g, "")}-${data.id}`}
-                        </Link>
-                      )}
-                    </td>
-                  </tr>
-                ))}
+                              .join(
+                                "",
+                              )}-${data.endTime.slice(0, 10).replace(/-/g, "")}-${
+                              data.id
+                            }`}
+                          </Link>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

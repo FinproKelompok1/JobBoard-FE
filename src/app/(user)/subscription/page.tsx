@@ -1,10 +1,13 @@
 "use client";
 
+import LoadingPage from "@/components/loading";
 import axios from "@/helpers/axios";
 import { CurrencyFormatter } from "@/helpers/currencryFormatter";
 import { stringToArray } from "@/helpers/stringToArray";
 import { toastErrAxios } from "@/helpers/toast";
+import { getUserProfile } from "@/libs/auth";
 import { getSubscriptions } from "@/libs/subscription";
+import { UserProfile } from "@/types/profile";
 import { ISubscription } from "@/types/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -14,6 +17,25 @@ export default function Subscription() {
   const [isSubscribingId, setIsSubscribingId] = useState<number | null>(null);
   const [subscriptions, setSubscriptions] = useState<ISubscription[]>([]);
   const router = useRouter();
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchUserProfile = async () => {
+    try {
+      setLoading(true);
+      const { data } = await getUserProfile();
+      setUser(data);
+    } catch (error) {
+      toastErrAxios(error);
+      console.error("Error fetch user profile:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
 
   useEffect(() => {
     const fetchSubs = async () => {
@@ -59,13 +81,19 @@ export default function Subscription() {
     }
   };
 
+  if (loading) return <LoadingPage />;
+
+  const isSubscribedToPlan = (subscriptionId: number) =>
+    user?.UserSubscription?.some(
+      (sub) => sub.subscriptionId === subscriptionId && sub.isActive,
+    ) ?? false;
+
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="flex w-screen flex-col items-center p-5 md:p-10">
         <h1 className="w-full text-center text-3xl font-bold text-primary">
           Subscription Plan
         </h1>
-
         <div className="mt-5 flex flex-col items-start justify-center text-gray-700 md:items-center">
           <p className="text-left text-lg md:text-center md:text-xl">
             Take your career to the next level with the right plan!
@@ -77,7 +105,6 @@ export default function Subscription() {
             Get started today—your future awaits!{" "}
           </p>
         </div>
-
         <div className="my-10">
           <div className="flex flex-wrap gap-5">
             {subscriptions.map((subscription, index) => (
@@ -114,8 +141,16 @@ export default function Subscription() {
                     onClick={() =>
                       handleSubscribe(subscription.id, subscription.price)
                     }
-                    disabled={isSubscribingId === subscription.id}
-                    className="rounded-md bg-accent py-2 text-center font-semibold tracking-wide text-white transition-all duration-300 ease-in-out hover:bg-accent/80 hover:text-white"
+                    disabled={
+                      isSubscribingId === subscription.id ||
+                      isSubscribedToPlan(subscription.id)
+                    }
+                    className={`rounded-md bg-accent py-2 text-center font-semibold tracking-wide text-white transition-all duration-300 ease-in-out ${
+                      isSubscribingId === subscription.id ||
+                      isSubscribedToPlan(subscription.id)
+                        ? "cursor-not-allowed opacity-50"
+                        : "hover:bg-accent/80 hover:text-white"
+                    }`}
                   >
                     {isSubscribingId === subscription.id
                       ? "Subscribing..."

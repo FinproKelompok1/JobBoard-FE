@@ -13,10 +13,9 @@ import {
 
 export default function LocationGraphic({ data }: { data: ILocationDemography[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const activeItem = data[activeIndex];
 
   const handleClick = useCallback(
-    (entry: any, index: number) => {
+    (_: number, index: number) => {
       setActiveIndex(index);
     },
     [setActiveIndex]

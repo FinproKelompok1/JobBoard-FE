@@ -23,6 +23,7 @@ export default function AdminLayout({
 
   useEffect(() => {
     const user = getCookie("user");
+    console.log("user", user);
     if (!user) {
       router.push("/auth/login");
       return;
@@ -33,7 +34,7 @@ export default function AdminLayout({
 
       if (userObject.role === "none") {
         router.push("/auth/verify-oauth");
-        return; 
+        return;
       }
 
       if (userObject.role !== "admin") {

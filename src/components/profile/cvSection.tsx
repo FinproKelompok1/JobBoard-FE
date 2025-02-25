@@ -15,6 +15,7 @@ import { handleDownloadCV } from "../cv/downloadCV";
 import CreateCV from "../cv/createCV";
 import { SimpleDateFormatter } from "@/helpers/dateFormatter";
 import UpdateCV from "../cv/updateCV";
+import Link from "next/link";
 
 export interface CvSectionProps {
   user: UserProfile;
@@ -27,52 +28,63 @@ export default function CvSection({ user, initialCV }: CvSectionProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isCreating, setIsCreating] = useState<boolean>(false);
   const cvData = {
-    summary: initialCV?.summary || "",
-    workExperience: initialCV?.experience || "",
-    skill: initialCV?.skill || "",
-    education: initialCV?.education || "",
+    summary: initialCV?.summary,
+    workExperience: initialCV?.experience,
+    skill: initialCV?.skill,
+    education: initialCV?.education,
   };
 
   const parseWorkExperiences = (workExperiences: string) => {
-    return workExperiences
-      .split(";")
-      .map((experience) => {
-        const parts = experience.split(",");
-        if (parts.length < 5) return null;
+    return (
+      workExperiences &&
+      workExperiences
+        .split(";")
+        .map((experience) => {
+          const parts = experience.split(",");
+          if (parts.length < 5) return null;
 
-        return {
-          company: parts[0].trim(),
-          jobTitle: parts[1].trim(),
-          startDate: parts[2].trim(),
-          endDate: parts[3].trim(),
-          description: parts.slice(4).join(",").trim(),
-        };
-      })
-      .filter(Boolean);
+          return {
+            company: parts[0].trim(),
+            jobTitle: parts[1].trim(),
+            startDate: parts[2].trim(),
+            endDate: parts[3].trim(),
+            description: parts.slice(4).join(",").trim(),
+          };
+        })
+        .filter(Boolean)
+    );
   };
 
-  const workExperiencesArray = parseWorkExperiences(cvData.workExperience);
+  const workExperiencesArray =
+    parseWorkExperiences(cvData.workExperience) || [];
 
   const parseEducations = (educations: string) => {
-    return educations
-      .split(";")
-      .map((education) => {
-        const parts = education.split(",");
-        if (parts.length < 5) return null;
+    return (
+      educations &&
+      educations
+        .split(";")
+        .map((education) => {
+          const parts = education.split(",");
+          if (parts.length < 5) return null;
 
-        return {
-          schoolName: parts[0].trim(),
-          degree: parts[1].trim(),
-          field: parts[2].trim(),
-          startDate: parts[3].trim(),
-          endDate: parts[4].trim(),
-          description: parts.slice(5).join(",").trim(),
-        };
-      })
-      .filter(Boolean);
+          return {
+            schoolName: parts[0].trim(),
+            degree: parts[1].trim(),
+            field: parts[2].trim(),
+            startDate: parts[3].trim(),
+            endDate: parts[4].trim(),
+            description: parts.slice(5).join(",").trim(),
+          };
+        })
+        .filter(Boolean)
+    );
   };
 
-  const educationsArray = parseEducations(cvData.education);
+  const educationsArray = parseEducations(cvData.education) || [];
+
+  const hasActiveSubscription = user.UserSubscription?.some(
+    (sub) => sub.isActive || new Date(sub.endDate) > new Date(),
+  );
 
   if (!isEditing && !isCreating) {
     return (
@@ -85,34 +97,50 @@ export default function CvSection({ user, initialCV }: CvSectionProps) {
             </h2>
           </div>
           <div className="flex items-center gap-5">
-            {!cvData ? (
-              <button
-                onClick={() => setIsCreating(true)}
-                className="flex items-center gap-2 rounded-lg border border-accent bg-accent px-4 py-2 font-medium text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/80"
-              >
-                <Plus className="h-5 w-5" />
-                <span>Create CV</span>
-              </button>
-            ) : (
-              <>
+            {hasActiveSubscription ? (
+              !cvData.summary &&
+              !cvData.workExperience &&
+              !cvData.skill &&
+              !cvData.education ? (
                 <button
-                  onClick={() => setIsEditing(true)}
-                  className="inline-flex items-center gap-2 rounded-lg border border-accent px-4 py-2 font-medium text-[#E60278] transition-all duration-300 ease-in-out hover:bg-accent hover:text-white"
-                >
-                  <Edit className="h-5 w-5" />
-                  <span>Edit CV</span>
-                </button>
-                <button
-                  onClick={() =>
-                    handleDownloadCV(user.username, setIsDownloading)
-                  }
-                  disabled={isDownloading}
+                  onClick={() => setIsCreating(true)}
                   className="flex items-center gap-2 rounded-lg border border-accent bg-accent px-4 py-2 font-medium text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/80"
                 >
-                  <Download className="h-5 w-5" />
-                  {isDownloading ? "Downloading..." : "Download"}
+                  <Plus className="h-5 w-5" />
+                  <span>Create CV</span>
                 </button>
-              </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => setIsEditing(true)}
+                    className="inline-flex items-center gap-2 rounded-lg border border-accent px-4 py-2 font-medium text-[#E60278] transition-all duration-300 ease-in-out hover:bg-accent hover:text-white"
+                  >
+                    <Edit className="h-5 w-5" />
+                    <span>Edit CV</span>
+                  </button>
+                  <button
+                    onClick={() =>
+                      handleDownloadCV(user.username, setIsDownloading)
+                    }
+                    disabled={isDownloading}
+                    className="flex items-center gap-2 rounded-lg border border-accent bg-accent px-4 py-2 font-medium text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/80"
+                  >
+                    <Download className="h-5 w-5" />
+                    {isDownloading ? "Downloading..." : "Download"}
+                  </button>
+                </>
+              )
+            ) : (
+              <p className="text-lg text-gray-700">
+                Please{" "}
+                <Link
+                  href="/subscription"
+                  className="text-accent hover:underline"
+                >
+                  subscribe
+                </Link>{" "}
+                to generate CV.
+              </p>
             )}
           </div>
         </div>

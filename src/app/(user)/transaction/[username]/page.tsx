@@ -23,6 +23,8 @@ export default async function UserTransaction({
     params.username,
   );
 
+  console.log("user transaction:", userTransactions);
+
   return (
     <main className="min-h-screen md:bg-gray-50">
       <div className="mt-5 md:mt-10">
@@ -34,7 +36,7 @@ export default async function UserTransaction({
       <div className="flex items-center justify-center p-5">
         <div className="max-w-full overflow-x-auto rounded-xl border">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-primary/10">
+            <thead className="bg-primary/90">
               <tr>
                 <th className="table-head border-b border-r border-gray-300">
                   Transaction ID
