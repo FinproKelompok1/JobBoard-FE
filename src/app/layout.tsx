@@ -52,6 +52,7 @@ export default function RootLayout({
           position="bottom-right"
         />
         {children}
+    
         <FooterWrapper />
       </body>
     </html>

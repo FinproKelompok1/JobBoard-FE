@@ -9,7 +9,7 @@ import { FaPencil, FaUserTie } from "react-icons/fa6";
 // import UseClickOutside from "@/hooks/useClickOutside";
 import UseOpen from "@/hooks/useOpen";
 import { PiSignOutFill } from "react-icons/pi";
-import { logOut } from "@/helpers/logout";
+import logOut from "@/helpers/logout";
 // import Image from "next/image";
 
 export default function MobileNav() {
