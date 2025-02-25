@@ -142,8 +142,11 @@ export default function ApplicantsTable({
     )
   }
   return (
-    <div className="mt-10">
-      <h1 className="font-medium text-2xl text-center">THERE IS NO APPLICANT</h1>
+    <div className="mt-10 flex flex-col items-center">
+      <h1 className="font-medium text-2xl">THERE IS NO APPLICANT</h1>
+      <div className="relative w-[20rem] h-[20rem] opacity-60">
+        <Image src={'/applicant-table-empty.svg'} alt="Table Empty" fill />
+      </div>
     </div>
   )
 }

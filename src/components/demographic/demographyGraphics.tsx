@@ -8,6 +8,7 @@ import GenderGraphic from "@/components/demographic/gender";
 import AgeGraphic from "@/components/demographic/age";
 import LocationGraphic from "@/components/demographic/location";
 import { getToken } from "@/libs/token";
+import Image from "next/image";
 
 export default function DemographyGraphics() {
   const options = {
@@ -27,6 +28,17 @@ export default function DemographyGraphics() {
         Loading...
       </div>
     );
+  }
+
+  if (Object.entries(data)[1][1].length <= 0) {
+    return (
+      <div className="mt-10 flex flex-col items-center">
+        <h1 className="font-medium text-2xl">THERE IS NO APPLICANT DEMOGRAPHIC</h1>
+        <div className="relative w-[20rem] h-[20rem] opacity-60">
+          <Image src={'/demographic-empty.svg'} alt="Demographic Empty" fill />
+        </div>
+      </div>
+    )
   }
 
   return (
