@@ -62,7 +62,6 @@ export default function EditSubscription({
       router.push("/developer/subscription");
       router.refresh();
     } catch (error) {
-      console.log("Error edit subscription:", error);
       toast.error("Error edit subscription");
     }
   };

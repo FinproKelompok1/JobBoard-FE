@@ -43,7 +43,6 @@ export const getCompanies = async (
       "&" +
       createQueryString("limit", limit.toString());
     const response = await axios.get(`/companies?${queryParams}`);
-    console.log("Companies API Response:", response.data);
 
     if (!response.data.meta && Array.isArray(response.data)) {
       return {
@@ -59,7 +58,6 @@ export const getCompanies = async (
 
     return response.data;
   } catch (err) {
-    console.error("Error fetching companies:", err);
     toastErrAxios(err);
 
     return {
@@ -83,7 +81,6 @@ export const getAllCompanies = async (): Promise<Company[]> => {
         ? response.data.data
         : [];
   } catch (err) {
-    console.error("Error fetching all companies:", err);
     toastErrAxios(err);
     return [];
   }
@@ -91,13 +88,9 @@ export const getAllCompanies = async (): Promise<Company[]> => {
 
 export const getCompanyDetail = async (id: string) => {
   try {
-    console.log("Fetching company details for ID:", id);
     const response = await axios.get(`/companies/${id}`);
-    console.log("Raw API Response:", response.data);
-    console.log("Company details response:", response.data);
     return response.data;
   } catch (err) {
-    console.error("Error fetching company details:", err);
     toastErrAxios(err);
     throw err;
   }

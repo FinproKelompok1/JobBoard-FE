@@ -24,7 +24,6 @@ export const getAdminProfile = async (): Promise<AdminProfile> => {
     });
     return response.data;
   } catch (err) {
-    console.error("Error fetching admin profile:", err);
     toast.error("Failed to fetch profile");
     throw err;
   }
@@ -61,7 +60,6 @@ export const updateAdminProfile = async (data: ProfileFormData) => {
     toast.success("Profile updated successfully");
     return response.data;
   } catch (err) {
-    console.error("Error updating admin profile:", err);
     toast.error("Failed to update profile");
     throw err;
   }

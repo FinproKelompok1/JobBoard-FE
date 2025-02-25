@@ -27,7 +27,6 @@ export default function Subscription() {
       setUser(data);
     } catch (error) {
       toastErrAxios(error);
-      console.error("Error fetch user profile:", error);
     } finally {
       setLoading(false);
     }
@@ -74,7 +73,6 @@ export default function Subscription() {
       toast.success(data.message);
       router.push(`/transaction/${data.username}/${data.transactionId}`);
     } catch (error) {
-      console.log("Error subscribe:", error);
       toastErrAxios(error);
     } finally {
       setIsSubscribingId(null);

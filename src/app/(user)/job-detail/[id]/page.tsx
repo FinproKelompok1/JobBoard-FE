@@ -68,8 +68,7 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
      try {
        const result = await checkUserApplication(params.id);
        setHasApplied(result);
-     } catch (error) {
-       console.error('Error checking application:', error);
+     } catch  {
        setHasApplied(false);
      }
    };

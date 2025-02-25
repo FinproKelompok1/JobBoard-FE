@@ -15,11 +15,9 @@ export default function CompanyDiscovery() {
       try {
         setIsLoading(true);
         const response = await getCompanies();
-        console.log('Fetched companies:', response);
         setCompanies(response.data);
-      } catch (err) {
+      } catch  {
         setError('Failed to fetch companies');
-        console.error(err);
       } finally {
         setIsLoading(false);
       }

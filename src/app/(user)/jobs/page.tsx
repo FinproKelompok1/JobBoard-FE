@@ -38,8 +38,7 @@ export default function AllJobsPage() {
           if (location && location.city && location.province) {
             setUserLocation(location);
           }
-        } catch (e) {
-          console.error("Error parsing saved location:", e);
+        } catch {
           localStorage.removeItem('userLocation');
         }
       }
@@ -166,7 +165,6 @@ export default function AllJobsPage() {
           throw new Error("Couldn't get location details");
         }
       } catch (error) {
-        console.error("Error getting location:", error);
         if (error instanceof GeolocationPositionError && error.code === error.PERMISSION_DENIED) {
           toast.info("Location access denied");
         } else {

@@ -29,7 +29,7 @@ export default function SalaryTrendGraphics() {
   if (Object.entries(data)[0][1].length <= 0) {
     return (
       <div className="mt-10 flex flex-col items-center">
-        <h1 className="font-medium text-2xl">THERE IS NO APPLICANT'S REVIEW</h1>
+        <h1 className="font-medium text-2xl">THERE IS NO APPLICANT&apos;S REVIEW</h1>
         <div className="relative w-[20rem] h-[20rem] opacity-60">
           <Image src={'/salary-trend-empty.svg'} alt="Salary Trend Empty" fill />
         </div>

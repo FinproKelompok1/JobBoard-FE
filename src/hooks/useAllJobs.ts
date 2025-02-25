@@ -56,8 +56,7 @@ export const useAllJobs = (initialLimit: number = 3) => {
 
         setJobs(response.jobs);
         setPagination(response.pagination);
-      } catch (error) {
-        console.error("Error fetching jobs:", error);
+      } catch {
         setJobs([]);
         setPagination({
           currentPage: 1,

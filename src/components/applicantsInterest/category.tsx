@@ -1,6 +1,6 @@
-import { IApplicantsInterestCategory, IGenderDemography } from "@/types/analytics";
+import { IApplicantsInterestCategory } from "@/types/analytics";
 import React from "react";
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Label } from "recharts";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
 interface ICustomizedLabel {
   cx: number

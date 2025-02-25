@@ -46,7 +46,6 @@ export async function getAllJobs(
     if (params?.order) queryParams.append("order", params.order);
 
     const url = `/discover${queryParams.toString() ? `?${queryParams.toString()}` : ""}`;
-    console.log("Calling AllJobs API:", url);
 
     const response = await axios.get(url);
 
@@ -62,7 +61,6 @@ export async function getAllJobs(
       },
     };
   } catch (error) {
-    console.error("API Error:", error);
     toastErrAxios(error);
 
     return {
@@ -88,12 +86,10 @@ export async function discoverJobs(params?: DiscoveryParams): Promise<Job[]> {
     if (params?.category) queryParams.append("category", params.category);
 
     const url = `/discover${queryParams.toString() ? `?${queryParams.toString()}` : ""}`;
-    console.log("Calling API:", url);
 
     const response = await axios.get(url);
     return response.data.result || [];
   } catch (error) {
-    console.error("API Error:", error);
     toastErrAxios(error);
     return [];
   }
@@ -104,7 +100,6 @@ export async function getJobDetail(jobId: string): Promise<Job | null> {
     const response = await axios.get(`/discover/${jobId}`);
     return response.data.result;
   } catch (error) {
-    console.error("API Error:", error);
     toastErrAxios(error);
     return null;
   }
@@ -116,7 +111,6 @@ export async function getRelatedJobs(jobId: string): Promise<Job[]> {
     const response = await axios.get(url);
     return response.data.result || [];
   } catch (error) {
-    console.error("API Error:", error);
     toastErrAxios(error);
     return [];
   }
@@ -128,11 +122,6 @@ export const applyJob = async (
   token: string,
 ) => {
   try {
-    console.log("Submitting application:", {
-      jobId,
-      formData: Object.fromEntries(formData.entries()),
-    });
-
     const response = await axios.post(`/apply/submit/${jobId}`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -143,7 +132,6 @@ export const applyJob = async (
 
     return response.data;
   } catch (error) {
-    console.error("Application submission error:", error);
     toastErrAxios(error);
     throw error;
   }
@@ -186,7 +174,6 @@ export const checkUserApplication = async (jobId: string) => {
 
     return response.data.hasApplied;
   } catch (error) {
-    console.error("Error checking application:", error);
     toastErrAxios(error);
     return false;
   }

@@ -49,8 +49,6 @@ export default async function UserAssessmentResultList({
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
                 {userAssessments.map((data, index) => {
-                  console.log("user assessment status:", data.status);
-
                   return (
                     <tr key={index}>
                       <td className="table-data">

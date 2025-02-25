@@ -112,7 +112,7 @@ export default function UserLayout({
       if (!isExemptFromProfileCheck()) {
         checkProfileCompletion();
       }
-    } catch (error) {
+    } catch  {
       router.push("/auth/login");
     }
   }, [pathname]); 

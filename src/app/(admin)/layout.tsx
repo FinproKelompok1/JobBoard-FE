@@ -23,7 +23,6 @@ export default function AdminLayout({
 
   useEffect(() => {
     const user = getCookie("user");
-    console.log("user", user);
     if (!user) {
       router.push("/auth/login");
       return;

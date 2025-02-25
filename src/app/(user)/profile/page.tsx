@@ -16,9 +16,8 @@ export default function ProfilePage() {
       setLoading(true);
       const { data } = await getUserProfile();
       setUser(data);
-    } catch (err) {
+    } catch {
       setError("Failed to load profile");
-      console.error(err);
     } finally {
       setLoading(false);
     }

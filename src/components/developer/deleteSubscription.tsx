@@ -41,7 +41,6 @@ export default function DeleteSubscription({
       await deleteSubscription(deleteSubsId);
       toast.success(`Subscription ID ${deleteSubsId} deleted successfully`);
     } catch (error) {
-      console.log("Error deleting subscription:", error);
       toastErrAxios(error);
     } finally {
       setIsDeleting(false);
