@@ -53,7 +53,6 @@ export default function JobFilter({
     'Informatics'
   ];
 
-  // Update state when initialFilters change
   useEffect(() => {
     if (initialFilters) {
       setSearchTerm(initialFilters.searchTerm || '');
@@ -109,7 +108,6 @@ export default function JobFilter({
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Ensure all values are strings to avoid any potential issues
     const filters: FilterParams = {
       searchTerm: searchTerm || '',
       category: selectedCategory || '',
@@ -118,7 +116,6 @@ export default function JobFilter({
     };
 
     if (isHero) {
-      // Create query string with only non-empty parameters
       const params = new URLSearchParams();
       if (searchTerm) params.append('search', searchTerm);
       if (selectedCategory) params.append('category', selectedCategory);
@@ -128,7 +125,6 @@ export default function JobFilter({
       const queryString = params.toString();
       router.push(`/jobs${queryString ? `?${queryString}` : ''}`);
     } else if (onSearch) {
-      // Only call onSearch if it exists
       onSearch(filters);
     }
   };

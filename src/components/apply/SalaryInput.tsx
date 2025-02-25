@@ -1,4 +1,3 @@
-// components/apply/SalaryInput.tsx
 
 interface SalaryInputProps {
   formattedSalary: string;
@@ -6,9 +5,7 @@ interface SalaryInputProps {
 }
 
 export function SalaryInput({ formattedSalary, handleSalaryChange }: SalaryInputProps) {
-  // Tambahkan handler untuk input
   const handleInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    // Hanya izinkan angka dan tombol kontrol (backspace, delete, dll)
     if (!/[\d]/.test(e.key) && 
         e.key !== 'Backspace' && 
         e.key !== 'Delete' && 

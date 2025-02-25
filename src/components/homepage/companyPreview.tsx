@@ -20,7 +20,6 @@ interface CompanyPreviewProps {
 }
 
 export default function CompanyPreview({ companies }: CompanyPreviewProps) {
-  // Hanya tampilkan 6 perusahaan pertama
   const previewCompanies = companies.slice(0, 6);
 
   return (

@@ -9,7 +9,6 @@ interface DiscoveryParams {
   category?: string;
 }
 
-// Tambahkan interface untuk pagination
 interface AllJobsParams extends DiscoveryParams {
   page?: number;
   limit?: number;
@@ -31,7 +30,6 @@ interface JobsResponse {
   pagination: PaginationData;
 }
 
-// Fungsi untuk halaman AllJobs dengan pagination
 export async function getAllJobs(
   params?: AllJobsParams,
 ): Promise<JobsResponse> {
@@ -67,7 +65,6 @@ export async function getAllJobs(
     console.error("API Error:", error);
     toastErrAxios(error);
 
-    // Return empty data with default pagination on error
     return {
       jobs: [],
       pagination: {
@@ -82,7 +79,6 @@ export async function getAllJobs(
   }
 }
 
-// Fungsi original discoverJobs tetap dipertahankan
 export async function discoverJobs(params?: DiscoveryParams): Promise<Job[]> {
   try {
     const queryParams = new URLSearchParams();

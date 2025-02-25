@@ -45,9 +45,7 @@ export const getCompanies = async (
     const response = await axios.get(`/companies?${queryParams}`);
     console.log("Companies API Response:", response.data);
 
-    // If the API doesn't return the expected format, transform it to match
     if (!response.data.meta && Array.isArray(response.data)) {
-      // Handle case where API returns just an array
       return {
         data: response.data,
         meta: {
@@ -64,7 +62,6 @@ export const getCompanies = async (
     console.error("Error fetching companies:", err);
     toastErrAxios(err);
 
-    // Return empty data with pagination info in case of error
     return {
       data: [],
       meta: {
@@ -77,7 +74,6 @@ export const getCompanies = async (
   }
 };
 
-// Legacy function for backward compatibility
 export const getAllCompanies = async (): Promise<Company[]> => {
   try {
     const response = await axios.get("/companies");

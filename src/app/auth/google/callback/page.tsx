@@ -49,7 +49,6 @@ export default function GoogleCallback() {
         }
       } catch (error) {
         console.error("Authentication error:", error);
-        // router.push('/login?error=Authentication failed');
       }
     };
 

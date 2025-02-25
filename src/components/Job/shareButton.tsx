@@ -1,6 +1,5 @@
 import React from "react";
 import { shareToPlatform } from "../../helpers/shareHelper";
-// You'll need to install react-icons: npm install react-icons
 import { FaXTwitter, FaLinkedin, FaWhatsapp } from "react-icons/fa6";
 
 type ShareButtonProps = {

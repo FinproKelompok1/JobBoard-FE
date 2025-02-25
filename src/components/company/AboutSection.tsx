@@ -6,7 +6,6 @@ interface AboutSectionProps {
 }
 
 export function AboutSection({ description }: AboutSectionProps) {
-  // Sanitize the HTML content to prevent XSS attacks
   const sanitizedDescription = DOMPurify.sanitize(description);
 
   return (

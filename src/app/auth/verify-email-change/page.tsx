@@ -29,7 +29,6 @@ export default function VerifyEmailChangePage() {
           setStatus("Success: Email verified");
           toast.success("Email changed successfully!");
 
-          // Force page reload to update user data
           setTimeout(() => {
             window.location.href = "/profile";
           }, 2000);

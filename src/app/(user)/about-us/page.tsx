@@ -3,13 +3,12 @@
 import React from 'react';
 import { FaInstagram, FaLinkedin } from 'react-icons/fa';
 import Link from 'next/link';
-import LoadingPage from '@/components/loading'; // Adjust import path as needed
+import LoadingPage from '@/components/loading'; 
 
 export default function AboutUs() {
   const [isLoading, setIsLoading] = React.useState(true);
   
   React.useEffect(() => {
-    // Simulate loading time or fetch data
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1500);
@@ -41,7 +40,6 @@ export default function AboutUs() {
     }
   ];
   
-  // If loading, return the LoadingPage component
   if (isLoading) {
     return <LoadingPage isLoading={true} />;
   }

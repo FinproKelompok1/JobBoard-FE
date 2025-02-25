@@ -11,32 +11,25 @@ const Pagination: React.FC<PaginationProps> = ({
   totalPages,
   onPageChange,
 }) => {
-  // Generate page numbers to display
   const getPageNumbers = () => {
     const pages = [];
     
-    // Always include first page, last page, current page, and pages adjacent to current page
-    const pageRange = 1; // Show 1 page before and after current page
+    const pageRange = 1; 
     
-    // Start with page 1
     pages.push(1);
     
-    // Add ellipsis if needed
     if (currentPage - pageRange > 2) {
       pages.push('...');
     }
     
-    // Add pages around current page
     for (let i = Math.max(2, currentPage - pageRange); i <= Math.min(totalPages - 1, currentPage + pageRange); i++) {
       pages.push(i);
     }
     
-    // Add ellipsis if needed
     if (currentPage + pageRange < totalPages - 1) {
       pages.push('...');
     }
     
-    // Add last page if there is more than one page
     if (totalPages > 1) {
       pages.push(totalPages);
     }

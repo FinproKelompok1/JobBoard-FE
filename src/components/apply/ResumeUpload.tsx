@@ -1,4 +1,3 @@
-// components/apply/ResumeUpload.tsx
 interface ResumeUploadProps {
   resume: File | null;
   dragActive: boolean;

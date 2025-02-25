@@ -11,7 +11,6 @@ export function useLocation() {
   const [showLocationPrompt, setShowLocationPrompt] = useState(true);
   const [isProcessingLocation, setIsProcessingLocation] = useState(false);
 
-  // Check for saved location first
   useEffect(() => {
     const savedLocation = localStorage.getItem("userLocation");
     if (savedLocation) {
@@ -44,13 +43,12 @@ export function useLocation() {
         try {
           console.log("Getting user location...");
 
-          // Show a toast to indicate we're getting location
           toast.info("Getting your location...", { autoClose: 3000 });
 
           const position = await new Promise<GeolocationPosition>(
             (resolve, reject) => {
               navigator.geolocation.getCurrentPosition(resolve, reject, {
-                timeout: 15000, // 15 seconds timeout
+                timeout: 15000,
                 maximumAge: 0,
                 enableHighAccuracy: true,
               });
@@ -62,7 +60,6 @@ export function useLocation() {
             lng: position.coords.longitude,
           });
 
-          // Show getting address toast
           toast.info("Finding your city...", { autoClose: 3000 });
 
           const response = await fetch(
@@ -76,29 +73,22 @@ export function useLocation() {
           );
 
           if (data.results && data.results.length > 0) {
-            // Extract location data from components using different potential fields
             const components = data.results[0].components;
 
-            // For Indonesia, we need to prioritize city/municipality over district/kecamatan
             let cityValue;
 
-            // Try to find the appropriate city name for Indonesia
             if (components.country_code === "id") {
-              // For Indonesia, try to get city/kabupaten/kota first, not kecamatan
               cityValue =
                 components.city ||
                 components.municipality ||
                 components.county ||
-                components.state_district; // This might be kabupaten in Indonesia
+                components.state_district;
 
-              // If still not found, look at formatted address for clues
               if (!cityValue && data.results[0].formatted) {
-                // Try to extract from components or from address parts
                 const addressParts = data.results[0].formatted
                   .split(",")
                   .map((p: string) => p.trim());
 
-                // In Indonesia, we typically want the city/district name that contains "Kota" or "Kabupaten"
                 for (const part of addressParts) {
                   if (
                     part.toLowerCase().includes("kota") ||
@@ -109,19 +99,15 @@ export function useLocation() {
                   }
                 }
 
-                // If still no city, check if we can find a larger area name
                 if (!cityValue && components.state) {
-                  // If it's a major city that's also a province (like Jakarta)
                   if (components.state.toLowerCase().includes("jakarta")) {
                     cityValue = "Jakarta";
                   } else if (addressParts.length >= 2) {
-                    // Use the second-to-last part as it's often the city
                     cityValue = addressParts[addressParts.length - 2];
                   }
                 }
               }
             } else {
-              // For non-Indonesia locations, use the standard approach
               cityValue =
                 components.city ||
                 components.town ||
@@ -130,15 +116,12 @@ export function useLocation() {
                 components.county;
             }
 
-            // Try multiple possible field names for province/state
             const provinceValue =
               components.state || components.province || components.region;
 
             if (cityValue) {
-              // Clean up city name and format according to your requirements
               let cleanCity = cityValue.replace(/\s*city\s*/i, "").trim();
 
-              // For Indonesia, ensure we have "KOTA" prefix if not already there
               if (
                 components.country_code === "id" &&
                 !cleanCity.toUpperCase().startsWith("KOTA") &&
@@ -178,7 +161,6 @@ export function useLocation() {
         } catch (error) {
           console.error("Error getting location:", error);
 
-          // Check if it's a permission denied error
           if (
             error instanceof GeolocationPositionError &&
             error.code === error.PERMISSION_DENIED
@@ -201,7 +183,6 @@ export function useLocation() {
         setUserLocation(null);
       }
 
-      // Always hide the prompt when done
       setShowLocationPrompt(false);
     } catch (error) {
       console.error("Unexpected error:", error);

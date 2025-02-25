@@ -1,4 +1,3 @@
-// components/apply/Sidebar.tsx
 import { Info, CheckCircle, AlertTriangle } from 'lucide-react';
 
 export function ApplicationGuidelines() {

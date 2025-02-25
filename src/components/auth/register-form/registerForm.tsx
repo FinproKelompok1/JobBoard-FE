@@ -10,7 +10,6 @@ import { authService } from '@/libs/auth';
 import UserType from '../verify/userType';
 import { Bounce, toast } from 'react-toastify';
 
-// Define types for the form values and submit handler
 interface FormValues {
   email: string;
   username: string;

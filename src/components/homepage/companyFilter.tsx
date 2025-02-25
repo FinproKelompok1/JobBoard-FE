@@ -21,7 +21,6 @@ export default function CompaniesFilter({
   onLocationChange,
   onSortChange
 }: CompaniesFilterProps) {
-  // Mengubah signature function untuk menerima ...args: unknown[]
   const debouncedSearch = useDebounce((...args: unknown[]) => {
     const value = args[0] as string;
     onSearchChange(value);

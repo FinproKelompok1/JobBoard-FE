@@ -7,7 +7,6 @@ import FormInput from "../shared/formInput";
 import { validationSchema } from "./validation";
 import { authService } from "@/libs/auth";
 
-// Define types for the form values and submit handler
 interface FormValues {
   email: string;
   password: string;

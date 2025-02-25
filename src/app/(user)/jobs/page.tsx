@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useAllJobs } from '@/hooks/useAllJobs'; // Gunakan hook baru
+import { useAllJobs } from '@/hooks/useAllJobs'; 
 import JobFilter, { FilterParams } from '@/components/homepage/filter';
 import JobsList from '@/components/homepage/jobList';
 import Pagination from '@/components/homepage/pagination';
@@ -18,7 +18,7 @@ interface LocationState {
 
 export default function AllJobsPage() {
   const searchParams = useSearchParams();
-  const { jobs, isLoading, pagination, fetchJobs, changePage } = useAllJobs(3); // 12 jobs per page
+  const { jobs, isLoading, pagination, fetchJobs, changePage } = useAllJobs(3); 
   const [userLocation, setUserLocation] = useState<LocationState | null>(null);
   const [isUsingLocation, setIsUsingLocation] = useState(false);
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
@@ -29,7 +29,6 @@ export default function AllJobsPage() {
     city: ''
   });
 
-  // Load saved location on initial render
   useEffect(() => {
     const loadSavedLocation = () => {
       const savedLocation = localStorage.getItem('userLocation');
@@ -49,7 +48,6 @@ export default function AllJobsPage() {
     loadSavedLocation();
   }, []);
 
-  // Initial fetch based on search params
   useEffect(() => {
     const initialFilters = {
       searchTerm: searchParams.get('search') || '',
@@ -63,7 +61,6 @@ export default function AllJobsPage() {
   }, [searchParams, fetchJobs]);
   
   const handleFilter = (filters: FilterParams) => {
-    // If we're using location, add location to the filters
     const updatedFilters = { ...filters };
     
     if (isUsingLocation && userLocation) {
@@ -72,27 +69,22 @@ export default function AllJobsPage() {
     }
     
     setCurrentFilters(updatedFilters);
-    fetchJobs(updatedFilters, 1); // Reset to page 1 when filters change
+    fetchJobs(updatedFilters, 1); 
   };
   
-  // Handle page change
   const handlePageChange = (page: number) => {
     changePage(page, currentFilters);
     
-    // Scroll to top of results
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
   };
   
-  // Toggle location usage
   const toggleLocationFilter = async () => {
     if (isUsingLocation) {
-      // Turn off location filtering
       setIsUsingLocation(false);
       
-      // Remove location from filters
       const updatedFilters = {
         ...currentFilters,
         city: '',
@@ -100,16 +92,13 @@ export default function AllJobsPage() {
       };
       
       setCurrentFilters(updatedFilters);
-      fetchJobs(updatedFilters, 1); // Reset to page 1
+      fetchJobs(updatedFilters, 1); 
       return;
     }
     
-    // Turn on location filtering
     if (userLocation) {
-      // We already have location, use it
       setIsUsingLocation(true);
       
-      // Add location to filters
       const updatedFilters = {
         ...currentFilters,
         city: userLocation.city,
@@ -117,9 +106,8 @@ export default function AllJobsPage() {
       };
       
       setCurrentFilters(updatedFilters);
-      fetchJobs(updatedFilters, 1); // Reset to page 1
+      fetchJobs(updatedFilters, 1); 
     } else {
-      // Need to get location first
       setIsLoadingLocation(true);
       
       try {
@@ -127,14 +115,12 @@ export default function AllJobsPage() {
           throw new Error("Geolocation not supported");
         }
         
-        // Get user position
         const position = await new Promise<GeolocationPosition>((resolve, reject) => {
           navigator.geolocation.getCurrentPosition(resolve, reject, {
             timeout: 10000
           });
         });
         
-        // Get location details from coordinates
         const response = await fetch(
           `https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}+${position.coords.longitude}&key=bcf87dd591a44c57b21a10bed03f5daa`
         );
@@ -143,13 +129,11 @@ export default function AllJobsPage() {
         if (data.results && data.results.length > 0) {
           const components = data.results[0].components;
           
-          // Get city and province from results
           const cityName = components.city || components.town || components.county || 
                          components.state_district || components.municipality;
           const provinceName = components.state || components.province || components.region;
           
           if (cityName) {
-            // Format city name
             let formattedCity = cityName;
             if (components.country_code === 'id' && 
                 !formattedCity.toUpperCase().startsWith('KOTA') &&
@@ -157,18 +141,15 @@ export default function AllJobsPage() {
               formattedCity = `KOTA ${formattedCity}`;
             }
             
-            // Create location object
             const location = {
               city: formattedCity.toUpperCase(),
               province: provinceName ? provinceName.toUpperCase() : ""
             };
             
-            // Save location
             setUserLocation(location);
             localStorage.setItem('userLocation', JSON.stringify(location));
             setIsUsingLocation(true);
             
-            // Add location to filters
             const updatedFilters = {
               ...currentFilters,
               city: location.city,
@@ -176,7 +157,7 @@ export default function AllJobsPage() {
             };
             
             setCurrentFilters(updatedFilters);
-            fetchJobs(updatedFilters, 1); // Reset to page 1
+            fetchJobs(updatedFilters, 1); 
             toast.success(`Showing jobs in ${location.city}`);
           } else {
             throw new Error("Couldn't determine your city");

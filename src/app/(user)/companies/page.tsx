@@ -5,10 +5,10 @@ import { getCompanies } from '@/libs/company';
 import CompaniesList from '@/components/homepage/companyList';
 import CompaniesFilter from '@/components/homepage/companyFilter';
 import { Building2 } from 'lucide-react';
-import LoadingPage from '@/components/loading'; // Komponen loading yang sudah ada
+import LoadingPage from '@/components/loading'; 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createQueryString } from "@/helpers/createQuery";
-import Pagination from '@/components/homepage/pagination'; // Komponen pagination
+import Pagination from '@/components/homepage/pagination'; 
 
 interface Company {
   id: number;
@@ -41,7 +41,7 @@ export default function CompaniesPage() {
   const [error, setError] = useState<string | null>(null);
   const [paginationMeta, setPaginationMeta] = useState<PaginationMeta>({
     page: 1,
-    limit: 3, // Konsisten menampilkan 3 perusahaan per halaman
+    limit: 3, 
     totalItems: 0,
     totalPages: 1
   });
@@ -56,7 +56,7 @@ export default function CompaniesPage() {
     const fetchCompanies = async () => {
       try {
         setIsLoading(true);
-        const response = await getCompanies(currentPage, 3); // Limit 3 perusahaan per halaman
+        const response = await getCompanies(currentPage, 3); 
         
         setCompanies(response.data);
         setFilteredCompanies(response.data);
@@ -119,7 +119,6 @@ export default function CompaniesPage() {
     filterCompanies();
   }, [companies, searchQuery, location, sortBy]);
 
-  // Function untuk pagination
   const handlePageChange = (page: number) => {
     if (page < 1 || page > paginationMeta.totalPages) return;
     const query = createQueryString('page', `${page}`);
@@ -127,7 +126,6 @@ export default function CompaniesPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Gunakan komponen LoadingPage untuk state loading awal
   if (isLoading && companies.length === 0) {
     return <LoadingPage isLoading={true} />;
   }
