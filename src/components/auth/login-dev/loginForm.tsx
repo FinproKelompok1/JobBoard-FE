@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Formik, Form } from "formik";
 import FormInput from "../shared/formInput";
 import { validationSchema } from "./validation";
 import { authService } from "@/libs/auth";
-import { LockKeyhole, Mail, ShieldCheck, AlertTriangle } from "lucide-react";
+import { LockKeyhole, Mail, ShieldCheck } from "lucide-react";
 
 interface FormValues {
   email: string;
@@ -20,16 +20,19 @@ interface SubmitHelpers {
 
 export default function RestrictedDevLogin() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const errorParam = searchParams.get("error");
-    if (errorParam) {
-      setError(decodeURIComponent(errorParam));
+    // Mendapatkan parameter error dari URL saat komponen dimount
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const errorParam = urlParams.get("error");
+      if (errorParam) {
+        setError(decodeURIComponent(errorParam));
+      }
     }
-  }, [searchParams]);
+  }, []);
 
   const initialValues: FormValues = {
     email: "",

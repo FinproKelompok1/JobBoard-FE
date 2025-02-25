@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { isAxiosError } from "axios";
 import { useEffect, useState } from "react";
@@ -8,14 +8,24 @@ import { verifyEmailChange } from "@/libs/auth";
 
 export default function VerifyEmailChangePage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const [token, setToken] = useState<string | null>(null);
   const [status, setStatus] = useState("Verifying...");
+
+  // Dapatkan token dari URL saat komponen dimount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      setToken(urlParams.get("token"));
+    }
+  }, []);
 
   useEffect(() => {
     const verify = async () => {
       try {
         if (!token) {
+          // Skip verifikasi jika token belum diambil dari URL
+          if (token === null && typeof window === 'undefined') return;
+          
           toast.error("Verification token is missing");
           setStatus("Failed: Token missing");
           return;

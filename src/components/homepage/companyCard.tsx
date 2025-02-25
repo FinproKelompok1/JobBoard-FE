@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Building2, Briefcase, MapPin } from 'lucide-react';
 
 interface CompanyCardProps {
@@ -29,11 +30,15 @@ export default function CompanyCard({ company }: CompanyCardProps) {
       <div className="flex items-start gap-3">
         <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
           {company.logo ? (
-            <img 
-              src={company.logo} 
-              alt={company.companyName} 
-              className="w-full h-full object-cover"
-            />
+            <div className="relative w-full h-full">
+              <Image 
+                src={company.logo} 
+                alt={company.companyName} 
+                fill
+                sizes="48px"
+                className="object-cover"
+              />
+            </div>
           ) : (
             <div className="w-full h-full bg-gray-200 flex items-center justify-center">
               <Building2 className="w-6 h-6 text-gray-400" />

@@ -1,5 +1,6 @@
+"use client"
 import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Formik, Form, FormikHelpers } from 'formik';
 import FormInput from '../shared/formInput';
 import SocialAuth from '../shared/socialAuth';
@@ -15,15 +16,18 @@ interface LoginValues {
 
 export default function LoginForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const errorParam = searchParams.get('error');
-    if (errorParam) {
-      setError(decodeURIComponent(errorParam));
+    // Mendapatkan parameter error dari URL saat komponen dimount
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const errorParam = urlParams.get('error');
+      if (errorParam) {
+        setError(decodeURIComponent(errorParam));
+      }
     }
-  }, [searchParams]);
+  }, []);
 
   const initialValues: LoginValues = {
     email: '',

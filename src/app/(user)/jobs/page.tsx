@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { useAllJobs } from '@/hooks/useAllJobs'; 
 import JobFilter, { FilterParams } from '@/components/homepage/filter';
 import JobsList from '@/components/homepage/jobList';
@@ -17,7 +16,6 @@ interface LocationState {
 }
 
 export default function AllJobsPage() {
-  const searchParams = useSearchParams();
   const { jobs, isLoading, pagination, fetchJobs, changePage } = useAllJobs(3); 
   const [userLocation, setUserLocation] = useState<LocationState | null>(null);
   const [isUsingLocation, setIsUsingLocation] = useState(false);
@@ -28,6 +26,48 @@ export default function AllJobsPage() {
     province: '',
     city: ''
   });
+
+  // Get URL search params without the hook
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      
+      const initialFilters = {
+        searchTerm: urlParams.get('search') || '',
+        category: urlParams.get('category') || '',
+        province: urlParams.get('province') || '',
+        city: urlParams.get('city') || ''
+      };
+      
+      setCurrentFilters(initialFilters);
+      fetchJobs(initialFilters);
+    }
+  }, [fetchJobs]);
+
+  // Listen for URL changes
+  useEffect(() => {
+    const handleUrlChange = () => {
+      if (typeof window !== 'undefined') {
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        const updatedFilters = {
+          searchTerm: urlParams.get('search') || currentFilters.searchTerm,
+          category: urlParams.get('category') || currentFilters.category,
+          province: urlParams.get('province') || currentFilters.province,
+          city: urlParams.get('city') || currentFilters.city
+        };
+        
+        setCurrentFilters(updatedFilters);
+        fetchJobs(updatedFilters);
+      }
+    };
+
+    window.addEventListener('popstate', handleUrlChange);
+    
+    return () => {
+      window.removeEventListener('popstate', handleUrlChange);
+    };
+  }, [currentFilters, fetchJobs]);
 
   useEffect(() => {
     const loadSavedLocation = () => {
@@ -46,18 +86,6 @@ export default function AllJobsPage() {
 
     loadSavedLocation();
   }, []);
-
-  useEffect(() => {
-    const initialFilters = {
-      searchTerm: searchParams.get('search') || '',
-      category: searchParams.get('category') || '',
-      province: searchParams.get('province') || '',
-      city: searchParams.get('city') || ''
-    };
-    
-    setCurrentFilters(initialFilters);
-    fetchJobs(initialFilters);
-  }, [searchParams, fetchJobs]);
   
   const handleFilter = (filters: FilterParams) => {
     const updatedFilters = { ...filters };
