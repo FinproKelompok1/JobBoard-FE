@@ -2,7 +2,6 @@ import Link from "next/link";
 import { IconType } from "react-icons";
 import { BsTwitterX } from "react-icons/bs";
 import {
-  IoLogoFacebook,
   IoLogoWhatsapp,
   IoLogoLinkedin,
 } from "react-icons/io5";
@@ -22,12 +21,7 @@ const shareButtons: IShareButton[] = [
     style: "text-blue-600",
     size: "size-7",
   },
-  {
-    Icon: IoLogoFacebook,
-    link: "https://www.facebook.com/sharer/sharer.php?u=",
-    style: "text-blue-500",
-    size: "size-7",
-  },
+
   {
     Icon: IoLogoWhatsapp,
     link: "https://wa.me/?text=",

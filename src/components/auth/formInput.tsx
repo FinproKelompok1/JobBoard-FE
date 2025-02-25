@@ -1,4 +1,3 @@
-// src/components/shared/formInput.tsx
 import { useField } from 'formik';
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
@@ -7,7 +6,7 @@ interface FormInputProps {
   label: string;
   name: string;
   type: string;
-  placeholder?: string;  // Add placeholder to the interface
+  placeholder?: string;  
 }
 
 export default function FormInput({ label, ...props }: FormInputProps) {

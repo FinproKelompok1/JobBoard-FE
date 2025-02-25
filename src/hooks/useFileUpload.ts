@@ -7,7 +7,6 @@ export const useFileUpload = () => {
   const isMounted = useRef(true);
 
   const validateAndSetFile = (file: File) => {
-    // Hapus pengecekan isMounted untuk validasi file
     if (file.type !== "application/pdf") {
       toast.error("Please upload a PDF file");
       return;

@@ -6,10 +6,12 @@ import CompanyDiscovery from "@/components/homepage/companyDiscovery";
 
 export default function Home() {
   return (
-    <div>
+    <main>
       <Hero />
-      <DiscoverySection />
-      <CompanyDiscovery />
-    </div>
+      <div className="px-6 md:px-10 lg:px-16">
+        <DiscoverySection />
+        <CompanyDiscovery />
+      </div>
+    </main>
   );
 }

@@ -71,7 +71,6 @@ export default function Navbar({ isHomePage }: NavbarProps) {
     window.location.href = "/";
   };
 
-  // Get navbar background class based on conditions
   const getNavbarClass = () => {
     if (isHomePage && !isScrolled) {
       return "bg-transparent";
@@ -79,7 +78,6 @@ export default function Navbar({ isHomePage }: NavbarProps) {
     return "bg-[#FFFFFF] shadow-lg";
   };
 
-  // Get desktop text color
   const desktopTextColor = isHomePage
     ? isScrolled
       ? "text-[#0D3880]"

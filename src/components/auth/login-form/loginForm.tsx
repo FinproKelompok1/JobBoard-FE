@@ -38,7 +38,6 @@ export default function LoginForm() {
     try {
       setError('');
       
-      // Check for developer credentials
       if (values.email === 'developer@gmail.com' && values.password === 'developer') {
         router.push('/auth/login-admin');
         return;

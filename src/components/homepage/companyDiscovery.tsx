@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { getCompanies, type Company } from '@/libs/company';
 import CompaniesList from './companyList';
+import LoadingState from './loadingState';
 
 export default function CompanyDiscovery() {
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -13,9 +14,9 @@ export default function CompanyDiscovery() {
     const fetchCompanies = async () => {
       try {
         setIsLoading(true);
-        const data = await getCompanies();
-        console.log('Fetched companies:', data);
-        setCompanies(data);
+        const response = await getCompanies();
+        console.log('Fetched companies:', response);
+        setCompanies(response.data);
       } catch (err) {
         setError('Failed to fetch companies');
         console.error(err);
@@ -29,25 +30,35 @@ export default function CompanyDiscovery() {
 
   if (isLoading) {
     return (
-      <div className="min-h-[200px] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#E60278] border-t-transparent" />
-      </div>
+      <section className="py-12 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <LoadingState />
+        </div>
+      </section>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-[200px] flex items-center justify-center text-red-500">
-        {error}
-      </div>
+      <section className="py-12 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="min-h-[200px] flex items-center justify-center text-red-500">
+            {error}
+          </div>
+        </div>
+      </section>
     );
   }
 
   if (companies.length === 0) {
     return (
-      <div className="min-h-[200px] flex items-center justify-center text-gray-500">
-        No companies found
-      </div>
+      <section className="py-12 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="min-h-[200px] flex items-center justify-center text-gray-500">
+            No companies found
+          </div>
+        </div>
+      </section>
     );
   }
 

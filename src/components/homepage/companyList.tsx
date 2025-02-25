@@ -1,17 +1,26 @@
 import React from 'react';
 import CompanyCard from './companyCard';
 
+interface Company {
+  id: number;
+  companyName: string;
+  logo: string | null;
+  jobCount: number;
+  Job?: {
+    location?: {
+      city?: string;
+      province?: string;
+    }
+  }[];
+}
+
 interface CompaniesListProps {
-  companies: Array<{
-    id: number;
-    companyName: string;
-    logo: string | null;
-    description: string;
-    jobCount: number;
-  }>;
+  companies?: Company[];
 }
 
 export default function CompaniesList({ companies }: CompaniesListProps) {
+  const validCompanies = Array.isArray(companies) ? companies : [];
+
   return (
     <div className="space-y-6">
       <div className="mb-8">
@@ -24,7 +33,7 @@ export default function CompaniesList({ companies }: CompaniesListProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {companies.map((company) => (
+        {validCompanies.map((company) => (
           <CompanyCard key={company.id} company={company} />
         ))}
       </div>

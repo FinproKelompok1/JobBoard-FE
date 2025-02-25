@@ -40,7 +40,6 @@ export const updateAdminProfile = async (data: ProfileFormData) => {
 
     const formData = new FormData();
 
-    // Add basic fields
     Object.entries(data).forEach(([key, value]) => {
       if (value !== undefined && key !== "cityCoordinates") {
         formData.append(key, value);

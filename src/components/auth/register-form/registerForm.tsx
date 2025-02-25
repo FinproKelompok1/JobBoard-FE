@@ -10,12 +10,27 @@ import { authService } from '@/libs/auth';
 import UserType from '../verify/userType';
 import { Bounce, toast } from 'react-toastify';
 
+interface FormValues {
+  email: string;
+  username: string;
+  password: string;
+  companyName: string;
+  phoneNumber: string;
+  isCompany: boolean;
+  terms: boolean;
+}
+
+interface SubmitHelpers {
+  setSubmitting: (isSubmitting: boolean) => void;
+  setFieldError: (field: string, message: string) => void;
+}
+
 export default function RegisterForm() {
   const router = useRouter();
   const [error, setError] = useState('');
   const [userType, setUserType] = useState('user');
 
-  const initialValues = {
+  const initialValues: FormValues = {
     email: '',
     username: '',
     password: '',
@@ -25,7 +40,7 @@ export default function RegisterForm() {
     terms: false
   };
 
-  const handleSubmit = async (values: any, { setSubmitting, setFieldError }: any) => {
+  const handleSubmit = async (values: FormValues, { setSubmitting, setFieldError }: SubmitHelpers) => {
     try {
       console.log(values)
       setError('');
@@ -55,8 +70,9 @@ export default function RegisterForm() {
         transition: Bounce,
       });
       router.push('/auth/login');
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Registration failed';
+    } catch (error: unknown) {
+      const errorObj = error as { response?: { data?: { message?: string } } };
+      const errorMessage = errorObj.response?.data?.message || 'Registration failed';
       if (errorMessage.includes('Email already registered')) {
         setFieldError('email', 'Email already registered');
       } else if (errorMessage.includes('Username already taken')) {
@@ -88,9 +104,8 @@ export default function RegisterForm() {
             validationSchema={userType === 'admin' ? adminValidationSchema : userValidationSchema}
             onSubmit={handleSubmit}
           >
-            {({ values }) => (
+            {() => (
               <Form className="space-y-4" key={userType === 'admin' ? 'admin' : 'user'}>
-
                 {userType === 'admin' ? (
                   <>
                     <FormInput label="Company Name" name="companyName" type="text" />
@@ -112,12 +127,12 @@ export default function RegisterForm() {
                   <label className="ml-2 text-sm text-gray-600">
                     I agree to the Terms & Policy
                   </label>
-                  <ErrorMessage
-                    name="terms"
-                    component="div"
-                    className="text-red-500 text-sm ml-2"
-                  />
                 </div>
+                <ErrorMessage
+                  name="terms"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
 
                 <button
                   type="submit"
@@ -126,7 +141,7 @@ export default function RegisterForm() {
                   Sign up
                 </button>
 
-                <SocialAuth role={userType === 'admin' ? 'admin' : 'user'} />
+                <SocialAuth />
               </Form>
             )}
           </Formik>

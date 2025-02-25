@@ -1,4 +1,3 @@
-// components/apply/SubmitButton.tsx
 interface SubmitButtonProps {
   isLoading: boolean;
 }

@@ -7,6 +7,16 @@ import FormInput from "../shared/formInput";
 import { validationSchema } from "./validation";
 import { authService } from "@/libs/auth";
 
+interface FormValues {
+  email: string;
+  password: string;
+  otp: string;
+}
+
+interface SubmitHelpers {
+  setSubmitting: (isSubmitting: boolean) => void;
+}
+
 export default function LoginDevForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -19,13 +29,13 @@ export default function LoginDevForm() {
     }
   }, [searchParams]);
 
-  const initialValues = {
+  const initialValues: FormValues = {
     email: "",
     password: "",
     otp: "",
   };
 
-  const handleSubmit = async (values: any, { setSubmitting }: any) => {
+  const handleSubmit = async (values: FormValues, { setSubmitting }: SubmitHelpers) => {
     try {
       setError("");
       console.log(values);
@@ -36,9 +46,10 @@ export default function LoginDevForm() {
       });
       console.log(response);
       router.push("/developer");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log(error);
-      const errorMessage = error.response?.data?.message || "Login failed";
+      const errorObj = error as { response?: { data?: { message?: string } } };
+      const errorMessage = errorObj.response?.data?.message || "Login failed";
       setError(errorMessage);
     } finally {
       setSubmitting(false);

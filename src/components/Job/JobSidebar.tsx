@@ -50,7 +50,6 @@ export function JobSidebar({ job }: JobSidebarProps) {
               {job.admin.companyName}
             </h3>
           </div>
-          <p className="text-gray-600 text-center">{job.admin.description}</p>
         </div>
       </div>
     </div>

@@ -13,6 +13,8 @@ export interface Job {
   tags: string[];
   locationId: number;
   isActive: boolean;
+  createdAt: string;
+  updatedAt?: string;
   location: {
     city: string;
     province: string;

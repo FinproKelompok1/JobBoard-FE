@@ -2,6 +2,7 @@ import axios from "@/helpers/axios";
 import { toastErrAxios } from "@/helpers/toast";
 import { CurriculumVitae } from "@/types/profile";
 import { toast } from "react-toastify";
+import { getUserData } from "@/helpers/cookies";
 
 interface AdminRegisterData {
   companyName: string;
@@ -23,19 +24,28 @@ interface LoginData {
   otpToken?: string;
 }
 
+interface OauthData {
+  type: string;
+  company?: string;
+  phone?: string;
+  username?: string;
+}
+
 axios.interceptors.request.use(
   (config) => {
-    const user = document.cookie.split("user=")[1]?.split(";")[0];
-    if (!user) return config;
-    const token = JSON.parse(user).token;
-    if (token) {
-      console.log("Header Auth:", `Bearer ${token}`);
-      config.headers.Authorization = `Bearer ${token}`;
+    try {
+      const userData = getUserData();
+      if (userData?.token) {
+        config.headers.Authorization = `Bearer ${userData.token}`;
+      }
+      return config;
+    } catch {
+      return config;
     }
-    return config;
   },
   (error) => Promise.reject(error),
 );
+
 export const authService = {
   login: async (data: LoginData) => {
     const response = await axios.post("/auth/login/user", data, {
@@ -64,7 +74,6 @@ export const authService = {
   loginDeveloper: async (data: LoginData) => {
     const response = await axios.post("/auth/developer/login", data);
 
-    console.log(response);
     document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
     if (response.data.user) {
       document.cookie = `user=${JSON.stringify({ ...response.data?.user, token: response.data.token })}; path=/`;
@@ -73,7 +82,7 @@ export const authService = {
     return response;
   },
 
-  completeOauth: async (data: any) => {
+  completeOauth: async (data: OauthData) => {
     const response = await axios.post("/auth/verify-oauth", {
       type: data.type,
       company: data?.company,
@@ -112,12 +121,11 @@ export const authService = {
     code: string,
   ) => {
     try {
-      const response = await axios.get(`/auth/${provider}/callback`, {
+      await axios.get(`/auth/${provider}/callback`, {
         params: { code },
       });
       return true;
-    } catch (error) {
-      console.error("Social auth error:", error);
+    } catch {
       return false;
     }
   },
@@ -132,12 +140,22 @@ export const getUserProfile = async () => {
   }
 };
 
-export const UpdateProfile = async (userId: string, data: any) => {
+interface ProfileUpdateData {
+  username?: string;
+  full_name?: string;
+  phone?: string;
+  address?: string;
+  [key: string]: unknown;
+}
+
+export const UpdateProfile = async (
+  userId: string,
+  data: ProfileUpdateData,
+) => {
   try {
     const response = await axios.put(`/auth/${userId}`, data);
     return response.data;
   } catch (error) {
-    console.error("Error in UpdateProfile:", error);
     throw error;
   }
 };
@@ -166,7 +184,6 @@ export const updateCV = async (
     const response = await axios.put(`/auth/${userId}/cv`, cvData);
     return response.data;
   } catch (error) {
-    console.error("Error updating CV:", error);
     throw error;
   }
 };
@@ -188,6 +205,49 @@ export const changeEmail = async ({
     return response.data;
   } catch (error) {
     toastErrAxios(error);
+    throw error;
+  }
+};
+
+export const verifyEmailChange = async (token: string) => {
+  try {
+    const response = await axios.get(
+      `/auth/verify-email-change?token=${token}`,
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const changeAdminEmail = async ({
+  newEmail,
+  password,
+}: {
+  newEmail: string;
+  password: string;
+}) => {
+  try {
+    const response = await axios.put("/auth/admin/change-email", {
+      newEmail,
+      password,
+    });
+
+    toast.success("Please check your new email for verification link");
+    return response.data;
+  } catch (error) {
+    toastErrAxios(error);
+    throw error;
+  }
+};
+
+export const verifyAdminEmailChange = async (token: string) => {
+  try {
+    const response = await axios.get(
+      `/auth/admin/verify-email-change?token=${token}`,
+    );
+    return response.data;
+  } catch (error) {
     throw error;
   }
 };
