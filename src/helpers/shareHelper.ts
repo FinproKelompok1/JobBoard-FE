@@ -19,9 +19,6 @@ export const buildShareUrl = (platform: string, data: ShareData): string => {
   const encodedUrl = encodeURIComponent(data.jobUrl);
 
   switch (platform) {
-    case "facebook":
-      return `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&t=${encodedMessage}`;
-
     case "twitter":
       return `https://twitter.com/share?url=${encodedUrl}&text=${encodedMessage}`;
 

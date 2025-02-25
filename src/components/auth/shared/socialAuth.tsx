@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 
-export default function SocialAuth({ role }: { role: string }) {
+export default function SocialAuth() {
   const [isLoading, setIsLoading] = useState({ google: false });
 
   const handleSocialLogin = async (provider: 'google') => {

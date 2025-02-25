@@ -5,9 +5,10 @@ import { getCompanies } from '@/libs/company';
 import CompaniesList from '@/components/homepage/companyList';
 import CompaniesFilter from '@/components/homepage/companyFilter';
 import { Building2 } from 'lucide-react';
-import LoadingPage from '@/components/loading';
+import LoadingPage from '@/components/loading'; // Komponen loading yang sudah ada
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createQueryString } from "@/helpers/createQuery";
+import Pagination from '@/components/homepage/pagination'; // Komponen pagination
 
 interface Company {
   id: number;
@@ -55,7 +56,7 @@ export default function CompaniesPage() {
     const fetchCompanies = async () => {
       try {
         setIsLoading(true);
-        const response = await getCompanies(currentPage, 2); // Limit 3 perusahaan per halaman
+        const response = await getCompanies(currentPage, 3); // Limit 3 perusahaan per halaman
         
         setCompanies(response.data);
         setFilteredCompanies(response.data);
@@ -126,56 +127,9 @@ export default function CompaniesPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Generate page numbers for pagination - sama seperti di JobsList
-  const getPageNumbers = () => {
-    const pages: (number | string)[] = [];
-    const totalPages = paginationMeta.totalPages;
-    const currentPage = paginationMeta.page;
-    const showEllipsis = totalPages > 7;
-
-    if (showEllipsis) {
-      // Always show first page
-      pages.push(1);
-
-      // Show ellipsis or numbers after first page
-      if (currentPage > 3) {
-        pages.push('...');
-      }
-
-      // Show current page and surrounding pages
-      for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
-        pages.push(i);
-      }
-
-      // Show ellipsis before last page
-      if (currentPage < totalPages - 2) {
-        pages.push('...');
-      }
-
-      // Always show last page
-      if (totalPages > 1) {
-        pages.push(totalPages);
-      }
-    } else {
-      // Show all pages if total pages is 7 or less
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    }
-
-    return pages;
-  };
-
+  // Gunakan komponen LoadingPage untuk state loading awal
   if (isLoading && companies.length === 0) {
-    return (
-      <div className="min-h-screen pt-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="min-h-[400px] flex items-center justify-center">
-            <LoadingPage/>
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingPage isLoading={true} />;
   }
 
   if (error && companies.length === 0) {
@@ -261,65 +215,20 @@ export default function CompaniesPage() {
               <>
                 <CompaniesList companies={filteredCompanies} />
                 
-                {/* Pagination styled like JobsList */}
+                {/* Gunakan komponen Pagination yang sudah dibuat */}
                 {paginationMeta.totalPages > 1 && (
-                  <div className="flex justify-center pt-8">
-                    <div className="flex gap-2">
-                      {/* Previous Button */}
-                      <button
-                        onClick={() => handlePageChange(paginationMeta.page - 1)}
-                        disabled={paginationMeta.page === 1}
-                        className={`border rounded-md px-4 py-2 ${
-                          paginationMeta.page === 1
-                            ? 'text-gray-400 border-gray-200 cursor-not-allowed'
-                            : 'text-black/60 hover:border-[#E60278] hover:text-[#E60278]'
-                        }`}
-                      >
-                        Previous
-                      </button>
-
-                      {/* Page Numbers */}
-                      {getPageNumbers().map((pageNum, idx) => {
-                        if (pageNum === '...') {
-                          return (
-                            <span 
-                              key={`ellipsis-${idx}`} 
-                              className="flex items-center px-2"
-                            >
-                              ...
-                            </span>
-                          );
-                        }
-
-                        return (
-                          <button
-                            key={`page-${pageNum}`}
-                            onClick={() => handlePageChange(Number(pageNum))}
-                            className={`border rounded-md px-4 py-2 ${
-                              paginationMeta.page === pageNum
-                                ? 'bg-[#E60278] text-white border-[#E60278]'
-                                : 'text-black/60 hover:border-[#E60278] hover:text-[#E60278]'
-                            }`}
-                          >
-                            {pageNum}
-                          </button>
-                        );
-                      })}
-
-                      {/* Next Button */}
-                      <button
-                        onClick={() => handlePageChange(paginationMeta.page + 1)}
-                        disabled={paginationMeta.page === paginationMeta.totalPages}
-                        className={`border rounded-md px-4 py-2 ${
-                          paginationMeta.page === paginationMeta.totalPages
-                            ? 'text-gray-400 border-gray-200 cursor-not-allowed'
-                            : 'text-black/60 hover:border-[#E60278] hover:text-[#E60278]'
-                        }`}
-                      >
-                        Next
-                      </button>
+                  <>
+                    <Pagination 
+                      currentPage={paginationMeta.page}
+                      totalPages={paginationMeta.totalPages}
+                      onPageChange={handlePageChange}
+                    />
+                    
+                    {/* Jobs count and page info */}
+                    <div className="text-center text-gray-500 mt-4">
+                      Showing {filteredCompanies.length} of {paginationMeta.totalItems} companies - Page {paginationMeta.page} of {paginationMeta.totalPages}
                     </div>
-                  </div>
+                  </>
                 )}
               </>
             )}

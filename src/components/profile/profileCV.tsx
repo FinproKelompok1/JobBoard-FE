@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
-import { X, Upload, Mail, Lock, Save } from 'lucide-react';
-import { UserProfile, Gender, LastEdu } from '@/types/profile';
-import { UpdateProfile, uploadProfileImage } from '@/libs/auth';
-import { PasswordChangeForm } from '@/components/profile/PasswordChangeForm';
-import SelectProfileProvince from './SelectProfileProvince';
-import SelectProfileCity from './SelectProfileCity';
+import React, { useState } from "react";
+import { X, Upload, Mail, Save } from "lucide-react";
+import { UserProfile, Gender, LastEdu } from "@/types/profile";
+import { changeEmail, UpdateProfile, uploadProfileImage } from "@/libs/auth";
+import { PasswordChangeForm } from "@/components/profile/PasswordChangeForm";
+import SelectProfileProvince from "./SelectProfileProvince";
+import SelectProfileCity from "./SelectProfileCity";
+import Image from "next/image";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { changePassword } from '@/libs/changePassword';
-import { toastErrAxios } from '@/helpers/toast';
+} from "@/components/ui/dialog";
+import { changePassword } from "@/libs/changePassword";
+import { toastErrAxios } from "@/helpers/toast";
 
 interface ProfileEditFormProps {
   user: UserProfile;
@@ -20,6 +21,7 @@ interface ProfileEditFormProps {
   onUpdate: () => void;
 }
 
+// Updated FormData to include more specific type for index signature
 interface FormData {
   fullname: string;
   gender: string;
@@ -32,49 +34,53 @@ interface FormData {
     latitude: number;
     longitude: number;
   };
+  [key: string]: string | number | boolean | object | undefined;
 }
 
-export default function ProfileEditForm({ user, handleClose, onUpdate }: ProfileEditFormProps) {
+export default function ProfileEditForm({
+  user,
+  handleClose,
+  onUpdate,
+}: ProfileEditFormProps) {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [showEmailDialog, setShowEmailDialog] = useState(false);
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
   const [provinceId, setProvinceId] = useState("");
-  const [passwordError, setPasswordError] = useState('');
-  
+  const [passwordError, setPasswordError] = useState("");
 
   const [formData, setFormData] = useState<FormData>({
-    fullname: user.fullname || '',
-    gender: user.gender || '',
-    dob: user.dob ? new Date(user.dob).toISOString().split('T')[0] : '',
-    lastEdu: user.lastEdu || '',
+    fullname: user.fullname || "",
+    gender: user.gender || "",
+    dob: user.dob ? new Date(user.dob).toISOString().split("T")[0] : "",
+    lastEdu: user.lastEdu || "",
     avatar: user.avatar,
-    province: user.province || '',
-    city: user.city || '',
+    province: user.province || "",
+    city: user.city || "",
   });
 
   const [emailData, setEmailData] = useState({
-    newEmail: '',
-    password: '',
+    newEmail: "",
+    password: "",
   });
 
   const [passwordData, setPasswordData] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: '',
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       setLoading(true);
-      setError('');
+      setError("");
       await UpdateProfile(user.id.toString(), formData);
       onUpdate();
       handleClose();
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      setError('Failed to update profile. Please try again.');
+    } catch (e) {
+      setError("Failed to update profile. Please try again.");
+      toastErrAxios(e);
     } finally {
       setLoading(false);
     }
@@ -85,21 +91,24 @@ export default function ProfileEditForm({ user, handleClose, onUpdate }: Profile
     if (file) {
       try {
         setLoading(true);
-        setError('');
-        
+        setError("");
+
         const reader = new FileReader();
         reader.onload = (e) => {
-          setFormData(prev => ({ ...prev, avatar: e.target?.result as string }));
+          setFormData((prev) => ({
+            ...prev,
+            avatar: e.target?.result as string,
+          }));
         };
         reader.readAsDataURL(file);
 
         const response = await uploadProfileImage(file);
-        setFormData(prev => ({ ...prev, avatar: response.data.avatar }));
+        setFormData((prev) => ({ ...prev, avatar: response.data.avatar }));
         onUpdate();
-      } catch (error) {
-        console.error('Error uploading image:', error);
-        setError('Failed to upload image. Please try again.');
-        setFormData(prev => ({ ...prev, avatar: user.avatar }));
+      } catch (e) {
+        setError("Failed to upload image. Please try again.");
+        setFormData((prev) => ({ ...prev, avatar: user.avatar }));
+        toastErrAxios(e);
       } finally {
         setLoading(false);
       }
@@ -107,9 +116,9 @@ export default function ProfileEditForm({ user, handleClose, onUpdate }: Profile
   };
 
   const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      city: e.target.value
+      city: e.target.value,
     }));
   };
 
@@ -117,57 +126,65 @@ export default function ProfileEditForm({ user, handleClose, onUpdate }: Profile
     e.preventDefault();
     try {
       setLoading(true);
-      // Implement email change logic here
-      console.log('Email change requested:', emailData);
+      setError("");
+
+      await changeEmail({
+        newEmail: emailData.newEmail,
+        password: emailData.password,
+      });
+
+      setEmailData({
+        newEmail: "",
+        password: "",
+      });
       setShowEmailDialog(false);
-    } catch (error) {
-      console.error('Error changing email:', error);
-      setError('Failed to change email. Please try again.');
+    } catch {
+      // Error handling sudah ditangani oleh toastErrAxios di fungsi changeEmail
     } finally {
       setLoading(false);
     }
   };
 
-const handlePasswordChange = async (e: React.FormEvent) => {
-  e.preventDefault();
-  try {
-    setLoading(true);
-    setPasswordError('');
-    
-    await changePassword({
-      currentPassword: passwordData.currentPassword,
-      newPassword: passwordData.newPassword,
-      confirmPassword: passwordData.confirmPassword,
-    });
-    
-    setPasswordData({
-      currentPassword: '',
-      newPassword: '',
-      confirmPassword: '',
-    });
-    setShowPasswordDialog(false);
-  } catch (error: unknown) {
-    toastErrAxios(error); 
-  } finally {
-    setLoading(false);
-  }
-};
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      setPasswordError("");
+
+      await changePassword({
+        currentPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword,
+        confirmPassword: passwordData.confirmPassword,
+      });
+
+      setPasswordData({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+      setShowPasswordDialog(false);
+    } catch (e) {
+      toastErrAxios(e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <h2 className="text-2xl font-bold text-[#0D3880]">Edit Profile</h2>
         <button
           onClick={handleClose}
           className="text-gray-500 hover:text-gray-700"
           disabled={loading}
         >
-          <X className="w-6 h-6" />
+          <X className="h-6 w-6" />
         </button>
       </div>
 
       {error && (
-        <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4">
+        <div className="mb-4 rounded-lg bg-red-50 p-3 text-red-600">
           {error}
         </div>
       )}
@@ -175,15 +192,21 @@ const handlePasswordChange = async (e: React.FormEvent) => {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Profile Picture */}
         <div>
-          <label className="block text-sm font-medium mb-2">Profile Picture</label>
+          <label className="mb-2 block text-sm font-medium">
+            Profile Picture
+          </label>
           <div className="flex items-center gap-4">
-            <img
-              src={formData.avatar}
-              alt="Profile"
-              className="w-20 h-20 rounded-full object-cover border border-gray-200"
-            />
-            <label className="cursor-pointer flex items-center gap-2 text-[#E60278] hover:bg-pink-50 px-4 py-2 rounded-lg">
-              <Upload className="w-4 h-4" />
+            <div className="relative h-20 w-20 overflow-hidden rounded-full border border-gray-200">
+              <Image
+                src={formData.avatar}
+                alt="Profile"
+                className="object-cover"
+                fill
+                sizes="80px"
+              />
+            </div>
+            <label className="hover:bg-pink-50 flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 text-[#E60278]">
+              <Upload className="h-4 w-4" />
               Upload New Photo
               <input
                 type="file"
@@ -199,98 +222,52 @@ const handlePasswordChange = async (e: React.FormEvent) => {
         <div className="grid grid-cols-2 gap-4">
           {/* Full Name */}
           <div>
-            <label className="block text-sm font-medium mb-2">Full Name</label>
+            <label className="mb-2 block text-sm font-medium">Full Name</label>
             <input
               type="text"
               value={formData.fullname}
-              onChange={(e) => setFormData(prev => ({ ...prev, fullname: e.target.value }))}
-              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60278]"
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, fullname: e.target.value }))
+              }
+              className="w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-[#E60278]"
               disabled={loading}
             />
           </div>
 
-            {/* Current Email field with change button */}
-      <div>
-        <label className="block text-sm font-medium mb-2">Current Email</label>
-        <div className="flex gap-2">
-          <input
-            type="email"
-            value={user.email}
-            className="w-full p-2 border rounded-lg bg-gray-50"
-            disabled
-          />
-          <button
-            type="button"
-            onClick={() => setShowEmailDialog(true)}
-            className="px-3 py-2 text-[#E60278] hover:bg-pink-50 rounded-lg transition-colors"
-          >
-            <Mail className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
-
-      {/* Email Change Dialog */}
-      <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Change Email Address</DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleEmailChange} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">New Email Address</label>
+          {/* Current Email field with change button */}
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Current Email
+            </label>
+            <div className="flex gap-2">
               <input
                 type="email"
-                value={emailData.newEmail}
-                onChange={(e) => setEmailData(prev => ({ ...prev, newEmail: e.target.value }))}
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60278]"
-                required
+                value={user.email}
+                className="w-full rounded-lg border bg-gray-50 p-2"
+                disabled
               />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">Confirm Password</label>
-              <input
-                type="password"
-                value={emailData.password}
-                onChange={(e) => setEmailData(prev => ({ ...prev, password: e.target.value }))}
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60278]"
-                required
-              />
-            </div>
-            <div className="flex justify-end gap-2">
               <button
                 type="button"
-                onClick={() => setShowEmailDialog(false)}
-                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-                disabled={loading}
+                onClick={() => setShowEmailDialog(true)}
+                className="hover:bg-pink-50 rounded-lg px-3 py-2 text-[#E60278] transition-colors"
               >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="bg-[#E60278] text-white px-4 py-2 rounded-lg hover:bg-pink-700 disabled:opacity-50 flex items-center gap-2"
-                disabled={loading}
-              >
-                {loading ? (
-                  <>
-                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Sending...
-                  </>
-                ) : (
-                  'Change Email'
-                )}
+                <Mail className="h-4 w-4" />
               </button>
             </div>
-          </form>
-        </DialogContent>
-      </Dialog>
+          </div>
 
           {/* Gender */}
           <div>
-            <label className="block text-sm font-medium mb-2">Gender</label>
+            <label className="mb-2 block text-sm font-medium">Gender</label>
             <select
               value={formData.gender}
-              onChange={(e) => setFormData(prev => ({ ...prev, gender: e.target.value as Gender }))}
-              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60278]"
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  gender: e.target.value as Gender,
+                }))
+              }
+              className="w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-[#E60278]"
               disabled={loading}
             >
               <option value="">Select Gender</option>
@@ -301,27 +278,40 @@ const handlePasswordChange = async (e: React.FormEvent) => {
 
           {/* Date of Birth */}
           <div>
-            <label className="block text-sm font-medium mb-2">Date of Birth</label>
+            <label className="mb-2 block text-sm font-medium">
+              Date of Birth
+            </label>
             <input
               type="date"
               value={formData.dob}
-              onChange={(e) => setFormData(prev => ({ ...prev, dob: e.target.value }))}
-              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60278]"
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, dob: e.target.value }))
+              }
+              className="w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-[#E60278]"
               disabled={loading}
             />
           </div>
 
           {/* Last Education */}
           <div className="col-span-2">
-            <label className="block text-sm font-medium mb-2">Last Education</label>
+            <label className="mb-2 block text-sm font-medium">
+              Last Education
+            </label>
             <select
               value={formData.lastEdu}
-              onChange={(e) => setFormData(prev => ({ ...prev, lastEdu: e.target.value as LastEdu }))}
-              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60278]"
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  lastEdu: e.target.value as LastEdu,
+                }))
+              }
+              className="w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-[#E60278]"
               disabled={loading}
             >
               <option value="">Select Education</option>
-              <option value={LastEdu.highSchoolDiploma}>High School Diploma</option>
+              <option value={LastEdu.highSchoolDiploma}>
+                High School Diploma
+              </option>
               <option value={LastEdu.bachelor}>Bachelor</option>
               <option value={LastEdu.diploma}>Diploma</option>
               <option value={LastEdu.master}>Master</option>
@@ -331,18 +321,18 @@ const handlePasswordChange = async (e: React.FormEvent) => {
 
           {/* Province & City */}
           <div>
-            <label className="block text-sm font-medium mb-2">Province</label>
+            <label className="mb-2 block text-sm font-medium">Province</label>
             <SelectProfileProvince
               values={formData}
               handleChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                setFormData(prev => ({ ...prev, province: e.target.value }))
+                setFormData((prev) => ({ ...prev, province: e.target.value }))
               }
               setProvinceId={setProvinceId}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">City</label>
+            <label className="mb-2 block text-sm font-medium">City</label>
             <SelectProfileCity
               values={formData}
               handleChange={handleCityChange}
@@ -351,35 +341,23 @@ const handlePasswordChange = async (e: React.FormEvent) => {
           </div>
         </div>
 
-        {/* Password Change Button */}
-        <div className="flex justify-center">
-          <button
-            type="button"
-            onClick={() => setShowPasswordDialog(true)}
-            className="text-[#E60278] hover:bg-pink-50 px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
-          >
-            <Lock className="w-4 h-4" />
-            Change Password
-          </button>
-        </div>
-
         {/* Submit Buttons */}
-        <div className="flex justify-end pt-4 border-t">
+        <div className="flex justify-end border-t pt-4">
           <button
             type="button"
             onClick={handleClose}
-            className="mr-3 px-6 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+            className="mr-3 rounded-lg px-6 py-2 text-gray-600 transition-colors hover:bg-gray-100"
             disabled={loading}
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="bg-[#E60278] text-white px-6 py-2 rounded-lg hover:bg-pink-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+            className="hover:bg-pink-700 flex items-center gap-2 rounded-lg bg-[#E60278] px-6 py-2 text-white transition-colors disabled:opacity-50"
             disabled={loading}
           >
-            <Save className="w-4 h-4" />
-            {loading ? 'Saving...' : 'Save Changes'}
+            <Save className="h-4 w-4" />
+            {loading ? "Saving..." : "Save Changes"}
           </button>
         </div>
       </form>
@@ -392,22 +370,36 @@ const handlePasswordChange = async (e: React.FormEvent) => {
           </DialogHeader>
           <form onSubmit={handleEmailChange} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2">New Email Address</label>
+              <label className="mb-2 block text-sm font-medium">
+                New Email Address
+              </label>
               <input
                 type="email"
                 value={emailData.newEmail}
-                onChange={(e) => setEmailData(prev => ({ ...prev, newEmail: e.target.value }))}
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60278]"
+                onChange={(e) =>
+                  setEmailData((prev) => ({
+                    ...prev,
+                    newEmail: e.target.value,
+                  }))
+                }
+                className="w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-[#E60278]"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Confirm Password</label>
+              <label className="mb-2 block text-sm font-medium">
+                Confirm Password
+              </label>
               <input
                 type="password"
                 value={emailData.password}
-                onChange={(e) => setEmailData(prev => ({ ...prev, password: e.target.value }))}
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E60278]"
+                onChange={(e) =>
+                  setEmailData((prev) => ({
+                    ...prev,
+                    password: e.target.value,
+                  }))
+                }
+                className="w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-[#E60278]"
                 required
               />
             </div>
@@ -415,13 +407,13 @@ const handlePasswordChange = async (e: React.FormEvent) => {
               <button
                 type="button"
                 onClick={() => setShowEmailDialog(false)}
-                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+                className="rounded-lg px-4 py-2 text-gray-600 hover:bg-gray-100"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="bg-[#E60278] text-white px-4 py-2 rounded-lg hover:bg-pink-700"
+                className="hover:bg-pink-700 rounded-lg bg-[#E60278] px-4 py-2 text-white"
               >
                 Change Email
               </button>
@@ -443,21 +435,21 @@ const handlePasswordChange = async (e: React.FormEvent) => {
               loading={loading}
               passwordError={passwordError}
             />
-            <div className="flex justify-end gap-2 mt-4">
+            <div className="mt-4 flex justify-end gap-2">
               <button
                 type="button"
                 onClick={() => setShowPasswordDialog(false)}
-                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+                className="rounded-lg px-4 py-2 text-gray-600 hover:bg-gray-100"
                 disabled={loading}
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="bg-[#E60278] text-white px-4 py-2 rounded-lg hover:bg-pink-700 disabled:opacity-50"
+                className="hover:bg-pink-700 rounded-lg bg-[#E60278] px-4 py-2 text-white disabled:opacity-50"
                 disabled={loading}
               >
-                {loading ? 'Changing...' : 'Change Password'}
+                {loading ? "Changing..." : "Change Password"}
               </button>
             </div>
           </form>

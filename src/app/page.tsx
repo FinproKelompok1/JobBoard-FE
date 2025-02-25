@@ -1,4 +1,3 @@
-// pages/index.tsx
 'use client';
 
 import Hero from "@/components/homepage/hero";
@@ -9,8 +8,10 @@ export default function Home() {
   return (
     <main>
       <Hero />
-      <DiscoverySection />
-      <CompanyDiscovery />
+      <div className="px-6 md:px-10 lg:px-16">
+        <DiscoverySection />
+        <CompanyDiscovery />
+      </div>
     </main>
   );
 }

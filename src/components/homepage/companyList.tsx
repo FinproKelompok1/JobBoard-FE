@@ -1,12 +1,24 @@
 import React from 'react';
 import CompanyCard from './companyCard';
 
+interface Company {
+  id: number;
+  companyName: string;
+  logo: string | null;
+  jobCount: number;
+  Job?: {
+    location?: {
+      city?: string;
+      province?: string;
+    }
+  }[];
+}
+
 interface CompaniesListProps {
-  companies?: any; // Menghindari error jika data tidak sesuai ekspektasi
+  companies?: Company[];
 }
 
 export default function CompaniesList({ companies }: CompaniesListProps) {
-  // Pastikan `companies` adalah array sebelum `map()`
   const validCompanies = Array.isArray(companies) ? companies : [];
 
   return (

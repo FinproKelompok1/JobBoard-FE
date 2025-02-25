@@ -2,9 +2,8 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
-import { isAxiosError } from "axios";
+import axios, { isAxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { verifyEmailChange } from "@/libs/auth";
 
 export default function VerifyEmailChangePage() {
   const router = useRouter();
@@ -13,7 +12,7 @@ export default function VerifyEmailChangePage() {
   const [status, setStatus] = useState("Verifying...");
 
   useEffect(() => {
-    const verify = async () => {
+    const verifyEmailChange = async () => {
       try {
         if (!token) {
           toast.error("Verification token is missing");
@@ -21,19 +20,21 @@ export default function VerifyEmailChangePage() {
           return;
         }
 
-        console.log("Verifying token:", token);
-        const response = await verifyEmailChange(token);
-        console.log("Verification response:", response);
+        const decoded = JSON.parse(atob(token.split(".")[1]));
 
-        if (response.success) {
-          setStatus("Success: Email verified");
-          toast.success("Email changed successfully!");
+        const endpoint = decoded.adminId
+          ? "/auth/admin/verify-email-change"
+          : "/auth/verify-email-change";
 
-          // Force page reload to update user data
-          setTimeout(() => {
-            window.location.href = "/profile";
-          }, 2000);
-        }
+        const redirectPath = decoded.adminId ? "/admin/profile" : "/profile";
+
+        await axios.get(`${endpoint}?token=${token}`);
+        setStatus("Success: Email verified");
+        toast.success("Email changed successfully!");
+
+        setTimeout(() => {
+          window.location.href = redirectPath;
+        }, 2000);
       } catch (error) {
         console.error("Verification error:", error);
         if (isAxiosError(error)) {
@@ -52,7 +53,7 @@ export default function VerifyEmailChangePage() {
       }
     };
 
-    verify();
+    verifyEmailChange();
   }, [token, router]);
 
   return (

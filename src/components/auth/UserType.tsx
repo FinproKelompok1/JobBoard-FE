@@ -1,7 +1,6 @@
-// src/components/shared/userTypeToggle.tsx
 interface UserTypeToggleProps {
   isCompany: boolean;
-  setFieldValue: (field: string, value: any) => void;
+  setFieldValue: (field: string, value: boolean) => void;
 }
 
 export default function UserTypeToggle({ isCompany, setFieldValue }: UserTypeToggleProps) {
