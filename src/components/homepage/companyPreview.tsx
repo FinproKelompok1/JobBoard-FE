@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Company {
   id: number;
@@ -58,11 +59,15 @@ export default function CompanyPreview({ companies }: CompanyPreviewProps) {
                 )}
               </div>
               {company.logo && (
-                <img
-                  src={company.logo}
-                  alt={company.companyName}
-                  className="h-12 w-12 object-contain rounded"
-                />
+                <div className="relative h-12 w-12">
+                  <Image
+                    src={company.logo}
+                    alt={company.companyName}
+                    fill
+                    sizes="48px"
+                    className="object-contain rounded"
+                  />
+                </div>
               )}
             </div>
             

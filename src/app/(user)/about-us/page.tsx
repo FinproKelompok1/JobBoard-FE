@@ -3,6 +3,7 @@
 import React from 'react';
 import { FaInstagram, FaLinkedin } from 'react-icons/fa';
 import Link from 'next/link';
+import Image from 'next/image';
 import LoadingPage from '@/components/loading'; 
 
 export default function AboutUs() {
@@ -68,11 +69,13 @@ export default function AboutUs() {
               className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               
-              <div className="h-72 bg-gray-100">
-                <img
+              <div className="h-72 bg-gray-100 relative">
+                <Image
                   src={`/api/placeholder/400/400`}
                   alt={member.name}
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover"
                 />
               </div>
               

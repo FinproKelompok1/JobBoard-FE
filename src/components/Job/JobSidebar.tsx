@@ -1,4 +1,5 @@
 import { Job } from '@/types/jobdis';
+import Image from 'next/image';
 
 interface JobSidebarProps {
   job: Job;
@@ -34,11 +35,15 @@ export function JobSidebar({ job }: JobSidebarProps) {
         <div className="space-y-4">
           <div className="w-20 h-20 mx-auto mb-4">
             {job.admin.logo ? (
-              <img 
-                src={job.admin.logo} 
-                alt={job.admin.companyName}
-                className="w-full h-full object-contain"
-              />
+              <div className="relative w-full h-full">
+                <Image 
+                  src={job.admin.logo} 
+                  alt={job.admin.companyName}
+                  fill
+                  sizes="80px"
+                  className="object-contain"
+                />
+              </div>
             ) : (
               <div className="w-full h-full bg-gray-100 rounded-lg flex items-center justify-center text-2xl font-bold text-gray-400">
                 {job.admin.companyName[0]}

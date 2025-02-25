@@ -6,7 +6,7 @@ import CompaniesList from '@/components/homepage/companyList';
 import CompaniesFilter from '@/components/homepage/companyFilter';
 import { Building2 } from 'lucide-react';
 import LoadingPage from '@/components/loading'; 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { createQueryString } from "@/helpers/createQuery";
 import Pagination from '@/components/homepage/pagination'; 
 
@@ -33,7 +33,6 @@ interface PaginationMeta {
 
 export default function CompaniesPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   
   const [companies, setCompanies] = useState<Company[]>([]);
   const [filteredCompanies, setFilteredCompanies] = useState<Company[]>([]);
@@ -49,10 +48,22 @@ export default function CompaniesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [location, setLocation] = useState('');
   const [sortBy, setSortBy] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    const currentPage = parseInt(searchParams.get('page') || '1');
+    const getPageFromUrl = () => {
+      if (typeof window !== 'undefined') {
+        const urlParams = new URLSearchParams(window.location.search);
+        const pageParam = urlParams.get('page');
+        return pageParam ? parseInt(pageParam) : 1;
+      }
+      return 1;
+    };
     
+    setCurrentPage(getPageFromUrl());
+  }, []);
+
+  useEffect(() => {
     const fetchCompanies = async () => {
       try {
         setIsLoading(true);
@@ -69,7 +80,7 @@ export default function CompaniesPage() {
     };
 
     fetchCompanies();
-  }, [searchParams]);
+  }, [currentPage]);
 
   useEffect(() => {
     const filterCompanies = () => {
@@ -120,6 +131,11 @@ export default function CompaniesPage() {
 
   const handlePageChange = (page: number) => {
     if (page < 1 || page > paginationMeta.totalPages) return;
+    
+    // Update state currentPage
+    setCurrentPage(page);
+    
+    // Update URL dengan query parameter baru
     const query = createQueryString('page', `${page}`);
     router.push(`/companies?${query}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
