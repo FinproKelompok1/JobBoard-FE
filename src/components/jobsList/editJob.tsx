@@ -118,7 +118,7 @@ export default function EditJob({ job }: { job: IJob }) {
                       onChange={handleChange}
                       value={values.title}
                       placeholder='Enter job title'
-                      className='outline-none p-2 border bg-white'
+                      className='outline-none p-2 border bg-white rounded-lg focus:ring-2 focus:ring-blueNavy'
                     />
                     <ErrorMessage name="name" >{msg => <div className='text-red-500 text-xs mt-1 ml-1'><sup>*</sup>{msg}</div>}</ErrorMessage>
                   </div>
@@ -131,7 +131,7 @@ export default function EditJob({ job }: { job: IJob }) {
                       onChange={handleChange}
                       value={values.role}
                       placeholder='Enter job role'
-                      className='outline-none p-2 border bg-white'
+                      className='outline-none p-2 border bg-white rounded-lg focus:ring-2 focus:ring-blueNavy'
                     />
                     <ErrorMessage name="name" >{msg => <div className='text-red-500 text-xs mt-1 ml-1'><sup>*</sup>{msg}</div>}</ErrorMessage>
                   </div>
@@ -171,7 +171,7 @@ export default function EditJob({ job }: { job: IJob }) {
                     />
                     <ErrorMessage name="tags" >{msg => <div className='text-red-500 text-xs mt-1 ml-1'><sup>*</sup>{msg}</div>}</ErrorMessage>
                   </div>
-                  <button disabled={isLoading || !dirty} type='submit' className={`${isLoading || !dirty ? 'disabled:opacity-[0.5] disabled:bg-lightBlue text-white' : 'hover:opacity-90'} py-2 px-4 transition ease-linear font-semibold text-white bg-lightBlue self-end`}>
+                  <button disabled={isLoading || !dirty} type='submit' className={`${isLoading || !dirty ? 'disabled:opacity-[0.5] disabled:bg-lightBlue text-white' : 'hover:opacity-90'} rounded-lg py-2 px-4 transition ease-linear font-semibold text-white bg-lightBlue self-end`}>
                     {isLoading ? 'Loading ...' : !dirty ? "You haven't made change yet" : 'Edit'}
                   </button>
                 </div>

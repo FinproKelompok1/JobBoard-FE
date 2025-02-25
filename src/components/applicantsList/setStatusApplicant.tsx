@@ -28,14 +28,18 @@ export default function SetStatusApplicant({ userId, jobId, status }: IProps) {
     <select
       name="status"
       id="status"
-      className="cursor-pointer outline-none"
+      className={`cursor-pointer outline-none px-2 py-1 rounded text-white ${status === 'processed' ? 'bg-orange-500' :
+          status === 'interviewed' ? 'bg-blue-500' :
+            status === 'accepted' ? 'bg-green-500' :
+              'bg-red-500'
+        }`}
       onChange={handleSetStatus}
       value={status}
     >
-      <option value="processed">Processed</option>
-      <option value="interviewed">Interviewed</option>
-      <option value="accepted">Accepted</option>
-      <option value="rejected">Rejected</option>
+      <option value="processed" className="bg-orange-500 text-white">Processed</option>
+      <option value="interviewed" className="bg-blue-500 text-white">Interviewed</option>
+      <option value="accepted" className="bg-green-500 text-white">Accepted</option>
+      <option value="rejected" className="bg-red-500 text-white">Rejected</option>
     </select>
   )
 }

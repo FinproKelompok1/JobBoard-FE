@@ -14,7 +14,7 @@ export default function SelectDate({ handleChange, values }: FormikProps<FormVal
         min={minDate}
         onChange={handleChange}
         value={values.endDate}
-        className='border focus:border-lightBlue focus:border-2 outline-none p-2'
+        className='border outline-none p-2 rounded-lg focus:ring-2 focus:ring-blueNavy'
       />
       <ErrorMessage name="endDate" >{msg => <div className='text-red-500 text-xs mt-1 ml-1'><sup>*</sup>{msg}</div>}</ErrorMessage>
     </>

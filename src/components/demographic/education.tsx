@@ -25,7 +25,7 @@ export default function EducationGraphic({ data }: { data: IEducationDemography[
     education,
   }: ICustomizedLabel) => {
     const RADIAN = Math.PI / 180;
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.65; // Sedikit lebih dalam untuk visibilitas lebih baik
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.65;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
 

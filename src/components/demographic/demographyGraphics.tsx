@@ -9,34 +9,35 @@ import AgeGraphic from "@/components/demographic/age";
 import LocationGraphic from "@/components/demographic/location";
 import { getToken } from "@/libs/token";
 
-export default function demographyGraphics() {
-  const opt = {
+export default function DemographyGraphics() {
+  const options = {
     revalidateOnFocus: false,
     revalidateIfStale: false,
     revalidateOnReconnect: false,
-    revalidateOnMount: true
-  }
-  const token = getToken()
+    revalidateOnMount: true,
+  };
+
+  const token = getToken();
   const fetcher = (url: string) => getDemography(url, token!);
-  const { data } = useSWR<IDemography>("/analytics/total-demographics", fetcher, opt)
+  const { data } = useSWR<IDemography>("/analytics/total-demographics", fetcher, options);
 
   if (!data) {
     return (
-      <div>Loading...</div>
-    )
+      <div className="flex justify-center items-center h-64 text-lg font-semibold text-gray-600">
+        Loading...
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col gap-10 shadow-xl border px-4 my-4 rounded-md">
-      <h1 className="text-xl font-medium mt-2 mb-10">APPLICANTS DEMOGRAPHICS</h1>
-      <div className="md:flex inline-flex flex-col md:flex-row">
+    <div className="flex flex-col gap-8 shadow-lg border border-gray-200 px-6 py-6 my-6 rounded-xl bg-white">
+      <h1 className="text-2xl font-semibold text-gray-800 text-center">Applicants Demographics</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <GenderGraphic data={data.gender} />
         <AgeGraphic data={data.age} />
-      </div>
-      <div className="md:flex inline-flex flex-col md:flex-row">
         <LocationGraphic data={data.location} />
         <EducationGraphic data={data.education} />
       </div>
     </div>
-  )
+  );
 }

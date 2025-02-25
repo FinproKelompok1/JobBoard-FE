@@ -88,20 +88,20 @@ export default function ApplicantFilter({
     setSearch(search)
   }, [search])
   return (
-    <div className="flex items-center flex-wrap gap-4 mt-2">
+    <div className="flex flex-wrap gap-4 mt-4 p-4 items-center bg-white shadow-md rounded-lg">
       <input
         onChange={handleSearch}
         type="text"
         placeholder="Search Name"
         name="name"
-        className="px-2 py-1 outline-none border"
+        className="px-4 py-2 rounded-lg outline-none border"
       />
       <div className="inline-flex items-center gap-2">
         <select
           onChange={handleEdu}
           name="last_edu"
           id="last_edu"
-          className="outline-none px-2 py-1 border cursor-pointer"
+          className="outline-none px-4 py-2 rounded-lg border cursor-pointer"
           value={tempEdu}
         >
           <option value="" disabled>filter by education</option>
@@ -126,8 +126,8 @@ export default function ApplicantFilter({
       </div>
       <div className="dropdown">
         <button tabIndex={0} role="button" className="p-2 rounded-full hover:bg-slate-200 transition duration-200"><FiFilter /></button>
-        <ul tabIndex={0} className="dropdown-content menu bg-base-100 z-[1] w-fit p-2 shadow">
-          <div className="flex items-center gap-2">
+        <ul tabIndex={0} className="dropdown-content menu bg-base-100 z-[1] shadow">
+          <div className="flex items-center">
             <SalaryRange
               setTempMinSalary={setTempMinSalary}
               setTempMaxSalary={setTempMaxSalary}
@@ -136,7 +136,7 @@ export default function ApplicantFilter({
               tempMaxSalary={tempMaxSalary}
             />
           </div>
-          <div className="flex gap-2 items-center mt-4">
+          <div className="flex items-center mt-4">
             <AgeRange
               setTempMinAge={setTempMinAge}
               setTempMaxAge={setTempMaxAge}

@@ -32,13 +32,13 @@ export default function JobsList() {
 
   return (
     <>
-      <div className="flex justify-between">
+      <div className="flex justify-between flex-wrap gap-2">
         <input
           onChange={handleSearch}
           placeholder="Search job title or category" type="search"
-          className="border-2 px-2 w-[25rem] focus:border-blueNavy hover:border-blueNavy outline-none transition duration-200"
+          className="border-2 p-2 rounded-lg w-[25rem] focus:border-blueNavy hover:border-blueNavy outline-none transition duration-200"
         />
-        <Link href={'/admin/create-job'} className="text-white bg-pink py-2 px-4 font-medium hover:bg-pink/85">Create a job</Link>
+        <Link href={'/admin/create-job'} className="text-white rounded-lg bg-pink py-2 px-4 font-medium hover:bg-pink/85">Create a job</Link>
       </div>
       <div className="dropdown mt-10">
         <button tabIndex={0} role="button" className="p-2 hover:bg-slate-200 transition duration-200 rounded-full"><TbArrowsSort /></button>

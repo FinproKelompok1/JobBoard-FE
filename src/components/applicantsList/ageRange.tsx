@@ -1,9 +1,9 @@
 interface IProps {
-  setTempMinAge: (param: string) => void
-  setTempMaxAge: (param: string) => void
-  applyAge: () => void
-  tempMinAge: string
-  tempMaxAge: string
+  setTempMinAge: (param: string) => void;
+  setTempMaxAge: (param: string) => void;
+  applyAge: () => void;
+  tempMinAge: string;
+  tempMaxAge: string;
 }
 
 export default function AgeRange({
@@ -11,37 +11,37 @@ export default function AgeRange({
   setTempMaxAge,
   applyAge,
   tempMinAge,
-  tempMaxAge
+  tempMaxAge,
 }: IProps) {
   return (
-    <>
+    <div className="flex flex-col md:flex-row items-center gap-2 rounded-lg shadow-sm bg-white max-w-md">
       <input
         type="number"
         min={0}
         max={100}
         name="min_age"
-        placeholder="Age"
+        placeholder="Min Age"
         value={tempMinAge}
         onChange={(e) => setTempMinAge(e.target.value)}
-        className="outline-none px-2 py-1 border w-16"
+        className="w-full md:w-auto flex-1 px-3 py-2 border text-xs border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <span>between</span>
+      <span className="text-gray-500">to</span>
       <input
         type="number"
         min={0}
         max={100}
         name="max_age"
-        placeholder="Age"
+        placeholder="Max Age"
         value={tempMaxAge}
         onChange={(e) => setTempMaxAge(e.target.value)}
-        className="outline-none px-2 py-1 border w-16"
+        className="w-full md:w-auto flex-1 px-3 py-2 border text-xs border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
       />
       <button
         onClick={applyAge}
-        className="px-2 py-1 text-xs bg-pink text-white font-semibold"
+        className="px-4 py-2 text-xs bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-all"
       >
         APPLY
       </button>
-    </>
-  )
+    </div>
+  );
 }

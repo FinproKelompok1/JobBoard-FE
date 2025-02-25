@@ -14,7 +14,7 @@ interface IProps {
   setProvinceId: (key: string) => void
 }
 
-export default function SetLocation({ formikProps, setProvinceId }: IProps) {
+export default function SetProvince({ formikProps, setProvinceId }: IProps) {
   const [province, setProvince] = useState<IProvince[]>([])
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export default function SetLocation({ formikProps, setProvinceId }: IProps) {
           if (selectedProvince) setProvinceId(selectedProvince.id)
         }}
         value={formikProps.values.province}
-        className='outline-none px-2 cursor-pointer appearance-none border py-2'
+        className='outline-none px-2 cursor-pointer appearance-none border py-2 rounded-lg focus:ring-2 focus:ring-blueNavy'
       >
         <option value={''} disabled className='text-black/50'>
           Select Province

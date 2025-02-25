@@ -23,7 +23,7 @@ export default function SelectWage({ setFieldValue, values }: FormikProps<FormVa
         onChange={handlePriceChange}
         onKeyDown={handleKeyDown}
         value={formatRupiahTanpaDesimal(Number(values.salary) || 0)}
-        className='outline-none p-2 border bg-white placeholder:text-black'
+        className='outline-none p-2 border bg-white placeholder:text-black rounded-lg focus:ring-2 focus:ring-blueNavy'
       />
     </>
   )

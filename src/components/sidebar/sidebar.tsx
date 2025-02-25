@@ -12,8 +12,8 @@ import { PiSignOutFill } from "react-icons/pi";
 import { logOut } from "@/helpers/logout";
 
 export default function Sidebar() {
-  const [SidebarOpen, setSidebarOpen] = useState<boolean>(true);
-  const [contentOpen, setContentOpen] = useState<boolean>(true);
+  const [SidebarOpen, setSidebarOpen] = useState<boolean>(false);
+  const [contentOpen, setContentOpen] = useState<boolean>(false);
   const pathname = usePathname();
 
   const toggleSidebar = () => {
@@ -46,8 +46,8 @@ export default function Sidebar() {
             <Image
               src="/favico-white.png"
               alt="TalentBridge"
-              width={40}
-              height={40}
+              width={35}
+              height={35}
             />
           )}
         </Link>

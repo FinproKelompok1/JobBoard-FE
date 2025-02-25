@@ -41,6 +41,7 @@ export default function GenderGraphic({ data }: { data: IGenderDemography[] }) {
         fill="white"
         textAnchor={x > cx ? "start" : "end"}
         dominantBaseline="central"
+        fontWeight="bold"
       >
         <tspan x={x} dy="-0.5em">{`${type[0].toUpperCase()}${type.slice(1)}`}</tspan>
         <tspan x={x} dy="1.2em">{`${(percent * 100).toFixed(0)}%`}</tspan>
