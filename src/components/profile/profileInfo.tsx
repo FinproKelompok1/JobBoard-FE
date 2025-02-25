@@ -17,8 +17,6 @@ interface ProfileInfoProps {
 export default function ProfileInfo({ user, onUpdate }: ProfileInfoProps) {
   const [showEditForm, setShowEditForm] = useState(false);
 
-  console.log("User data:", user); // Debug log
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto max-w-7xl space-y-6 px-4 py-8">
@@ -28,9 +26,11 @@ export default function ProfileInfo({ user, onUpdate }: ProfileInfoProps) {
             {/* Avatar & Verification */}
             <div className="text-center md:text-left">
               <div className="relative">
-                <img
+                <Image
                   src={user.avatar}
                   alt={user.fullname || user.username}
+                  width={160}
+                  height={160}
                   className="h-40 w-40 rounded-full border-4 border-blue-50 object-cover"
                 />
                 {user.isVerified && (

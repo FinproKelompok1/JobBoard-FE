@@ -36,12 +36,13 @@ export default function SetPreTest({ jobId, isTestValue }: IProps) {
     <select
       name="status"
       id="status"
-      className="cursor-pointer outline-none"
+      className={`cursor-pointer outline-none px-2 py-1 font-medium rounded text-white appearance-none transition-all duration-300 ${isTestValue === Boolean(1) ? "bg-green-500" : "bg-red-500"
+        }`}
       onChange={handleStatusTest}
       value={isTestValue ? 1 : 0}
     >
-      <option value={1}>Active</option>
-      <option value={0}>Unactive</option>
+      <option value={1} >Active</option>
+      <option value={0} >Unactive</option>
     </select>
   )
 }

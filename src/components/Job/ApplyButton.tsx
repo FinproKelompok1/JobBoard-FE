@@ -7,14 +7,14 @@ interface ApplyButtonProps {
   hasApplied: boolean;
   isLoggedIn: boolean;
   onApply: () => void;
-  footerSelector?: string; // Selector for the footer element
+  footerSelector?: string; 
 }
 
 export function ApplyButton({ 
   hasApplied, 
   isLoggedIn,
   onApply,
-  footerSelector = 'footer' // Default selector
+  footerSelector = 'footer' 
 }: ApplyButtonProps) {
   const [isVisible, setIsVisible] = useState(true);
   const buttonRef = useRef(null);
@@ -25,7 +25,6 @@ export function ApplyButton({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Hide button when footer is intersecting
         setIsVisible(!entry.isIntersecting);
       },
       {

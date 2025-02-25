@@ -77,7 +77,7 @@ export default function CreateJob() {
                     onChange={handleChange}
                     value={values.title}
                     placeholder='Enter job title'
-                    className='outline-none p-2 border bg-white'
+                    className='outline-none p-2 border bg-white rounded-lg focus:ring-2 focus:ring-blueNavy'
                   />
                   <ErrorMessage name="title" >{msg => <div className='text-red-500 text-xs mt-1 ml-1'><sup>*</sup>{msg}</div>}</ErrorMessage>
                 </div>
@@ -90,7 +90,7 @@ export default function CreateJob() {
                     onChange={handleChange}
                     value={values.role}
                     placeholder='Enter job role'
-                    className='outline-none p-2 border bg-white'
+                    className='outline-none p-2 border bg-white rounded-lg focus:ring-2 focus:ring-blueNavy'
                   />
                   <ErrorMessage name="role" >{msg => <div className='text-red-500 text-xs mt-1 ml-1'><sup>*</sup>{msg}</div>}</ErrorMessage>
                 </div>
@@ -126,11 +126,11 @@ export default function CreateJob() {
                     onChange={handleChange}
                     value={values.tags}
                     placeholder='Enter job tags, seprated with ","'
-                    className='outline-none p-2 border bg-white'
+                    className='outline-none p-2 border bg-white rounded-lg focus:ring-2 focus:ring-blueNavy'
                   />
                   <ErrorMessage name="tags" >{msg => <div className='text-red-500 text-xs mt-1 ml-1'><sup>*</sup>{msg}</div>}</ErrorMessage>
                 </div>
-                <button disabled={isLoading} type='submit' className={`${isLoading ? 'disabled:opacity-[0.5] disabled:bg-lightBlue text-white' : 'hover:opacity-90'} py-2 px-4 transition ease-linear font-semibold text-white bg-lightBlue self-end`}>
+                <button disabled={isLoading} type='submit' className={`${isLoading ? 'disabled:opacity-[0.5] disabled:bg-lightBlue text-white' : 'hover:opacity-90'} rounded-lg py-2 px-4 transition ease-linear font-semibold text-white bg-lightBlue self-end`}>
                   {isLoading ? 'Loading ...' : 'Create Job'}
                 </button>
               </div>

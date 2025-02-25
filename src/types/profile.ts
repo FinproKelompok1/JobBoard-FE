@@ -61,8 +61,8 @@ export interface UserProfile {
   gender: Gender | null;
   dob: string | null;
   lastEdu: LastEdu | null;
-  province: string | null; // tambah ini
-  city: string | null; // tambah ini
+  province: string | null;
+  city: string | null;
   CurriculumVitae: CurriculumVitae[];
   JobApplication: JobApplication[];
   createdAt: string;

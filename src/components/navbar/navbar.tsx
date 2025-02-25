@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import NavLinks from "./navlink";
 import Link from "next/link";
+import Image from "next/image";
 import useCookie from "@/hooks/useCookie";
 
 interface NavbarProps {
@@ -71,7 +72,6 @@ export default function Navbar({ isHomePage }: NavbarProps) {
     window.location.href = "/";
   };
 
-  // Get navbar background class based on conditions
   const getNavbarClass = () => {
     if (isHomePage && !isScrolled) {
       return "bg-transparent";
@@ -79,7 +79,6 @@ export default function Navbar({ isHomePage }: NavbarProps) {
     return "bg-[#FFFFFF] shadow-lg";
   };
 
-  // Get desktop text color
   const desktopTextColor = isHomePage
     ? isScrolled
       ? "text-[#0D3880]"
@@ -101,9 +100,11 @@ export default function Navbar({ isHomePage }: NavbarProps) {
         >
           <div className="h-8 w-8 overflow-hidden rounded-full bg-gray-200">
             {userH.profilePicture ? (
-              <img
+              <Image
                 src={userH.profilePicture}
                 alt="Profile"
+                width={32}
+                height={32}
                 className="h-full w-full object-cover"
               />
             ) : (
@@ -189,18 +190,22 @@ export default function Navbar({ isHomePage }: NavbarProps) {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center">
-            <img
+            <Image
               src={
                 isHomePage && !isScrolled
                   ? "/logo-title-white.png"
                   : "/logo-title-colored.png"
               }
               alt="TalentBridge Logo"
+              width={144}
+              height={48}
               className="hidden h-12 md:block"
             />
-            <img
+            <Image
               src="/logo-title-colored.png"
               alt="TalentBridge Logo"
+              width={144}
+              height={48}
               className="h-12 md:hidden"
             />
           </Link>

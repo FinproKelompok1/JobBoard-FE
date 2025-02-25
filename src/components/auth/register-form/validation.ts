@@ -4,7 +4,7 @@ export const userValidationSchema = Yup.object().shape({
   email: Yup.string()
     .email("Invalid email format")
     .required("Email is required"),
-  username: Yup.string(),
+  username: Yup.string().required("Username is required"),
   password: Yup.string()
     .min(8, "Password must be at least 8 characters")
     .max(20, "Password cannot exceed 20 characters")
@@ -45,7 +45,7 @@ export const adminValidationSchema = Yup.object().shape({
         .max(50, "Company Name cannot exceed 50 characters"),
     otherwise: (schema) => schema.notRequired(),
   }),
-  phone: Yup.string().when("isCompany", {
+  phoneNumber: Yup.string().when("isCompany", {
     is: true,
     then: (schema) =>
       schema

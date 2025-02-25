@@ -1,45 +1,74 @@
-'use client';
+"use client";
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import { toast } from 'react-toastify';
-import  { isAxiosError } from 'axios';
-import { useEffect } from 'react';
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { isAxiosError } from "axios";
+import { useEffect, useState } from "react";
+import { verifyEmailChange } from "@/libs/auth";
 
 export default function VerifyEmailChangePage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const [token, setToken] = useState<string | null>(null);
+  const [status, setStatus] = useState("Verifying...");
+
+  // Dapatkan token dari URL saat komponen dimount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      setToken(urlParams.get("token"));
+    }
+  }, []);
 
   useEffect(() => {
-    const verifyEmailChange = async () => {
+    const verify = async () => {
       try {
-        setTimeout(() => {
-          router.push('/profile');
-        }, 3000);
-        
-        toast.success('Email changed successfully!');
-      } catch (error: unknown) {
-        if (isAxiosError(error)) {
-          toast.error(error.response?.data?.message || 'Email change verification failed');
-        } else {
-          toast.error('Email change verification failed');
+        if (!token) {
+          // Skip verifikasi jika token belum diambil dari URL
+          if (token === null && typeof window === 'undefined') return;
+          
+          toast.error("Verification token is missing");
+          setStatus("Failed: Token missing");
+          return;
         }
+
+        const response = await verifyEmailChange(token);
+        if (response.success) {
+          setStatus("Success: Email verified");
+          toast.success("Email changed successfully!");
+
+          setTimeout(() => {
+            window.location.href = "/profile";
+          }, 2000);
+        }
+      } catch (error) {
+        if (isAxiosError(error)) {
+          const errorMessage =
+            error.response?.data?.message || "Email change verification failed";
+          setStatus(`Failed: ${errorMessage}`);
+          toast.error(errorMessage);
+        } else {
+          setStatus("Failed: Unknown error");
+          toast.error("Email change verification failed");
+        }
+
+        setTimeout(() => {
+          router.push("/profile");
+        }, 3000);
       }
     };
 
-    verifyEmailChange();
-  }, [router, searchParams]);
+    verify();
+  }, [token, router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full p-8 bg-white rounded-lg shadow-md text-center">
-        <h2 className="text-2xl font-bold text-[#0D3880] mb-4">
-          Email Changed Successfully!
+    <div className="flex min-h-screen items-center justify-center bg-gray-50">
+      <div className="w-full max-w-md rounded-lg bg-white p-8 text-center shadow-md">
+        <h2 className="mb-4 text-2xl font-bold text-[#0D3880]">
+          Verifying Email Change
         </h2>
-        <p className="text-gray-600 mb-4">
-          Your email has been verified and updated.
-        </p>
+        <p className="mb-4 text-gray-600">{status}</p>
         <p className="text-sm text-gray-500">
-          Redirecting to profile page in a few seconds...
+          You will be redirected to your profile page shortly.
         </p>
       </div>
     </div>

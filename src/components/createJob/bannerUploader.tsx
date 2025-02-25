@@ -43,7 +43,7 @@ export const BannerUploader: React.FC<BannerUploader> = ({
       {!previewUrl ? (
         <div
           onClick={() => imgRef.current?.click()}
-          className="relative w-full h-full cursor-pointer bg-center bg-cover"
+          className="relative w-full h-full cursor-pointer bg-center bg-cover rounded-lg overflow-hidden"
         >
           <Image src={'https://assets.loket.com/images/banner-event.jpg'} alt="Banner Job" fill />
           <div className="absolute gap-2 flex flex-col items-center top-[50%] right-[50%] translate-x-[50%] -translate-y-[50%]">
@@ -57,7 +57,7 @@ export const BannerUploader: React.FC<BannerUploader> = ({
       ) : (
         <div
           onClick={() => imgRef.current?.click()}
-          className="overflow-hidden w-full h-full relative cursor-pointer"
+          className="overflow-hidden w-full h-full relative cursor-pointer rounded-lg"
         >
           <Image
             src={previewUrl}

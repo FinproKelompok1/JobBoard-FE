@@ -12,7 +12,7 @@ export default function SelectCategory({ handleChange, values }: FormikProps<For
         id='category'
         onChange={handleChange}
         value={values.category}
-        className='outline-none px-2 cursor-pointer appearance-none border py-2'
+        className='outline-none px-2 cursor-pointer appearance-none border py-2 rounded-lg focus:ring-2 focus:ring-blueNavy'
       >
         <option value={''} disabled className='text-black/50'>
           Select Category

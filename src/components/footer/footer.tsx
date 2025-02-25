@@ -1,6 +1,7 @@
 'use client'
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Briefcase,
   Building2,
@@ -18,11 +19,15 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Brand Section */}
           <div className="space-y-4">
-            <img
-              src="/logo-title-white.png"
-              alt="TalentBridge Logo"
-              className="h-10"
-            />
+            <div className="relative h-10 w-auto">
+              <Image
+                src="/logo-title-white.png"
+                alt="TalentBridge Logo"
+                width={180}
+                height={40}
+                className="h-10 w-auto"
+              />
+            </div>
             <p className="text-sm text-gray-300 font-light">
               Transforming careers, building futures.
               We connect extraordinary talent with visionary companies.

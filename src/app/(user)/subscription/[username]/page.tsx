@@ -54,12 +54,9 @@ export default function UserSubscription({
       toast.success(data.message);
       router.push(`/transaction/${data.transactionId}`);
     } catch (error) {
-      console.log("Error renew subscription:", error);
       toastErrAxios(error);
     }
   };
-
-  console.log("user subs:", userSubscription);
 
   return (
     <main className="min-h-screen bg-gray-50">

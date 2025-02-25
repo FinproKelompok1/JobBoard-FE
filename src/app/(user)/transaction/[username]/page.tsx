@@ -23,8 +23,6 @@ export default async function UserTransaction({
     params.username,
   );
 
-  console.log("user transaction:", userTransactions);
-
   return (
     <main className="min-h-screen md:bg-gray-50">
       <div className="mt-5 md:mt-10">

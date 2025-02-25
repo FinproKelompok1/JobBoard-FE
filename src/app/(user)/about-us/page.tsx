@@ -1,9 +1,22 @@
 'use client'
+
 import React from 'react';
 import { FaInstagram, FaLinkedin } from 'react-icons/fa';
 import Link from 'next/link';
+import Image from 'next/image';
+import LoadingPage from '@/components/loading'; 
 
 export default function AboutUs() {
+  const [isLoading, setIsLoading] = React.useState(true);
+  
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
   const team = [
     {
       name: "Tsania Millatina Aghnia Fariha",
@@ -27,10 +40,14 @@ export default function AboutUs() {
       linkedin: "Wildan",
     }
   ];
-
+  
+  if (isLoading) {
+    return <LoadingPage isLoading={true} />;
+  }
+  
   return (
     <div className="min-h-screen bg-white">
-
+      
       <div className="pt-16 pb-12">
         <div className="container mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto">
@@ -43,8 +60,7 @@ export default function AboutUs() {
           </div>
         </div>
       </div>
-
-
+      
       <div className="container mx-auto px-6 pb-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {team.map((member, index) => (
@@ -52,20 +68,22 @@ export default function AboutUs() {
               key={index}
               className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
-
-              <div className="h-72 bg-gray-100">
-                <img
+              
+              <div className="h-72 bg-gray-100 relative">
+                <Image
                   src={`/api/placeholder/400/400`}
                   alt={member.name}
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover"
                 />
               </div>
-            
+              
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-gray-900">{member.name}</h3>
                 <p className="text-[#0D3880] font-medium mt-1">{member.role}</p>
                 <p className="text-gray-600 mt-4 text-sm">{member.description}</p>
-
+                
                 <div className="flex items-center space-x-4 mt-6">
                   <Link 
                     href={`https://instagram.com/${member.instagram}`}

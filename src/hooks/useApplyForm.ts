@@ -2,7 +2,10 @@ import { useState } from "react";
 import { applyJob } from "@/libs/jobdis";
 import { toast } from "react-toastify";
 
-export const useApplyForm = (jobId: string) => {
+export const useApplyForm = (
+  jobId: string,
+  setIsSubmitted: (param: boolean) => void,
+) => {
   const [expectedSalary, setExpectedSalary] = useState<string>("");
   const [formattedSalary, setFormattedSalary] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
@@ -52,6 +55,7 @@ export const useApplyForm = (jobId: string) => {
 
       await applyJob(jobId, formData, token);
       toast.success("Application submitted successfully");
+      setIsSubmitted(true);
     } catch (error: unknown) {
       console.error("Submit error:", error);
 

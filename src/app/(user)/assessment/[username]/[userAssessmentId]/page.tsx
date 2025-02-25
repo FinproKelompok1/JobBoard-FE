@@ -41,7 +41,7 @@ export default function UserAssessmentForm({
     };
 
     fetchData();
-  }, []);
+  }, [params.userAssessmentId]);
 
   useEffect(() => {
     if (!userAssessment) return;
@@ -68,12 +68,11 @@ export default function UserAssessmentForm({
     const interval = setInterval(updateCountDown, 1000);
 
     return () => clearInterval(interval);
-  }, [userAssessment]);
+  }, [userAssessment, router]);
 
   const handleChange = (questionId: number, option: string) => {
     setAnswer((prev) => {
       const updatedAnswer = { ...prev, [questionId]: option };
-      console.log("Selected answer:", updatedAnswer);
       return updatedAnswer;
     });
   };
@@ -108,7 +107,6 @@ export default function UserAssessmentForm({
         `/assessment/${userAssessment.User.username}/${params.userAssessmentId}/result`,
       );
     } catch (error) {
-      console.error("Failed to submit answer:", error);
       toastErrAxios(error);
     } finally {
       setIsSubmitting(false);

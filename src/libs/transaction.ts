@@ -13,7 +13,6 @@ export async function getTransactions({
     const response = await axios.get("/transactions", {
       params: { page, limit, sort, order, status, email },
     });
-    console.log("get transactions response:", response.data.transactions);
     return {
       transactions: response.data.transactions,
       totalPages: response.data.totalPages,
@@ -40,7 +39,6 @@ export async function getTransactionToken(id: string, amount: number) {
       .split("; ")
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
-    console.log("token", token);
     const { data } = await axios.post(
       "/transactions/payment",
       {
@@ -55,7 +53,6 @@ export async function getTransactionToken(id: string, amount: number) {
     );
     return data.transactionToken;
   } catch (error) {
-    console.error("Error get transaction token:", error);
     toastErrAxios(error);
   }
 }

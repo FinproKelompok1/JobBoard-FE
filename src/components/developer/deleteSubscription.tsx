@@ -25,7 +25,7 @@ export default function DeleteSubscription({
       }
     };
     fetchSubsUser();
-  }, []);
+  }, [subscriptionId]);
 
   const handleDeleteSubscription = async () => {
     if (!deleteSubsId) return;
@@ -41,7 +41,6 @@ export default function DeleteSubscription({
       await deleteSubscription(deleteSubsId);
       toast.success(`Subscription ID ${deleteSubsId} deleted successfully`);
     } catch (error) {
-      console.log("Error deleting subscription:", error);
       toastErrAxios(error);
     } finally {
       setIsDeleting(false);

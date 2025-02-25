@@ -1,4 +1,3 @@
-// components/apply/Sidebar.tsx
 import { Info, CheckCircle, AlertTriangle } from 'lucide-react';
 
 export function ApplicationGuidelines() {
@@ -47,7 +46,7 @@ export function ContactSupport() {
     <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
       <h3 className="text-sm font-medium text-gray-700 mb-2">Need Help?</h3>
       <p className="text-sm text-gray-600 mb-4">
-        If you're experiencing any issues, our support team is here to help. Click below to send us an email.
+        If you&apos;re experiencing any issues, our support team is here to help. Click below to send us an email.
       </p>
       <a 
         href="mailto:finprokelompok1@gmail.com" 

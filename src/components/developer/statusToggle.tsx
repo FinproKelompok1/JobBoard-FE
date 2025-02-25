@@ -32,7 +32,6 @@ export default function StatusToggle({
       toast.success(response.data.message);
       router.refresh();
     } catch (error) {
-      console.error("Error switch assessment's status:", error);
       toastErrAxios(error);
     }
   };

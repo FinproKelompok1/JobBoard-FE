@@ -38,7 +38,7 @@ export default function SelectCity({ formikProps, provinceId }: IProps) {
         id='city'
         onChange={formikProps.handleChange}
         value={formikProps.values.city}
-        className='outline-none px-2 cursor-pointer appearance-none border py-2'
+        className='outline-none px-2 cursor-pointer appearance-none border py-2 rounded-lg focus:ring-2 focus:ring-blueNavy'
       >
         <option value={''} disabled className='text-black/50'>
           Select City

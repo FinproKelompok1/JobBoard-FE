@@ -1,18 +1,19 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import LoadingPage from "@/components/loading";
 import axios from "@/helpers/axios";
 
 export default function GoogleCallback() {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        const code = searchParams.get("code");
+        // Get code parameter from URL using browser's URLSearchParams API
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get("code");
 
         if (!code) {
           router.push("/login?error=No authorization code received");
@@ -24,8 +25,7 @@ export default function GoogleCallback() {
 
         const response = await axios.get(fullUrl);
         let userRole;
-        document.cookie =
-          "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+        document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
 
         if (response.data.admin) {
           document.cookie = `user=${JSON.stringify({
@@ -49,12 +49,13 @@ export default function GoogleCallback() {
         }
       } catch (error) {
         console.error("Authentication error:", error);
-        // router.push('/login?error=Authentication failed');
       }
     };
 
-    handleCallback();
-  }, [router, searchParams]);
+    if (typeof window !== 'undefined') {
+      handleCallback();
+    }
+  }, [router]);
 
   return <LoadingPage />;
 }

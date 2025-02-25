@@ -1,5 +1,6 @@
 import { Job, JobCategory } from '@/types/jobdis';
 import Link from 'next/link';
+import Image from 'next/image';
 import DOMPurify from 'dompurify';
 
 interface JobCardProps {
@@ -20,11 +21,15 @@ export default function JobCard({ job, getCategoryIcon, CurrencyFormatter }: Job
       <div className="flex items-start space-x-3 mb-3">
         <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
           {job.admin?.logo ? (
-            <img 
-              src={job.admin.logo} 
-              alt={job.admin?.companyName} 
-              className="w-full h-full object-cover"
-            />
+            <div className="relative w-full h-full">
+              <Image 
+                src={job.admin.logo} 
+                alt={job.admin?.companyName || 'Company logo'} 
+                fill
+                sizes="40px"
+                className="object-cover"
+              />
+            </div>
           ) : (
             <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500 font-semibold">
               {job.admin?.companyName.charAt(0)}

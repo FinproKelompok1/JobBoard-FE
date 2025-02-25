@@ -19,6 +19,7 @@ export default function Subscription() {
   const router = useRouter();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState<string | null>(null);
 
   const fetchUserProfile = async () => {
     try {
@@ -27,33 +28,42 @@ export default function Subscription() {
       setUser(data);
     } catch (error) {
       toastErrAxios(error);
-      console.error("Error fetch user profile:", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchUserProfile();
+    if (typeof window !== "undefined") {
+      fetchUserProfile();
+    }
   }, []);
 
   useEffect(() => {
-    const fetchSubs = async () => {
-      try {
-        const subscriptions = await getSubscriptions();
-        setSubscriptions(subscriptions);
-      } catch (error) {
-        console.log("Error get subscription:", error);
-      }
-    };
+    if (typeof window !== "undefined") {
+      const fetchSubs = async () => {
+        try {
+          const subscriptions = await getSubscriptions();
+          setSubscriptions(subscriptions);
+        } catch (error) {
+          console.log("Error getting subscriptions:", error);
+        }
+      };
 
-    fetchSubs();
+      fetchSubs();
+    }
   }, []);
 
-  const token = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("token="))
-    ?.split("=")[1];
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        ?.split("=")[1];
+
+      setToken(storedToken || null);
+    }
+  }, []);
 
   const handleSubscribe = async (subscriptionId: number, amount: number) => {
     try {
@@ -74,7 +84,6 @@ export default function Subscription() {
       toast.success(data.message);
       router.push(`/transaction/${data.username}/${data.transactionId}`);
     } catch (error) {
-      console.log("Error subscribe:", error);
       toastErrAxios(error);
     } finally {
       setIsSubscribingId(null);

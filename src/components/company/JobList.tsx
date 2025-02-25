@@ -1,4 +1,3 @@
-// components/company/JobsList.tsx
 import { Job } from '@/types/company';
 import { MapPin, Briefcase } from 'lucide-react';
 import Link from 'next/link';

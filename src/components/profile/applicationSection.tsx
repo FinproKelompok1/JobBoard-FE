@@ -55,7 +55,6 @@ export default function ApplicationsSection({ applications }: ApplicationsSectio
       }
       return response.data;
     } catch (error) {
-      console.error('Error taking job:', error);
       toast.error('Failed to accept job. Please try again.');
       throw error;
     }

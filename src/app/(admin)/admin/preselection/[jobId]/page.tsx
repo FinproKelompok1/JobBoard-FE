@@ -2,8 +2,8 @@ import CreateSelectionTest from "@/components/createSelectionTest/createSelectio
 
 export default function PreselectionTestPage() {
   return (
-    <main>
+    <>
       <CreateSelectionTest />
-    </main>
+    </>
   )
 }

@@ -52,7 +52,7 @@ export default function TransactionDetail({
     };
 
     fetchTransaction();
-  }, []);
+  }, [params.transactionId]);
 
   const handlePaySubscribe = async () => {
     try {
@@ -65,14 +65,10 @@ export default function TransactionDetail({
         transaction.id,
         transaction.amount,
       );
-      console.log("transaction token:", transactionToken);
-      console.log("transaction id:", transaction.id);
-      console.log("transaction amount:", transaction.amount);
       if (transactionToken) {
         window.snap.pay(transactionToken);
       }
     } catch (error) {
-      console.log("Error pay subscribe:", error);
       toastErrAxios(error);
     } finally {
       setIsLoading(false);

@@ -36,6 +36,7 @@
     "yup": "^1.6.1"
   },
   "devDependencies": {
+    "@types/dompurify": "^3.2.0",
     "@types/jsonwebtoken": "^9.0.8",
     "@types/node": "^20",
     "@types/react": "^18",

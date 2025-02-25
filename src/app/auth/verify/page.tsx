@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { authService } from '@/libs/auth';
 import { toastErrAxios } from '@/helpers/toast';
 import axios from 'axios';
@@ -10,15 +10,27 @@ type VerificationStatus = 'loading' | 'success' | 'error' | 'already-verified';
 
 export default function VerifyPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [status, setStatus] = useState<VerificationStatus>('loading');
   const [message, setMessage] = useState('');
+  const [token, setToken] = useState<string | null>(null);
 
+  // Effect untuk mendapatkan token dari URL saat komponen dimount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tokenParam = urlParams.get('token');
+      setToken(tokenParam);
+    }
+  }, []);
+
+  // Effect untuk memverifikasi email setelah token didapatkan
   useEffect(() => {
     const verifyEmail = async () => {
       try {
-        const token = searchParams.get('token');
         if (!token) {
+          // Skip verifikasi jika token belum diambil dari URL
+          if (token === null && typeof window === 'undefined') return;
+          
           setStatus('error');
           setMessage('No verification token provided');
           return;
@@ -49,7 +61,7 @@ export default function VerifyPage() {
     };
 
     verifyEmail();
-  }, [router, searchParams]);
+  }, [token, router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">

@@ -4,12 +4,11 @@ import Link from "next/link";
 import { FaFileAlt } from "react-icons/fa";
 import { RiHome4Fill } from "react-icons/ri";
 import { FaPencil, FaUserTie } from "react-icons/fa6";
-// import { logOut } from "@/libs/action";
 // import useSessionOrganizer from "@/hooks/useSessionOrganiser";
 // import UseClickOutside from "@/hooks/useClickOutside";
 import UseOpen from "@/hooks/useOpen";
 import { PiSignOutFill } from "react-icons/pi";
-import { logOut } from "@/helpers/logout";
+import logOut from "@/helpers/logout";
 // import Image from "next/image";
 
 export default function MobileNav() {
@@ -50,19 +49,19 @@ export default function MobileNav() {
           <p className="font-bold">{organizer?.name}</p>
           <p>{organizer?.email}</p>
         </div> */}
-          <Link href={"/organizer/dashboard"} className="flex items-center hover:bg-black/10 p-3" >
+          <Link href={"/admin/dashboard"} className="flex items-center hover:bg-black/10 p-3" >
             <RiHome4Fill className='text-[20px]' />
             <p className="ml-2">Dashboard</p>
           </Link>
-          <Link href={"/organizer/events"} className="flex items-center hover:bg-black/10 p-3" >
+          <Link href={"/admin/job"} className="flex items-center hover:bg-black/10 p-3" >
             <FaFileAlt className='text-[20px]' />
             <p className="ml-2">Jobs</p>
           </Link>
-          <Link href={"/create-event"} className="flex items-center hover:bg-black/10 p-3" >
+          <Link href={"/create-job"} className="flex items-center hover:bg-black/10 p-3" >
             <FaPencil className='text-[20px]' />
             <p className="ml-2">Create Job</p>
           </Link>
-          <Link href={"/organizer/bio"} className="flex items-center hover:bg-black/10 p-3" >
+          <Link href={"/admin/profile"} className="flex items-center hover:bg-black/10 p-3" >
             <FaUserTie className='text-[20px]' />
             <p className="ml-2">Profile</p>
           </Link>
@@ -70,7 +69,7 @@ export default function MobileNav() {
             <Link
               href={"#"}
               className="flex items-center text-red-500 font-semibold hover:bg-red-500 p-3 hover:text-white"
-            onClick={logOut}
+              onClick={logOut}
             >
               <PiSignOutFill className='text-[20px]' />
               <p className="ml-2">Log out</p>
