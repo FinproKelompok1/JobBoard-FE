@@ -50,7 +50,6 @@ export default function EditAssesmentQuestion({
       mutate();
       setIsModalOpen(false);
     } catch (error) {
-      console.error("Failed to edit question:", error);
       toastErrAxios(error);
     } finally {
       setIsEditing(false);

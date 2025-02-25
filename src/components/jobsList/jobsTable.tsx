@@ -10,7 +10,6 @@ import axios from "@/helpers/axios"
 import { toast } from "react-toastify"
 import useSWR, { mutate } from "swr"
 import EditJob from "./editJob"
-import { QueryContext } from "./jobsList"
 import TotalApplicants from "./totalApplicants"
 import { sweetAlertWarning } from "@/helpers/sweetAlert"
 import Pagination from "../pagination"
@@ -18,6 +17,7 @@ import SetPublish from "./setPublish"
 import SetPreTest from "./setPreTest"
 import { getToken } from "@/libs/token"
 import Image from "next/image"
+import { QueryContext } from "./jobsListAdmin"
 
 interface ISWR {
   jobs: IJob[],
@@ -132,7 +132,7 @@ export default function JobsTable() {
     <div className="mt-10 flex flex-col items-center">
       <h1 className="font-medium text-2xl">THERE IS NO JOB CREATED</h1>
       <div className="relative w-[20rem] h-[20rem] opacity-60">
-        <Image src={'/job-table-empty.svg'} alt="Table Empty" fill/>
+        <Image src={'/job-table-empty.svg'} alt="Table Empty" fill />
       </div>
     </div>
   )

@@ -17,12 +17,10 @@ export function useLocation() {
       try {
         const parsed = JSON.parse(savedLocation);
         if (parsed && parsed.city && parsed.province) {
-          console.log("Loading saved location from localStorage:", parsed);
           setUserLocation(parsed);
           setShowLocationPrompt(false);
         }
       } catch (e) {
-        console.error("Error parsing saved location", e);
         localStorage.removeItem("userLocation");
       }
     }
@@ -33,7 +31,6 @@ export function useLocation() {
       setIsProcessingLocation(true);
 
       if (!allow) {
-        console.log("User chose not to use location");
         setUserLocation(null);
         setShowLocationPrompt(false);
         return;
@@ -41,8 +38,6 @@ export function useLocation() {
 
       if ("geolocation" in navigator) {
         try {
-          console.log("Getting user location...");
-
           toast.info("Getting your location...", { autoClose: 3000 });
 
           const position = await new Promise<GeolocationPosition>(
@@ -55,11 +50,6 @@ export function useLocation() {
             },
           );
 
-          console.log("Position received:", {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
-
           toast.info("Finding your city...", { autoClose: 3000 });
 
           const response = await fetch(
@@ -67,10 +57,6 @@ export function useLocation() {
           );
 
           const data = await response.json();
-          console.log(
-            "Geocode response components:",
-            data.results?.[0]?.components,
-          );
 
           if (data.results && data.results.length > 0) {
             const components = data.results[0].components;
@@ -135,7 +121,6 @@ export function useLocation() {
                 province: provinceValue ? provinceValue.toUpperCase() : "",
               };
 
-              console.log("Setting location:", locationData);
               localStorage.setItem(
                 "userLocation",
                 JSON.stringify(locationData),
@@ -143,7 +128,6 @@ export function useLocation() {
               setUserLocation(locationData);
               toast.success("Location found!", { autoClose: 3000 });
             } else {
-              console.log("No city-like field found in geocode response");
               toast.warning(
                 "Couldn't determine your city. Showing all jobs instead.",
                 { autoClose: 5000 },
@@ -151,7 +135,6 @@ export function useLocation() {
               setUserLocation(null);
             }
           } else {
-            console.log("No valid geocode results");
             toast.warning(
               "Couldn't translate coordinates to a location. Showing all jobs instead.",
               { autoClose: 5000 },
@@ -159,8 +142,6 @@ export function useLocation() {
             setUserLocation(null);
           }
         } catch (error) {
-          console.error("Error getting location:", error);
-
           if (
             error instanceof GeolocationPositionError &&
             error.code === error.PERMISSION_DENIED
@@ -185,7 +166,6 @@ export function useLocation() {
 
       setShowLocationPrompt(false);
     } catch (error) {
-      console.error("Unexpected error:", error);
       toast.error("An error occurred. Showing latest jobs instead.", {
         autoClose: 5000,
       });

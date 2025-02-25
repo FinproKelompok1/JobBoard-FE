@@ -43,7 +43,6 @@ const SelectProfileCity: React.FC<SelectProfileCityProps> = ({
         const data = await response.json();
         setCities(data);
       } catch (error) {
-        console.error('Error fetching cities:', error);
         setError('Failed to fetch cities');
         setCities([]);
       } finally {

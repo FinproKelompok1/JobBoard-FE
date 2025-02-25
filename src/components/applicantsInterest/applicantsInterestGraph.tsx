@@ -20,7 +20,6 @@ export default function ApplicantsInterestGraph() {
   const { data } = useSWR<IApplicantsInterest>("/analytics/applicant-interest", fetcher, opt);
 
   if (!data) {
-    console.log(data)
     return (
       <div className="text-center py-4 font-medium text-gray-600">Loading...</div>
     );

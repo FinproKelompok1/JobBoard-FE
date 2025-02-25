@@ -93,7 +93,6 @@ export default function JobFilter({
           const data = await response.json();
           setCities(data);
         } catch (error) {
-          console.error('Error fetching cities:', error);
           setCities([]);
         } finally {
           setIsLoading(false);

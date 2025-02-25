@@ -63,7 +63,6 @@ export default function CompaniesPage() {
         setPaginationMeta(response.meta);
       } catch (err) {
         setError('Failed to fetch companies');
-        console.error(err);
       } finally {
         setIsLoading(false);
       }

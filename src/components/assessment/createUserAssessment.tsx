@@ -34,7 +34,6 @@ export default function CreateUserAssessment({
 
       router.push(`/assessment/${username}/${data.userAssessmentId}`);
     } catch (error) {
-      console.error("Error creating user assessment:", error);
       toastErrAxios(error);
     } finally {
       setIsCreating(false);

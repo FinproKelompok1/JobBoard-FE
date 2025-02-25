@@ -70,7 +70,6 @@ export default function UpdateCV({
       toast.success(data.message);
       window.location.reload();
     } catch (error) {
-      console.log("Error edit CV:", error);
       toastErrAxios(error);
     } finally {
       setIsEditing(false);

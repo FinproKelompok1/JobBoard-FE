@@ -21,7 +21,6 @@ export default function SelectProfileProvince({ values, handleChange, setProvinc
       try {
         const response = await fetch('https://muhammadwildansapoetro.github.io/api-wilayah-indonesia/api/provinces.json');
         const data = await response.json();
-        console.log("Provinces data:", data); // Debug log
         setProvinces(data);
       } catch (error) {
         console.error('Error fetching provinces:', error);
@@ -32,7 +31,6 @@ export default function SelectProfileProvince({ values, handleChange, setProvinc
 
   const handleProvinceSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedProvince = provinces.find(p => p.name === e.target.value);
-    console.log("Selected province:", selectedProvince); // Debug log
     if (selectedProvince) {
       setProvinceId(selectedProvince.id);
       handleChange(e);

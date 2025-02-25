@@ -21,10 +21,7 @@ export default function VerifyEmailChangePage() {
           return;
         }
 
-        console.log("Verifying token:", token);
         const response = await verifyEmailChange(token);
-        console.log("Verification response:", response);
-
         if (response.success) {
           setStatus("Success: Email verified");
           toast.success("Email changed successfully!");
@@ -34,7 +31,6 @@ export default function VerifyEmailChangePage() {
           }, 2000);
         }
       } catch (error) {
-        console.error("Verification error:", error);
         if (isAxiosError(error)) {
           const errorMessage =
             error.response?.data?.message || "Email change verification failed";

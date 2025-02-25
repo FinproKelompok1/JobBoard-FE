@@ -17,8 +17,6 @@ interface ProfileInfoProps {
 export default function ProfileInfo({ user, onUpdate }: ProfileInfoProps) {
   const [showEditForm, setShowEditForm] = useState(false);
 
-  console.log("User data:", user); // Debug log
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto max-w-7xl space-y-6 px-4 py-8">

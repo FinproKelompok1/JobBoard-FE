@@ -128,7 +128,7 @@ export default function LoginForm() {
                   Sign in
                 </button>
 
-                <SocialAuth role="" />
+                <SocialAuth />
                 
                 <p className="text-sm text-center text-gray-600 pt-4">
                   Don&apos;t have an account?{' '}

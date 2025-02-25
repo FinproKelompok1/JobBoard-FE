@@ -18,7 +18,6 @@ export default function ProfilePage() {
       setUser(data);
     } catch (err) {
       setError("Failed to load profile");
-      console.error(err);
     } finally {
       setLoading(false);
     }

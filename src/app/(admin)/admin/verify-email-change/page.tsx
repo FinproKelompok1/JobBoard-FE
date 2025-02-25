@@ -36,7 +36,6 @@ export default function VerifyEmailChangePage() {
           window.location.href = redirectPath;
         }, 2000);
       } catch (error) {
-        console.error("Verification error:", error);
         if (isAxiosError(error)) {
           const errorMessage =
             error.response?.data?.message || "Email change verification failed";

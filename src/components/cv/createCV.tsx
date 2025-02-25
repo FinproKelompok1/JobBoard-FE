@@ -52,7 +52,6 @@ export default function CreateCV({
       resetForm();
       window.location.reload();
     } catch (error) {
-      console.log("Error create CV:", error);
       toastErrAxios(error);
     } finally {
       setIsCreating(false);

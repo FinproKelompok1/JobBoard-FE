@@ -9,7 +9,6 @@ export default async function middleware(request: NextRequest) {
     if (!data.isThereTest) return NextResponse.next();
     return NextResponse.redirect(new URL("/admin/job", request.url));
   } catch (err) {
-    console.log("Middleware error : ", err);
     return NextResponse.next();
   }
 }

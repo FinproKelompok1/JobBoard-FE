@@ -38,16 +38,13 @@ export default function LoginDevForm() {
   const handleSubmit = async (values: FormValues, { setSubmitting }: SubmitHelpers) => {
     try {
       setError("");
-      console.log(values);
       const response = await authService.loginDeveloper({
         email: values.email,
         password: values.password,
         otpToken: values.otp,
       });
-      console.log(response);
       router.push("/developer");
     } catch (error: unknown) {
-      console.log(error);
       const errorObj = error as { response?: { data?: { message?: string } } };
       const errorMessage = errorObj.response?.data?.message || "Login failed";
       setError(errorMessage);

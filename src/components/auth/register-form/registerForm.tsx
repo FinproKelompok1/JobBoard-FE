@@ -42,7 +42,6 @@ export default function RegisterForm() {
 
   const handleSubmit = async (values: FormValues, { setSubmitting, setFieldError }: SubmitHelpers) => {
     try {
-      console.log(values)
       setError('');
       if (userType === 'admin') {
         await authService.registerAdmin({
@@ -80,7 +79,6 @@ export default function RegisterForm() {
       } else {
         setError(errorMessage);
       }
-      console.log(error)
     } finally {
       setSubmitting(false);
     }
