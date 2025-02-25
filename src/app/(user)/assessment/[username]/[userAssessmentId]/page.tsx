@@ -41,7 +41,7 @@ export default function UserAssessmentForm({
     };
 
     fetchData();
-  }, []);
+  }, [params.userAssessmentId]);
 
   useEffect(() => {
     if (!userAssessment) return;
@@ -68,7 +68,7 @@ export default function UserAssessmentForm({
     const interval = setInterval(updateCountDown, 1000);
 
     return () => clearInterval(interval);
-  }, [userAssessment]);
+  }, [userAssessment, router]);
 
   const handleChange = (questionId: number, option: string) => {
     setAnswer((prev) => {

@@ -43,7 +43,7 @@ export default function EditSubscription({
     };
 
     fetchSubscription();
-  }, []);
+  }, [subscriptionId]);
 
   const initialValues: ISubscriptionForm = {
     category: subscription?.category || "",

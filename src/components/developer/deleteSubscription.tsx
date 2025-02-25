@@ -25,7 +25,7 @@ export default function DeleteSubscription({
       }
     };
     fetchSubsUser();
-  }, []);
+  }, [subscriptionId]);
 
   const handleDeleteSubscription = async () => {
     if (!deleteSubsId) return;

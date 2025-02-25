@@ -2,6 +2,7 @@ import { Job } from '@/types/jobdis';
 import { getCategoryIcon } from '@/helpers/category';
 import { CurrencyFormatter } from '@/helpers/currencryFormatter';
 import { Briefcase, MapPin, DollarSign } from 'lucide-react';
+import Image from 'next/image';
 
 interface JobDetailHeroProps {
   job: Job;
@@ -13,11 +14,16 @@ export function JobDetailHero({ job }: JobDetailHeroProps) {
       <div className="relative h-64">
         {job.banner ? (
           <>
-            <img 
-              src={job.banner} 
-              alt={`${job.title} banner`}
-              className="w-full h-full object-cover"
-            />
+            <div className="relative w-full h-full">
+              <Image 
+                src={job.banner} 
+                alt={`${job.title} banner`}
+                fill
+                sizes="(max-width: 768px) 100vw, 1200px"
+                priority
+                className="object-cover"
+              />
+            </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/35 to-black/10" />
           </>
         ) : (

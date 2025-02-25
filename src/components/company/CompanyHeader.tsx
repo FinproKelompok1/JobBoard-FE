@@ -1,5 +1,6 @@
 import { Building2, Briefcase, Calendar } from 'lucide-react';
 import { CompanyDetail } from '@/types/company';
+import Image from 'next/image';
 
 interface CompanyHeaderProps {
   company: CompanyDetail;
@@ -16,11 +17,15 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
           <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6">
             <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gray-50 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center border border-gray-100 shadow-sm mb-4 sm:mb-0">
               {company.logo ? (
-                <img 
-                  src={company.logo} 
-                  alt={company.companyName}
-                  className="w-full h-full object-cover"
-                />
+                <div className="relative w-full h-full">
+                  <Image 
+                    src={company.logo} 
+                    alt={company.companyName}
+                    fill
+                    sizes="(max-width: 640px) 96px, 128px"
+                    className="object-cover"
+                  />
+                </div>
               ) : (
                 <Building2 className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400" />
               )}

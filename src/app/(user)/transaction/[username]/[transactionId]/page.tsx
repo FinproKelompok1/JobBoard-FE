@@ -52,7 +52,7 @@ export default function TransactionDetail({
     };
 
     fetchTransaction();
-  }, []);
+  }, [params.transactionId]);
 
   const handlePaySubscribe = async () => {
     try {

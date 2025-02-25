@@ -1,16 +1,23 @@
 'use client'
+
 import React from 'react';
+import Image from 'next/image';
 import JobFilter from './filter';
 
 export default function Hero() {
   return (
     <div className="relative min-h-screen">
       <div className="absolute inset-0">
-        <img 
-          src="/hero.jpg" 
-          alt="Professional working" 
-          className="w-full h-full object-cover"
-        />
+        <div className="relative w-full h-full">
+          <Image
+            src="/hero.jpg"
+            alt="Professional working"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        </div>
         <div className="absolute inset-0 bg-[#000000]/60" />
       </div>
       
@@ -27,7 +34,7 @@ export default function Hero() {
           <p className="text-[#FFFFFF]/90 text-lg md:text-xl max-w-2xl mb-12">
             Discover opportunities that match your skills and aspirations. Your next career move is just a click away.
           </p>
-
+  
           <div className="grid md:grid-cols-3 gap-4">
             <div className="bg-[#0D3880]/90 backdrop-blur-sm p-6 rounded-lg hover:bg-[#0D3880] transition-all cursor-pointer border border-white/10">
               <h3 className="text-[#FFFFFF] text-2xl font-bold mb-2">Search Jobs</h3>
@@ -38,12 +45,12 @@ export default function Hero() {
                 </svg>
               </p>
             </div>
-
+            
             <div className="bg-[#E60278]/90 backdrop-blur-sm p-6 rounded-lg hover:bg-[#E60278] transition-all cursor-pointer border border-white/10">
               <h3 className="text-[#FFFFFF] text-2xl font-bold mb-2">Create Profile</h3>
               <p className="text-[#FFFFFF]/90">Showcase Your Skills</p>
             </div>
-
+            
             <div className="bg-[#0D3880]/90 backdrop-blur-sm p-6 rounded-lg hover:bg-[#0D3880] transition-all cursor-pointer border border-white/10">
               <h3 className="text-[#FFFFFF] text-2xl font-bold mb-2">Find Talents</h3>
               <p className="text-[#FFFFFF]/90 flex items-center">
@@ -55,11 +62,11 @@ export default function Hero() {
             </div>
           </div>
         </div>
-
+        
         <div className="bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20">
-        <JobFilter isHero={true} />
+          <JobFilter isHero={true} />
+        </div>
       </div>
-    </div>
     </div>
   );
 }

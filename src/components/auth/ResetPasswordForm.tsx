@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Formik, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import FormInput from './formInput';
@@ -28,14 +28,26 @@ interface FormValues {
 
 export default function ResetPasswordForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [resetSuccess, setResetSuccess] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
+  const [isCompany, setIsCompany] = useState(false);
 
-  const token = searchParams.get('token');
-  const isCompany = searchParams.get('isCompany') === 'true';
+  // Dapatkan parameter dari URL saat komponen dimount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tokenParam = urlParams.get('token');
+      const isCompanyParam = urlParams.get('isCompany') === 'true';
+      
+      setToken(tokenParam);
+      setIsCompany(isCompanyParam);
+    }
+  }, []);
 
   useEffect(() => {
+    if (token === null) return; // Skip jika token belum diambil
+    
     if (!token) {
       toast.error('Invalid or missing reset token');
       router.push('/auth/login');
@@ -75,6 +87,20 @@ export default function ResetPasswordForm() {
       setSubmitting(false);
     }
   };
+
+  if (token === null) {
+    // Token belum diambil, loading state
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50">
+        <div className="w-full max-w-md p-8">
+          <div className="bg-white p-8 rounded-xl shadow-lg text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0D3880] mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!token) {
     return null;
