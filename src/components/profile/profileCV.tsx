@@ -21,7 +21,6 @@ interface ProfileEditFormProps {
   onUpdate: () => void;
 }
 
-// Updated FormData to include more specific type for index signature
 interface FormData {
   fullname: string;
   gender: string;
@@ -139,7 +138,6 @@ export default function ProfileEditForm({
       });
       setShowEmailDialog(false);
     } catch {
-      // Error handling sudah ditangani oleh toastErrAxios di fungsi changeEmail
     } finally {
       setLoading(false);
     }
