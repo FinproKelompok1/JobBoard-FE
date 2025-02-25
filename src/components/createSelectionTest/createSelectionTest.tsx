@@ -22,7 +22,9 @@ export default function CreateSelectionTest() {
     try {
       setIsLoading(true);
       const { data } = await axios.post('/preselection', { ...preselection, jobId });
+      const statusPreselection = await axios.patch(`/preselection/active/${jobId}`, { isTestActive: true })
       toast.success(data.message);
+      toast.success(statusPreselection.data.message);
       router.push('/admin/job');
     } catch (err: unknown) {
       toastErrAxios(err);
