@@ -53,7 +53,6 @@ export default function Sidebar() {
         </Link>
       </div>
 
-      {/* menu sidebar */}
       <div className="grow">
         <div className="mb-4 flex flex-col">
           <h1

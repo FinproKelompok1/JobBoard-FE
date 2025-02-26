@@ -27,7 +27,6 @@ export default function CompanyCard({ company }: CompanyCardProps) {
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow transition-all duration-300 w-full max-w-xs mx-auto">
-      {/* Header with logo and company name */}
       <div className="p-4 pb-3 border-b border-gray-200">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200 bg-gray-50">
@@ -59,7 +58,6 @@ export default function CompanyCard({ company }: CompanyCardProps) {
         </div>
       </div>
       
-      {/* Body with locations */}
       <div className="p-4 bg-white">
         {uniqueLocations.length > 0 && (
           <div>
@@ -80,7 +78,6 @@ export default function CompanyCard({ company }: CompanyCardProps) {
           </div>
         )}
         
-        {/* Action button */}
         <Link 
           href={`/companies-detail/${company.id}`}
           className="mt-4 flex w-full items-center justify-center gap-1 py-2 px-4 bg-gray-50 hover:bg-[#E60278] hover:text-white text-[#E60278] rounded-md transition-colors text-sm font-medium border border-gray-200"
