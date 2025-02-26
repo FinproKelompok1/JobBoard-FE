@@ -40,6 +40,7 @@ export default function DeleteSubscription({
       setIsDeleting(true);
       await deleteSubscription(deleteSubsId);
       toast.success(`Subscription ID ${deleteSubsId} deleted successfully`);
+      window.location.reload();
     } catch (error) {
       toastErrAxios(error);
     } finally {

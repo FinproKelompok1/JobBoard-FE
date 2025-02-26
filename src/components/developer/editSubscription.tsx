@@ -25,7 +25,7 @@ export default function EditSubscription({
   const [subscription, setSubscription] = useState<ISubscriptionForm | null>(
     null,
   );
-  const [isEditing, setIsEditing] = useState<boolean>(true);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const router = useRouter();
@@ -37,8 +37,6 @@ export default function EditSubscription({
         setSubscription(subscription);
       } catch (error) {
         console.error("Error get subscription:", error);
-      } finally {
-        setIsEditing(false);
       }
     };
 
@@ -51,18 +49,26 @@ export default function EditSubscription({
     feature: subscription?.feature || "",
   };
 
-  const handleEditSubscription = async (values: ISubscriptionForm) => {
+  const handleEditSubscription = async (
+    values: ISubscriptionForm,
+    { resetForm }: { resetForm: () => void },
+  ) => {
     try {
+      setIsEditing(true);
       const response = await axios.patch(
         `/subscriptions/${subscriptionId}`,
         values,
       );
 
       toast.success(response.data.message);
-      router.push("/developer/subscription");
-      router.refresh();
+      window.location.reload();
     } catch (error) {
       console.error("Error edit subscription", error);
+    } finally {
+      setIsEditing(false);
+      setIsChecked(false);
+      setIsModalOpen(false);
+      resetForm();
     }
   };
 

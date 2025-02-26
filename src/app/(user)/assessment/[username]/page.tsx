@@ -22,6 +22,23 @@ export default async function UserAssessmentResultList({
           </h1>
         </div>
 
+        {userAssessments.length === 0 && (
+          <div className="mt-5 flex items-center justify-center">
+            <p className="text-primary">
+              Please{" "}
+              <span>
+                <Link
+                  href={"/subscription"}
+                  className="font-bold text-accent hover:underline"
+                >
+                  subscribe
+                </Link>
+              </span>{" "}
+              first to take skill assessments.
+            </p>
+          </div>
+        )}
+
         <div className="flex items-center justify-center p-5">
           <div className="max-w-full overflow-x-auto rounded-xl border">
             <table className="min-w-full divide-y divide-gray-200">

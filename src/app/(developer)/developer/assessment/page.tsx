@@ -59,12 +59,6 @@ export default async function Assessment() {
                       >
                         Questions: {assessment.AssessmentQuestion.length}
                       </Link>
-                      <Link
-                        href={`/developer/assessment/${assessment.id}/user`}
-                        className="w-36 rounded-md border-2 border-accent py-2 text-center font-semibold text-accent transition-all duration-300 ease-in-out hover:bg-accent hover:text-white"
-                      >
-                        Users
-                      </Link>
                     </div>
                   </div>
                 );
