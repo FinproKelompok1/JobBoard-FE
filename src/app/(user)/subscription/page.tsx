@@ -146,6 +146,11 @@ export default function Subscription() {
                 </div>
 
                 <div className="flex flex-col gap-3">
+                  {isSubscribedToPlan(subscription.id) && (
+                    <p className="text-sm text-accent">
+                      You have already subscribed.
+                    </p>
+                  )}
                   <button
                     onClick={() =>
                       handleSubscribe(subscription.id, subscription.price)
