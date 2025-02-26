@@ -4,14 +4,17 @@ import NavLinks from "./navlink";
 import Link from "next/link";
 import Image from "next/image";
 
-interface UserType {
-  role: "admin" | "developer" | "user" | string;
+interface User {
+  role: string;
+  username: string;
+  profilePicture?: string;
+  companyName?: string;
 }
 
 interface MobileNavbarProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  userH: UserType | null;
+  userH: User | null;
   logOut: () => void;
 }
 
@@ -31,6 +34,7 @@ export default function MobileNavbar({
             width={144}
             height={48}
             className="h-12 w-auto"
+            priority
           />
         </Link>
         <button

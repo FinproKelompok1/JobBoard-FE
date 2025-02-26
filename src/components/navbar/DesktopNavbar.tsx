@@ -3,17 +3,17 @@ import NavLinks from "./navlink";
 import Link from "next/link";
 import Image from "next/image";
 
-interface UserType {
-  role: "admin" | "developer" | "user" | string;
+interface User {
+  role: string;
+  username: string;
   profilePicture?: string;
-  username?: string;
   companyName?: string;
 }
 
 interface DesktopNavbarProps {
   isHomePage: boolean;
   isScrolled: boolean;
-  userH: UserType | null;
+  userH: User | null;
   showProfileMenu: boolean;
   setShowProfileMenu: React.Dispatch<React.SetStateAction<boolean>>;
   logOut: () => void;
@@ -46,6 +46,7 @@ export default function DesktopNavbar({
           width={144}
           height={48}
           className="h-12 w-auto"
+          priority
         />
       </Link>
 

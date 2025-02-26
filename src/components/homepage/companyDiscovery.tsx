@@ -10,7 +10,7 @@ export default function CompanyDiscovery() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const DISPLAY_LIMIT = 4; // Limit to display only 4 companies
+  const DISPLAY_LIMIT = 4; 
   const router = useRouter();
 
   useEffect(() => {
@@ -67,7 +67,6 @@ export default function CompanyDiscovery() {
     );
   }
 
-  // Get only the first 4 companies
   const limitedCompanies = companies.slice(0, DISPLAY_LIMIT);
   const hasMoreCompanies = companies.length > DISPLAY_LIMIT;
 

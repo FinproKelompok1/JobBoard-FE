@@ -24,20 +24,23 @@ export default function AboutUs() {
       description: "Passionate about creating beautiful web interfaces.",
       instagram: "tsaniamaf",
       linkedin: "tsaniafariha",
+      image: "/about/ts.jpg" 
     },
     {
       name: "Hanif",
       role: "Fullstack",
       description: "Specialized in building robust and scalable backend systems.",
       instagram: "hanif",
-      linkedin: "hanif",
+      linkedin: "hanifahmadrizqullah",
+      image: "/about/hanif.jpg" 
     },
     {
       name: "Wildan",
       role: "Fullstack",
       description: "Dedicated to creating intuitive and engaging user experiences.",
       instagram: "Wildan",
-      linkedin: "Wildan",
+      linkedin: "muhammadwildansapoetro",
+      image: "/about/wildan.jpg" 
     }
   ];
   
@@ -71,7 +74,7 @@ export default function AboutUs() {
               
               <div className="h-72 bg-gray-100 relative">
                 <Image
-                  src={`/api/placeholder/400/400`}
+                  src={member.image} 
                   alt={member.name}
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"

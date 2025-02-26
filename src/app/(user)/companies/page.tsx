@@ -142,7 +142,6 @@ export default function CompaniesPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Show loading page for both initial load and page changes
   if (isLoading || isPageChanging) {
     return <LoadingPage isLoading={true} />;
   }

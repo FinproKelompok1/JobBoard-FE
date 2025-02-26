@@ -53,18 +53,15 @@ export default function JobFilter({
     'Informatics'
   ];
 
-  // Set initial values from URL or props
   useEffect(() => {
     if (initialFilters) {
       setSearchTerm(initialFilters.searchTerm || '');
       setSelectedCategory(initialFilters.category || '');
       
-      // For province and city, we'll need to handle them after loading the data
-      // because we need to find the IDs based on names
+     
     }
   }, [initialFilters]);
 
-  // Fetch provinces on component mount
   useEffect(() => {
     const fetchProvinces = async () => {
       setIsLoading(true);
@@ -76,7 +73,6 @@ export default function JobFilter({
         const data = await response.json();
         setProvinces(data);
         
-        // If we have an initial province filter, find its ID
         if (initialFilters?.province) {
           const provinceItem = data.find((p: Province) => 
             p.name.toLowerCase() === initialFilters.province?.toLowerCase()
@@ -96,7 +92,6 @@ export default function JobFilter({
     fetchProvinces();
   }, [initialFilters?.province]);
 
-  // Fetch cities when province changes
   useEffect(() => {
     const fetchCities = async () => {
       if (selectedProvinceId) {
@@ -109,7 +104,6 @@ export default function JobFilter({
           const data = await response.json();
           setCities(data);
           
-          // If we have an initial city filter, find its ID
           if (initialFilters?.city) {
             const cityItem = data.find((c: City) => 
               c.name.toLowerCase() === initialFilters.city?.toLowerCase()
@@ -137,22 +131,21 @@ export default function JobFilter({
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Get province and city names from their IDs
     const provinceName = provinces.find((p: Province) => p.id === selectedProvinceId)?.name || '';
     const cityName = cities.find((c: City) => c.id === selectedCityId)?.name || '';
     
     console.log('Sending search with:', {
       searchTerm,
       category: selectedCategory,
-      province: provinceName,  // Send name, not ID
-      city: cityName           // Send name, not ID
+      province: provinceName,  
+      city: cityName           
     });
     
     const filters: FilterParams = {
       searchTerm: searchTerm || '',
       category: selectedCategory || '',
-      province: provinceName,  // Send name, not ID
-      city: cityName           // Send name, not ID
+      province: provinceName,  
+      city: cityName           
     };
 
     if (isHero) {
