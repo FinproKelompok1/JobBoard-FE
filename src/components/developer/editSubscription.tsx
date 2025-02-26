@@ -4,7 +4,6 @@ import axios from "@/helpers/axios";
 import { getSubscriptionById } from "@/libs/subscription";
 import { ISubscriptionForm } from "@/types/types";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { toast } from "react-toastify";
@@ -28,7 +27,6 @@ export default function EditSubscription({
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchSubscription = async () => {
