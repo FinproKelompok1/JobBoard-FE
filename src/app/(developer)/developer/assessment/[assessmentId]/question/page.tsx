@@ -9,24 +9,34 @@ import useSWR from "swr";
 
 const fetcher = async ([url, id]: [string, number]) => {
   if (url.includes("assessment")) return await getAssessmentById(id);
-  if (url.includes("questions")) return await getAssessmentQuestions(id);
+  if (url.includes("questions")) {
+    const response = await getAssessmentQuestions(id);
+    return {
+      questions: response.assessmentQuestions, // Ensure it matches the backend
+      totalQuestions: response.totalQuestions,
+    };
+  }
   return null;
 };
 
 export default function AssessmentQuestion({
   params,
 }: {
-  params: { assessmentId: number };
+  params: { assessmentId: string };
 }) {
+  const assessmentId = Number(params.assessmentId);
+
   const { data: assessment } = useSWR<IAssessment>(
-    [`assessment-%${params.assessmentId}`, params.assessmentId],
+    [`assessment-%${assessmentId}`, assessmentId],
     fetcher,
   );
 
-  const { data: assessmentQuestion, mutate } = useSWR<{
+  const { data, mutate } = useSWR<{
     questions: IAssessmentQuestion[];
     totalQuestions: number;
   }>([`questions-${params.assessmentId}`, params.assessmentId], fetcher);
+
+  const assessmentQuestion = data || { questions: [], totalQuestions: 0 };
 
   if (!assessment || !assessmentQuestion) {
     return (
@@ -52,7 +62,7 @@ export default function AssessmentQuestion({
           </h1>
           <div>
             <CreateAssessmentQuestion
-              assessmentId={params.assessmentId}
+              assessmentId={assessmentId}
               mutate={mutate}
               disabled={isMaxQuestions}
             />
@@ -77,43 +87,45 @@ export default function AssessmentQuestion({
         </div>
 
         <div className="mt-10 w-[1000px]">
-          {assessmentQuestion &&
-            (assessmentQuestion.totalQuestions === 0 ? (
-              <div>
-                <p className="text-xl text-primary">
-                  There is no question yet. Please create 25 questions to
-                  activate this assessment.
-                </p>
-              </div>
-            ) : (
-              assessmentQuestion.questions.map((question) => (
-                <div key={question.id} className="mb-5">
-                  <div className="flex items-center gap-5">
-                    <p className="text-xl font-semibold">
-                      {question.question} (ID: {question.id})
-                    </p>
-                    <EditQuestion question={question} mutate={mutate} />
-                  </div>
-
-                  <div className="ml-5 mt-2">
-                    <ol className="list-lower-alpha text-lg">
-                      {question.options.map((option, optionIndex) => (
-                        <li
-                          key={optionIndex}
-                          className={`p-1 ${
-                            optionIndex === question.correctAnswer
-                              ? "font-semibold text-green-600"
-                              : ""
-                          }`}
-                        >
-                          {String.fromCharCode(97 + optionIndex)}. {option}
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
+          {assessmentQuestion.totalQuestions === 0 ? (
+            <div>
+              <p className="text-xl text-primary">
+                There is no question yet. Please create 25 questions to activate
+                this assessment.
+              </p>
+            </div>
+          ) : assessmentQuestion?.questions?.length ? (
+            assessmentQuestion.questions.map((question, index) => (
+              <div key={question.id} className="mb-5">
+                <div className="flex items-center">
+                  <p className="text-xl font-semibold">{index + 1}.</p>
+                  <p className="ml-2 mr-4 text-xl font-semibold">
+                    {question.question} (ID: {question.id})
+                  </p>
+                  <EditQuestion question={question} mutate={mutate} />
                 </div>
-              ))
-            ))}
+
+                <div className="ml-5 mt-2">
+                  <ol className="list-lower-alpha text-lg">
+                    {question.options.map((option, optionIndex) => (
+                      <li
+                        key={optionIndex}
+                        className={`p-1 ${
+                          optionIndex === question.correctAnswer
+                            ? "font-semibold text-green-600"
+                            : ""
+                        }`}
+                      >
+                        {String.fromCharCode(97 + optionIndex)}. {option}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-xl text-primary">No questions available.</p>
+          )}
         </div>
       </div>
     </main>

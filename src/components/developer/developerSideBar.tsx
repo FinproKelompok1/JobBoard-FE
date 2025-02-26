@@ -104,7 +104,7 @@ export default function DeveloperSideBar() {
             </div>
           </div>
 
-          {userH && ( // Ensure user is logged in before showing logout button
+          {userH && (
             <div className="mb-5 mt-10">
               <button
                 onClick={handleLogOut}
