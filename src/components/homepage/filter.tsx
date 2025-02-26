@@ -20,10 +20,10 @@ interface JobFilterProps {
 }
 
 export interface FilterParams {
-  searchTerm: string;
-  category: string;
-  province: string;
-  city: string;
+  searchTerm?: string;
+  category?: string;
+  province?: string;
+  city?: string;
 }
 
 export default function JobFilter({ 
@@ -35,8 +35,8 @@ export default function JobFilter({
   const router = useRouter();
   const [provinces, setProvinces] = useState<Province[]>([]);
   const [cities, setCities] = useState<City[]>([]);
-  const [selectedProvince, setSelectedProvince] = useState<string>(initialFilters?.province || '');
-  const [selectedCity, setSelectedCity] = useState<string>(initialFilters?.city || '');
+  const [selectedProvinceId, setSelectedProvinceId] = useState<string>('');
+  const [selectedCityId, setSelectedCityId] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>(initialFilters?.searchTerm || '');
   const [selectedCategory, setSelectedCategory] = useState<string>(initialFilters?.category || '');
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -53,15 +53,18 @@ export default function JobFilter({
     'Informatics'
   ];
 
+  // Set initial values from URL or props
   useEffect(() => {
     if (initialFilters) {
       setSearchTerm(initialFilters.searchTerm || '');
       setSelectedCategory(initialFilters.category || '');
-      setSelectedProvince(initialFilters.province || '');
-      setSelectedCity(initialFilters.city || '');
+      
+      // For province and city, we'll need to handle them after loading the data
+      // because we need to find the IDs based on names
     }
   }, [initialFilters]);
 
+  // Fetch provinces on component mount
   useEffect(() => {
     const fetchProvinces = async () => {
       setIsLoading(true);
@@ -72,54 +75,92 @@ export default function JobFilter({
         }
         const data = await response.json();
         setProvinces(data);
+        
+        // If we have an initial province filter, find its ID
+        if (initialFilters?.province) {
+          const provinceItem = data.find((p: Province) => 
+            p.name.toLowerCase() === initialFilters.province?.toLowerCase()
+          );
+          if (provinceItem) {
+            console.log('Found province by name:', provinceItem);
+            setSelectedProvinceId(provinceItem.id);
+          }
+        }
       } catch (error) {
         console.error('Error fetching provinces:', error);
       } finally {
         setIsLoading(false);
       }
     };
+    
     fetchProvinces();
-  }, []);
+  }, [initialFilters?.province]);
 
+  // Fetch cities when province changes
   useEffect(() => {
     const fetchCities = async () => {
-      if (selectedProvince) {
+      if (selectedProvinceId) {
         setIsLoading(true);
         try {
-          const response = await fetch(`https://muhammadwildansapoetro.github.io/api-wilayah-indonesia/api/regencies/${selectedProvince}.json`);
+          const response = await fetch(`https://muhammadwildansapoetro.github.io/api-wilayah-indonesia/api/regencies/${selectedProvinceId}.json`);
           if (!response.ok) {
             throw new Error('Failed to fetch cities');
           }
           const data = await response.json();
           setCities(data);
-        } catch  {
+          
+          // If we have an initial city filter, find its ID
+          if (initialFilters?.city) {
+            const cityItem = data.find((c: City) => 
+              c.name.toLowerCase() === initialFilters.city?.toLowerCase()
+            );
+            if (cityItem) {
+              console.log('Found city by name:', cityItem);
+              setSelectedCityId(cityItem.id);
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching cities:', error);
           setCities([]);
         } finally {
           setIsLoading(false);
         }
       } else {
         setCities([]);
+        setSelectedCityId('');
       }
     };
+    
     fetchCities();
-  }, [selectedProvince]);
+  }, [selectedProvinceId, initialFilters?.city]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Get province and city names from their IDs
+    const provinceName = provinces.find((p: Province) => p.id === selectedProvinceId)?.name || '';
+    const cityName = cities.find((c: City) => c.id === selectedCityId)?.name || '';
+    
+    console.log('Sending search with:', {
+      searchTerm,
+      category: selectedCategory,
+      province: provinceName,  // Send name, not ID
+      city: cityName           // Send name, not ID
+    });
+    
     const filters: FilterParams = {
       searchTerm: searchTerm || '',
       category: selectedCategory || '',
-      province: selectedProvince || '',
-      city: selectedCity || ''
+      province: provinceName,  // Send name, not ID
+      city: cityName           // Send name, not ID
     };
 
     if (isHero) {
       const params = new URLSearchParams();
       if (searchTerm) params.append('search', searchTerm);
       if (selectedCategory) params.append('category', selectedCategory);
-      if (selectedProvince) params.append('province', selectedProvince);
-      if (selectedCity) params.append('city', selectedCity);
+      if (provinceName) params.append('province', provinceName);
+      if (cityName) params.append('city', cityName);
       
       const queryString = params.toString();
       router.push(`/jobs${queryString ? `?${queryString}` : ''}`);
@@ -135,16 +176,18 @@ export default function JobFilter({
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         placeholder="Job Title, Skills, Keywords"
-        className="w-full md:flex-1 p-3 rounded bg-white/80 backdrop-blur border border-white/20 placeholder:text-gray-500 text-gray-800"
+        className="w-full md:flex-1 p-3 rounded bg-white border border-gray-300 placeholder:text-gray-500 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 z-10"
+        style={{ position: 'relative', zIndex: 10 }}
       />
 
       <select
         value={selectedCategory}
         onChange={(e) => setSelectedCategory(e.target.value)}
-        className="w-full md:w-auto p-3 rounded bg-white/80 backdrop-blur border border-white/20 text-gray-800"
+        className="w-full md:w-auto p-3 rounded bg-white border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 z-10"
+        style={{ position: 'relative', zIndex: 10 }}
       >
         <option value="">Any Category</option>
-        {categories.map(category => (
+        {categories.map((category: string) => (
           <option key={category} value={category.toLowerCase()}>
             {category}
           </option>
@@ -152,16 +195,18 @@ export default function JobFilter({
       </select>
 
       <select
-        value={selectedProvince}
+        value={selectedProvinceId}
         onChange={(e) => {
-          setSelectedProvince(e.target.value);
-          setSelectedCity('');
+          console.log('Province ID changed:', e.target.value);
+          setSelectedProvinceId(e.target.value);
+          setSelectedCityId('');
         }}
-        className="w-full md:w-auto p-3 rounded bg-white/80 backdrop-blur border border-white/20 text-gray-800"
+        className="w-full md:w-auto p-3 rounded bg-white border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 z-10"
         disabled={isLoading}
+        style={{ position: 'relative', zIndex: 10 }}
       >
         <option value="">Any Province</option>
-        {provinces.map(province => (
+        {provinces.map((province: Province) => (
           <option key={province.id} value={province.id}>
             {province.name}
           </option>
@@ -169,13 +214,17 @@ export default function JobFilter({
       </select>
 
       <select
-        value={selectedCity}
-        onChange={(e) => setSelectedCity(e.target.value)}
-        className="w-full md:w-auto p-3 rounded bg-white/80 backdrop-blur border border-white/20 text-gray-800"
-        disabled={!selectedProvince || isLoading}
+        value={selectedCityId}
+        onChange={(e) => {
+          console.log('City ID changed:', e.target.value);
+          setSelectedCityId(e.target.value);
+        }}
+        className="w-full md:w-auto p-3 rounded bg-white border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 z-10"
+        disabled={!selectedProvinceId || isLoading}
+        style={{ position: 'relative', zIndex: 10 }}
       >
         <option value="">Any City</option>
-        {cities.map(city => (
+        {cities.map((city: City) => (
           <option key={city.id} value={city.id}>
             {city.name}
           </option>
@@ -184,7 +233,8 @@ export default function JobFilter({
 
       <button
         type="submit"
-        className="w-full md:w-auto bg-[#E60278] text-white px-8 py-3 rounded hover:bg-[#E60278]/90 transition-colors"
+        className="w-full md:w-auto bg-[#E60278] text-white px-8 py-3 rounded hover:bg-[#E60278]/90 transition-colors focus:outline-none focus:ring-2 focus:ring-[#E60278] focus:ring-offset-2 z-10"
+        style={{ position: 'relative', zIndex: 10 }}
       >
         Search
       </button>

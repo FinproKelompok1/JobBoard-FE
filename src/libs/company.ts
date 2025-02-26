@@ -35,7 +35,7 @@ export interface CompaniesResponse {
 
 export const getCompanies = async (
   page: number = 1,
-  limit: number = 2,
+  limit: number = 6,
 ): Promise<CompaniesResponse> => {
   try {
     const queryParams =

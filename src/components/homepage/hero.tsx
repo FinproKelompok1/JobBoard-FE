@@ -64,7 +64,17 @@ export default function Hero() {
         </div>
         
         <div className="bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20">
-          <JobFilter isHero={true} />
+          <JobFilter 
+  isHero={true} 
+  className="hero-filter"
+  initialFilters={{
+    searchTerm: '',
+    category: '',
+    province: '',
+    city: ''
+  }}
+  key="hero-job-filter" // Tambahkan key unik
+/>
         </div>
       </div>
     </div>

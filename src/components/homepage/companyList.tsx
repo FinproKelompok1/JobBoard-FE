@@ -22,9 +22,9 @@ export default function CompaniesList({ companies }: CompaniesListProps) {
   const validCompanies = Array.isArray(companies) ? companies : [];
 
   return (
-    <div className="space-y-6">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-[#0D3880] mb-2">
+    <div>
+      <div className="mb-3">
+        <h2 className="text-2xl font-bold text-[#0D3880] mb-1">
           Top Employers
         </h2>
         <p className="text-gray-600">
@@ -32,7 +32,7 @@ export default function CompaniesList({ companies }: CompaniesListProps) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-3">
         {validCompanies.map((company) => (
           <CompanyCard key={company.id} company={company} />
         ))}

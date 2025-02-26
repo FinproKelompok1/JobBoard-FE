@@ -7,7 +7,7 @@ import JobsList from '@/components/homepage/jobList';
 import Pagination from '@/components/homepage/pagination';
 import LoadingPage from '@/components/loading';
 import { getCategoryIcon } from '@/helpers/category';
-import { CurrencyFormatter } from '../../../helpers/currencryFormatter';
+import { CurrencyFormatter } from '@/helpers/currencryFormatter';
 import { toast } from 'react-toastify';
 
 interface LocationState {
@@ -16,7 +16,7 @@ interface LocationState {
 }
 
 export default function AllJobsPage() {
-  const { jobs, isLoading, pagination, fetchJobs, changePage } = useAllJobs(3); 
+  const { jobs, isLoading, pagination, fetchJobs, changePage } = useAllJobs(6); // Increased items per page for better UX
   const [userLocation, setUserLocation] = useState<LocationState | null>(null);
   const [isUsingLocation, setIsUsingLocation] = useState(false);
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
@@ -27,34 +27,38 @@ export default function AllJobsPage() {
     city: ''
   });
 
+  // Load filters from URL on initial render
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
       
-      const initialFilters = {
+      const initialFilters: FilterParams = {
         searchTerm: urlParams.get('search') || '',
         category: urlParams.get('category') || '',
         province: urlParams.get('province') || '',
         city: urlParams.get('city') || ''
       };
       
+      console.log('Initial filters from URL:', initialFilters);
       setCurrentFilters(initialFilters);
       fetchJobs(initialFilters);
     }
   }, [fetchJobs]);
 
+  // Handle browser back/forward navigation
   useEffect(() => {
     const handleUrlChange = () => {
       if (typeof window !== 'undefined') {
         const urlParams = new URLSearchParams(window.location.search);
         
-        const updatedFilters = {
-          searchTerm: urlParams.get('search') || currentFilters.searchTerm,
-          category: urlParams.get('category') || currentFilters.category,
-          province: urlParams.get('province') || currentFilters.province,
-          city: urlParams.get('city') || currentFilters.city
+        const updatedFilters: FilterParams = {
+          searchTerm: urlParams.get('search') || '',
+          category: urlParams.get('category') || '',
+          province: urlParams.get('province') || '',
+          city: urlParams.get('city') || ''
         };
         
+        console.log('URL changed, new filters:', updatedFilters);
         setCurrentFilters(updatedFilters);
         fetchJobs(updatedFilters);
       }
@@ -65,8 +69,9 @@ export default function AllJobsPage() {
     return () => {
       window.removeEventListener('popstate', handleUrlChange);
     };
-  }, [currentFilters, fetchJobs]);
+  }, [fetchJobs]);
 
+  // Load saved user location from localStorage
   useEffect(() => {
     const loadSavedLocation = () => {
       const savedLocation = localStorage.getItem('userLocation');
@@ -75,8 +80,10 @@ export default function AllJobsPage() {
           const location = JSON.parse(savedLocation);
           if (location && location.city && location.province) {
             setUserLocation(location);
+            console.log('Loaded saved location:', location);
           }
-        } catch {
+        } catch (error) {
+          console.error('Error parsing saved location:', error);
           localStorage.removeItem('userLocation');
         }
       }
@@ -85,19 +92,39 @@ export default function AllJobsPage() {
     loadSavedLocation();
   }, []);
   
+  // Handle filter submission from JobFilter component
   const handleFilter = (filters: FilterParams) => {
+    console.log('Filter submitted:', filters);
+    
     const updatedFilters = { ...filters };
     
+    // Apply location filter if enabled
     if (isUsingLocation && userLocation) {
       updatedFilters.city = userLocation.city;
       updatedFilters.province = userLocation.province;
+      console.log('Applied location filter:', userLocation);
     }
     
     setCurrentFilters(updatedFilters);
     fetchJobs(updatedFilters, 1); 
+    
+    // Update URL to reflect current filters (optional)
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams();
+      if (updatedFilters.searchTerm) params.append('search', updatedFilters.searchTerm);
+      if (updatedFilters.category) params.append('category', updatedFilters.category);
+      if (updatedFilters.province) params.append('province', updatedFilters.province);
+      if (updatedFilters.city) params.append('city', updatedFilters.city);
+      
+      const queryString = params.toString();
+      const newUrl = `${window.location.pathname}${queryString ? `?${queryString}` : ''}`;
+      window.history.pushState({}, '', newUrl);
+    }
   };
   
+  // Handle pagination
   const handlePageChange = (page: number) => {
+    console.log('Changing to page:', page);
     changePage(page, currentFilters);
     
     window.scrollTo({
@@ -106,8 +133,10 @@ export default function AllJobsPage() {
     });
   };
   
+  // Toggle location-based filtering
   const toggleLocationFilter = async () => {
     if (isUsingLocation) {
+      console.log('Disabling location filter');
       setIsUsingLocation(false);
       
       const updatedFilters = {
@@ -122,6 +151,7 @@ export default function AllJobsPage() {
     }
     
     if (userLocation) {
+      console.log('Enabling location filter with saved location:', userLocation);
       setIsUsingLocation(true);
       
       const updatedFilters = {
@@ -133,6 +163,7 @@ export default function AllJobsPage() {
       setCurrentFilters(updatedFilters);
       fetchJobs(updatedFilters, 1); 
     } else {
+      console.log('Fetching user location...');
       setIsLoadingLocation(true);
       
       try {
@@ -146,11 +177,15 @@ export default function AllJobsPage() {
           });
         });
         
+        console.log('Got coordinates:', position.coords);
+        
         const response = await fetch(
           `https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}+${position.coords.longitude}&key=bcf87dd591a44c57b21a10bed03f5daa`
         );
         
         const data = await response.json();
+        console.log('Geocoding response:', data);
+        
         if (data.results && data.results.length > 0) {
           const components = data.results[0].components;
           
@@ -171,6 +206,7 @@ export default function AllJobsPage() {
               province: provinceName ? provinceName.toUpperCase() : ""
             };
             
+            console.log('Setting location:', location);
             setUserLocation(location);
             localStorage.setItem('userLocation', JSON.stringify(location));
             setIsUsingLocation(true);
@@ -191,6 +227,7 @@ export default function AllJobsPage() {
           throw new Error("Couldn't get location details");
         }
       } catch (error) {
+        console.error('Location error:', error);
         if (error instanceof GeolocationPositionError && error.code === error.PERMISSION_DENIED) {
           toast.info("Location access denied");
         } else {
@@ -247,16 +284,23 @@ export default function AllJobsPage() {
         <JobFilter 
           onSearch={handleFilter}
           isHero={false}
-          className="mb-8 p-4 bg-white rounded-lg shadow"
+          className="mb-8 p-4 bg-white rounded-lg shadow border border-gray-200"
           initialFilters={currentFilters}
         />
         
-        <JobsList 
-          jobs={jobs}
-          userLocation={isUsingLocation ? userLocation : null}
-          CurrencyFormatter={CurrencyFormatter}
-          getCategoryIcon={getCategoryIcon} 
-        />
+        {jobs.length > 0 ? (
+          <JobsList 
+            jobs={jobs}
+            userLocation={isUsingLocation ? userLocation : null}
+            CurrencyFormatter={CurrencyFormatter}
+            getCategoryIcon={getCategoryIcon} 
+          />
+        ) : (
+          <div className="text-center p-12 bg-white rounded-lg shadow">
+            <h3 className="text-xl font-semibold text-gray-800">No jobs found</h3>
+            <p className="text-gray-600 mt-2">Try adjusting your filters to see more results</p>
+          </div>
+        )}
         
         {pagination.totalPages > 1 && (
           <>

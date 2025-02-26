@@ -72,18 +72,14 @@ export default function Navbar({ isHomePage }: NavbarProps) {
     window.location.href = "/";
   };
 
-  const getNavbarClass = () => {
-    if (isHomePage && !isScrolled) {
-      return "bg-transparent";
-    }
-    return "bg-[#FFFFFF] shadow-lg";
-  };
+
 
   const desktopTextColor = isHomePage
     ? isScrolled
       ? "text-[#0D3880]"
       : "text-[#FFFFFF]"
     : "text-[#0D3880]";
+  
 
   const renderProfileMenu = () => {
     if (!userH) return null;
@@ -109,7 +105,7 @@ export default function Navbar({ isHomePage }: NavbarProps) {
               />
             ) : (
               <div
-                className={`flex h-full w-full items-center justify-center ${desktopTextColor}`}
+                className={`flex h-full w-full items-center justify-center ${desktopTextColor} md:${desktopTextColor}`}
               >
                 {userH.username?.charAt(0).toUpperCase() || "U"}
               </div>
@@ -185,11 +181,21 @@ export default function Navbar({ isHomePage }: NavbarProps) {
 
   return (
     <nav
-      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${getNavbarClass()}`}
+      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 bg-[#FFFFFF] shadow-lg md:${isHomePage && !isScrolled ? "bg-transparent shadow-none" : "bg-[#FFFFFF] shadow-lg"}`}
     >
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center">
+            {/* Logo for mobile - always colored version */}
+            <Image
+              src="/logo-title-colored.png"
+              alt="TalentBridge Logo"
+              width={144}
+              height={48}
+              className="h-12 w-auto md:hidden"
+            />
+            
+            {/* Logo for desktop - follows current behavior */}
             <Image
               src={
                 isHomePage && !isScrolled
@@ -200,13 +206,6 @@ export default function Navbar({ isHomePage }: NavbarProps) {
               width={144}
               height={48}
               className="hidden h-12 w-auto md:block"
-            />
-            <Image
-              src="/logo-title-colored.png"
-              alt="TalentBridge Logo"
-              width={144}
-              height={48}
-              className="h-12 w-auto md:hidden"
             />
           </Link>
 
@@ -238,9 +237,10 @@ export default function Navbar({ isHomePage }: NavbarProps) {
             </div>
           </div>
 
+          {/* Mobile menu button - always blue text */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className={`md:hidden ${desktopTextColor}`}
+            className="text-[#0D3880] md:hidden"
           >
             {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
           </button>
