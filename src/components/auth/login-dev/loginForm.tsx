@@ -24,7 +24,6 @@ export default function RestrictedDevLogin() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Mendapatkan parameter error dari URL saat komponen dimount
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
       const errorParam = urlParams.get("error");

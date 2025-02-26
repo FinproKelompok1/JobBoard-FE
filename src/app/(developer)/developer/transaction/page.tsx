@@ -5,7 +5,7 @@ import DateFormatter from "@/helpers/dateFormatter";
 import { getTransactions } from "@/libs/transaction";
 import { ITransaction } from "@/types/types";
 import { useEffect, useState } from "react";
-import { FaSortAlphaDown, FaSortAlphaUpAlt } from "react-icons/fa";
+import { FaSortAlphaDown, FaSortAlphaDownAlt } from "react-icons/fa";
 
 export default function TransactionList() {
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
@@ -113,7 +113,7 @@ export default function TransactionList() {
                       {sortCreateAt === "asc" ? (
                         <FaSortAlphaDown className="size-5" />
                       ) : (
-                        <FaSortAlphaUpAlt className="size-5" />
+                        <FaSortAlphaDownAlt className="size-5" />
                       )}
                     </span>
                   </button>

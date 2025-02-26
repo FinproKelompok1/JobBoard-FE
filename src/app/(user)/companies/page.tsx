@@ -132,10 +132,8 @@ export default function CompaniesPage() {
   const handlePageChange = (page: number) => {
     if (page < 1 || page > paginationMeta.totalPages) return;
     
-    // Update state currentPage
     setCurrentPage(page);
     
-    // Update URL dengan query parameter baru
     const query = createQueryString('page', `${page}`);
     router.push(`/companies?${query}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -159,7 +157,6 @@ export default function CompaniesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
       <div className="relative bg-gradient-to-br from-gray-900 to-gray-800">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#E60278]/10 rounded-full blur-2xl" />
@@ -201,7 +198,6 @@ export default function CompaniesPage() {
         </div>
       </div>
 
-      {/* Content Section */}
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
@@ -228,7 +224,6 @@ export default function CompaniesPage() {
               <>
                 <CompaniesList companies={filteredCompanies} />
                 
-                {/* Gunakan komponen Pagination yang sudah dibuat */}
                 {paginationMeta.totalPages > 1 && (
                   <>
                     <Pagination 
@@ -237,7 +232,6 @@ export default function CompaniesPage() {
                       onPageChange={handlePageChange}
                     />
                     
-                    {/* Jobs count and page info */}
                     <div className="text-center text-gray-500 mt-4">
                       Showing {filteredCompanies.length} of {paginationMeta.totalItems} companies - Page {paginationMeta.page} of {paginationMeta.totalPages}
                     </div>

@@ -170,7 +170,6 @@ export default function ApplicationsSection({ applications }: ApplicationsSectio
         ))}
       </div>
 
-      {/* Rejection Modal */}
       <Dialog open={!!selectedRejection} onOpenChange={() => setSelectedRejection(null)}>
         <DialogContent className="sm:max-w-[425px] bg-white rounded-xl">
           <DialogHeader>
@@ -187,7 +186,6 @@ export default function ApplicationsSection({ applications }: ApplicationsSectio
         </DialogContent>
       </Dialog>
 
-      {/* Take Job Modal */}
       <Dialog open={showTakeJobModal} onOpenChange={setShowTakeJobModal}>
         <DialogContent className="sm:max-w-[425px] bg-white rounded-xl">
           <DialogHeader>

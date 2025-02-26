@@ -199,14 +199,14 @@ export default function Navbar({ isHomePage }: NavbarProps) {
               alt="TalentBridge Logo"
               width={144}
               height={48}
-              className="hidden h-12 md:block"
+              className="hidden h-12 w-auto md:block"
             />
             <Image
               src="/logo-title-colored.png"
               alt="TalentBridge Logo"
               width={144}
               height={48}
-              className="h-12 md:hidden"
+              className="h-12 w-auto md:hidden"
             />
           </Link>
 

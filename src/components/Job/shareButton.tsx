@@ -18,7 +18,6 @@ const ShareButton: React.FC<ShareButtonProps> = (props) => {
     <div className="flex items-center space-x-4">
       <span className="font-medium text-gray-600">Share:</span>
 
-      {/* X (formerly Twitter) Button */}
       <button
         onClick={() => handleShare("twitter")}
         className="flex items-center justify-center rounded-lg bg-black p-2 text-white transition-colors hover:bg-gray-800"
@@ -27,7 +26,6 @@ const ShareButton: React.FC<ShareButtonProps> = (props) => {
         <FaXTwitter className="h-5 w-5" />
       </button>
 
-      {/* LinkedIn Button */}
       <button
         onClick={() => handleShare("linkedin")}
         className="flex items-center justify-center rounded-lg bg-[#0A66C2] p-2 text-white transition-colors hover:bg-[#084e96]"
@@ -36,7 +34,6 @@ const ShareButton: React.FC<ShareButtonProps> = (props) => {
         <FaLinkedin className="h-5 w-5" />
       </button>
 
-      {/* WhatsApp Button */}
       <button
         onClick={() => handleShare("whatsapp")}
         className="flex items-center justify-center rounded-lg bg-[#25D366] p-2 text-white transition-colors hover:bg-[#1da850]"

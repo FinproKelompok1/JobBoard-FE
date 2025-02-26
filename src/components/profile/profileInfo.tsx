@@ -20,10 +20,8 @@ export default function ProfileInfo({ user, onUpdate }: ProfileInfoProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto max-w-7xl space-y-6 px-4 py-8">
-        {/* Profile Card */}
         <div className="rounded-xl bg-white p-8 shadow-lg">
           <div className="flex flex-col items-start gap-8 md:flex-row">
-            {/* Avatar & Verification */}
             <div className="text-center md:text-left">
               <div className="relative">
                 <Image
@@ -41,9 +39,7 @@ export default function ProfileInfo({ user, onUpdate }: ProfileInfoProps) {
               </div>
             </div>
 
-            {/* User Info */}
             <div className="flex-1 space-y-6">
-              {/* Name & Username */}
               <div className="flex items-center gap-5">
                 <div>
                   <h1 className="mb-2 text-3xl font-bold text-[#0D3880]">
@@ -82,9 +78,7 @@ export default function ProfileInfo({ user, onUpdate }: ProfileInfoProps) {
                 </div>
               </div>
 
-              {/* User Details Grid */}
               <div className="grid gap-4 md:grid-cols-2">
-                {/* Email */}
                 <div className="flex items-center rounded-lg bg-gray-50 p-3">
                   <Mail className="mr-3 h-5 w-5 text-[#E60278]" />
                   <div>
@@ -93,7 +87,6 @@ export default function ProfileInfo({ user, onUpdate }: ProfileInfoProps) {
                   </div>
                 </div>
 
-                {/* Gender */}
                 {user.gender && (
                   <div className="flex items-center rounded-lg bg-gray-50 p-3">
                     <User className="mr-3 h-5 w-5 text-[#E60278]" />
@@ -104,7 +97,6 @@ export default function ProfileInfo({ user, onUpdate }: ProfileInfoProps) {
                   </div>
                 )}
 
-                {/* Date of Birth */}
                 {user.dob && (
                   <div className="flex items-center rounded-lg bg-gray-50 p-3">
                     <Calendar className="mr-3 h-5 w-5 text-[#E60278]" />
@@ -115,7 +107,6 @@ export default function ProfileInfo({ user, onUpdate }: ProfileInfoProps) {
                   </div>
                 )}
 
-                {/* Education */}
                 {user.lastEdu && (
                   <div className="flex items-center rounded-lg bg-gray-50 p-3">
                     <GraduationCap className="mr-3 h-5 w-5 text-[#E60278]" />
@@ -128,7 +119,6 @@ export default function ProfileInfo({ user, onUpdate }: ProfileInfoProps) {
                   </div>
                 )}
 
-                {/* Location */}
                 {(user.province || user.city) && (
                   <div className="flex items-center rounded-lg bg-gray-50 p-3">
                     <MapPin className="mr-3 h-5 w-5 text-[#E60278]" />
@@ -143,7 +133,6 @@ export default function ProfileInfo({ user, onUpdate }: ProfileInfoProps) {
               </div>
             </div>
 
-            {/* Edit Button */}
             <button
               onClick={() => setShowEditForm(true)}
               className="hover:bg-pink-50 rounded-xl p-3 text-[#E60278] transition-colors"
@@ -153,10 +142,8 @@ export default function ProfileInfo({ user, onUpdate }: ProfileInfoProps) {
           </div>
         </div>
 
-        {/* Tabbed Sections */}
         <TabbedSection user={user} onUpdate={onUpdate} />
 
-        {/* Edit Form Modal */}
         {showEditForm && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
             <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white">

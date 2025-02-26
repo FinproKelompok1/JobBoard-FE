@@ -1,5 +1,6 @@
 "use client";
 
+import LoadingPage from "@/components/loading";
 import CreateReview from "@/components/review/createReview";
 import StarRating from "@/components/review/starRating";
 import { CurrencyFormatter } from "@/helpers/currencryFormatter";
@@ -72,9 +73,7 @@ export default function CompanyReview() {
               </div>
             ))
           ) : (
-            <p className="text-lg font-medium text-gray-500">
-              You don&apos;t have accepted jobs
-            </p>
+            <LoadingPage />
           )}
 
           <div className="mt-3">

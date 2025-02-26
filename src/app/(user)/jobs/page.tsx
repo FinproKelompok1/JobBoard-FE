@@ -27,7 +27,6 @@ export default function AllJobsPage() {
     city: ''
   });
 
-  // Get URL search params without the hook
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
@@ -44,7 +43,6 @@ export default function AllJobsPage() {
     }
   }, [fetchJobs]);
 
-  // Listen for URL changes
   useEffect(() => {
     const handleUrlChange = () => {
       if (typeof window !== 'undefined') {
@@ -260,7 +258,6 @@ export default function AllJobsPage() {
           getCategoryIcon={getCategoryIcon} 
         />
         
-        {/* Pagination component, hanya ditampilkan jika lebih dari 1 halaman */}
         {pagination.totalPages > 1 && (
           <>
             <Pagination 
@@ -269,7 +266,6 @@ export default function AllJobsPage() {
               onPageChange={handlePageChange}
             />
             
-            {/* Jobs count and page info */}
             <div className="text-center text-gray-500 mt-4">
               Showing {jobs.length} of {pagination.totalItems} jobs - Page {pagination.currentPage} of {pagination.totalPages}
             </div>

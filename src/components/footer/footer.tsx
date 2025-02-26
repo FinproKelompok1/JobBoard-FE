@@ -15,9 +15,7 @@ export default function Footer() {
   return (
     <footer className="relative bg-[#0D3880] text-white py-8">
       <div className="container mx-auto px-6 relative z-10">
-        {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Brand Section */}
           <div className="space-y-4">
             <div className="relative h-10 w-auto">
               <Image

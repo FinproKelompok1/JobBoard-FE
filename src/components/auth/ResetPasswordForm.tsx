@@ -33,7 +33,6 @@ export default function ResetPasswordForm() {
   const [token, setToken] = useState<string | null>(null);
   const [isCompany, setIsCompany] = useState(false);
 
-  // Dapatkan parameter dari URL saat komponen dimount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
@@ -46,7 +45,7 @@ export default function ResetPasswordForm() {
   }, []);
 
   useEffect(() => {
-    if (token === null) return; // Skip jika token belum diambil
+    if (token === null) return; 
     
     if (!token) {
       toast.error('Invalid or missing reset token');
@@ -89,7 +88,6 @@ export default function ResetPasswordForm() {
   };
 
   if (token === null) {
-    // Token belum diambil, loading state
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="w-full max-w-md p-8">
@@ -110,7 +108,6 @@ export default function ResetPasswordForm() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50">
       <div className="w-full max-w-md p-8">
         <div className="bg-white p-8 rounded-xl shadow-lg relative overflow-hidden">
-          {/* Background pattern */}
           <div className="absolute top-0 right-0 w-40 h-40 bg-blue-50 rounded-full -mr-20 -mt-20 z-0" />
           <div className="absolute bottom-0 left-0 w-32 h-32 bg-pink-50 rounded-full -ml-16 -mb-16 z-0" />
 
