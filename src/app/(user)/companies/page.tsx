@@ -40,7 +40,7 @@ export default function CompaniesPage() {
   const [error, setError] = useState<string | null>(null);
   const [paginationMeta, setPaginationMeta] = useState<PaginationMeta>({
     page: 1,
-    limit: 3, 
+    limit: 4, 
     totalItems: 0,
     totalPages: 1
   });
@@ -49,6 +49,7 @@ export default function CompaniesPage() {
   const [location, setLocation] = useState('');
   const [sortBy, setSortBy] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [isPageChanging, setIsPageChanging] = useState(false);
 
   useEffect(() => {
     const getPageFromUrl = () => {
@@ -67,7 +68,7 @@ export default function CompaniesPage() {
     const fetchCompanies = async () => {
       try {
         setIsLoading(true);
-        const response = await getCompanies(currentPage, 3); 
+        const response = await getCompanies(currentPage, 4); 
         
         setCompanies(response.data);
         setFilteredCompanies(response.data);
@@ -76,6 +77,7 @@ export default function CompaniesPage() {
         setError('Failed to fetch companies');
       } finally {
         setIsLoading(false);
+        setIsPageChanging(false);
       }
     };
 
@@ -132,6 +134,7 @@ export default function CompaniesPage() {
   const handlePageChange = (page: number) => {
     if (page < 1 || page > paginationMeta.totalPages) return;
     
+    setIsPageChanging(true);
     setCurrentPage(page);
     
     const query = createQueryString('page', `${page}`);
@@ -139,7 +142,8 @@ export default function CompaniesPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  if (isLoading && companies.length === 0) {
+  // Show loading page for both initial load and page changes
+  if (isLoading || isPageChanging) {
     return <LoadingPage isLoading={true} />;
   }
 
@@ -212,11 +216,7 @@ export default function CompaniesPage() {
           </div>
 
           <div className="md:col-span-3">
-            {isLoading && companies.length > 0 ? (
-              <div className="flex justify-center my-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-4 border-[#E60278] border-t-transparent"></div>
-              </div>
-            ) : filteredCompanies.length === 0 ? (
+            {filteredCompanies.length === 0 ? (
               <div className="bg-white rounded-lg p-8 text-center">
                 <p className="text-gray-500">No companies found matching your criteria.</p>
               </div>
