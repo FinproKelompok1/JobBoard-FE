@@ -147,7 +147,7 @@ export default function Subscription() {
 
                 <div className="flex flex-col gap-3">
                   {isSubscribedToPlan(subscription.id) && (
-                    <p className="text-sm text-accent">
+                    <p className="text-sm tracking-wide text-accent">
                       You have already subscribed.
                     </p>
                   )}
