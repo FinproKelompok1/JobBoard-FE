@@ -5,7 +5,7 @@ import { toastErrAxios } from "@/helpers/toast";
 import { ICvForm } from "@/types/types";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Award, BriefcaseIcon, GraduationCap, RadioTower } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import WorkExperienceForm from "./workExperienceForm";
@@ -39,17 +39,20 @@ export default function UpdateCV({
     setEducationString(formattedEducation);
   };
 
-  const initialValues: ICvForm = {
-    summary: cv?.summary || "",
-    experience: cv.experience || "",
-    education: cv.education || "",
-    skill: cv.skill || "",
-  };
+  const initialValues: ICvForm = useMemo(
+    () => ({
+      summary: cv?.summary || "",
+      experience: cv.experience || "",
+      education: cv.education || "",
+      skill: cv.skill || "",
+    }),
+    [cv],
+  );
 
   useEffect(() => {
     setExperienceString(initialValues.experience);
     setEducationString(initialValues.education);
-  }, []);
+  }, [initialValues]);
 
   const handleEditCv = async (
     values: ICvForm,

@@ -43,7 +43,7 @@ export default function EditSubscription({
     };
 
     fetchSubscription();
-  }, []);
+  }, [subscriptionId]);
 
   const initialValues: ISubscriptionForm = {
     category: subscription?.category || "",
@@ -61,8 +61,8 @@ export default function EditSubscription({
       toast.success(response.data.message);
       router.push("/developer/subscription");
       router.refresh();
-    } catch  {
-      toast.error("Error edit subscription");
+    } catch (error) {
+      console.log("Error edit subscription", error);
     }
   };
 
