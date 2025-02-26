@@ -11,7 +11,6 @@ export default function VerifyEmailChangePage() {
   const [token, setToken] = useState<string | null>(null);
   const [status, setStatus] = useState("Verifying...");
 
-  // Dapatkan token dari URL saat komponen dimount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
@@ -23,7 +22,6 @@ export default function VerifyEmailChangePage() {
     const verify = async () => {
       try {
         if (!token) {
-          // Skip verifikasi jika token belum diambil dari URL
           if (token === null && typeof window === 'undefined') return;
           
           toast.error("Verification token is missing");

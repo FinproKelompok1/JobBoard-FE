@@ -6,9 +6,9 @@ import CompanyDiscovery from "@/components/homepage/companyDiscovery";
 
 export default function Home() {
   return (
-<main className="bg-gray-50"> {/* or whatever color matches your site background */}
+<main className="bg-gray-50"> 
   <Hero />
-  <div className="px-6 md:px-10 lg:px-16 bg-gray-50"> {/* same bg color */}
+  <div className="px-6 md:px-10 lg:px-16 bg-gray-50"> 
     <DiscoverySection />
     <CompanyDiscovery />
   </div>

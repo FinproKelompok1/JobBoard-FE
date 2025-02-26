@@ -188,7 +188,6 @@ export default function ProfileEditForm({
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Profile Picture */}
         <div>
           <label className="mb-2 block text-sm font-medium">
             Profile Picture
@@ -218,7 +217,6 @@ export default function ProfileEditForm({
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          {/* Full Name */}
           <div>
             <label className="mb-2 block text-sm font-medium">Full Name</label>
             <input
@@ -232,7 +230,6 @@ export default function ProfileEditForm({
             />
           </div>
 
-          {/* Current Email field with change button */}
           <div>
             <label className="mb-2 block text-sm font-medium">
               Current Email
@@ -254,7 +251,6 @@ export default function ProfileEditForm({
             </div>
           </div>
 
-          {/* Gender */}
           <div>
             <label className="mb-2 block text-sm font-medium">Gender</label>
             <select
@@ -274,7 +270,6 @@ export default function ProfileEditForm({
             </select>
           </div>
 
-          {/* Date of Birth */}
           <div>
             <label className="mb-2 block text-sm font-medium">
               Date of Birth
@@ -290,7 +285,6 @@ export default function ProfileEditForm({
             />
           </div>
 
-          {/* Last Education */}
           <div className="col-span-2">
             <label className="mb-2 block text-sm font-medium">
               Last Education
@@ -317,7 +311,6 @@ export default function ProfileEditForm({
             </select>
           </div>
 
-          {/* Province & City */}
           <div>
             <label className="mb-2 block text-sm font-medium">Province</label>
             <SelectProfileProvince
@@ -339,7 +332,6 @@ export default function ProfileEditForm({
           </div>
         </div>
 
-        {/* Submit Buttons */}
         <div className="flex justify-end border-t pt-4">
           <button
             type="button"
@@ -360,7 +352,6 @@ export default function ProfileEditForm({
         </div>
       </form>
 
-      {/* Email Change Dialog */}
       <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -420,7 +411,6 @@ export default function ProfileEditForm({
         </DialogContent>
       </Dialog>
 
-      {/* Password Change Dialog */}
       <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>

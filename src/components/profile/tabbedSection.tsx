@@ -27,7 +27,6 @@ export default function TabbedSection({ user, onUpdate }: TabbedSectionProps) {
 
   return (
     <div className="mb-6 rounded-xl bg-white shadow-lg">
-      {/* Tabs Navigation */}
       <div className="flex border-b">
         <button
           onClick={() => setActiveTab("academic")}
@@ -51,7 +50,6 @@ export default function TabbedSection({ user, onUpdate }: TabbedSectionProps) {
         </button>
       </div>
 
-      {/* Tab Content */}
       <div className="p-6">
         {activeTab === "academic" && (
           <CvSection

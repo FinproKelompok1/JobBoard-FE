@@ -129,6 +129,24 @@ export const authService = {
       return false;
     }
   },
+
+  getUserProfile: async () => {
+    try {
+      const response = await axios.get("/auth/me");
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  checkProfileCompletion: async () => {
+    try {
+      const response = await axios.get("/auth/check-completion");
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export const getUserProfile = async () => {

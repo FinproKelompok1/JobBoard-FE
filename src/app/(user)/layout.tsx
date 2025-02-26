@@ -2,7 +2,7 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { authService } from "@/libs/auth"; 
 
 export default function UserLayout({
   children,
@@ -50,33 +50,29 @@ export default function UserLayout({
 
   const checkProfileCompletion = async () => {
     try {
-      const token = getCookie("token");
-      if (!token) return;
+      const response = await authService.checkProfileCompletion();
 
-      setShowModal(true);
-      
-      const response = await axios.get("/api/user/me", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-
-      if (response.data.success && response.data.data) {
-        const userData = response.data.data;
+      if (response.success && response.data) {
+        const { isComplete, missingFields: missingData } = response.data;
         
         const missingFieldList = [];
-        if (!userData.gender) missingFieldList.push('gender');
-        if (!userData.dob) missingFieldList.push('date of birth');
-        if (!userData.lastEdu) missingFieldList.push('education');
-        if (!userData.domicileId) missingFieldList.push('current location');
+        if (missingData.gender) missingFieldList.push('gender');
+        if (missingData.dob) missingFieldList.push('date of birth');
+        if (missingData.lastEdu) missingFieldList.push('education');
+        if (missingData.domicileId) missingFieldList.push('current location');
 
-        if (missingFieldList.length > 0) {
+        if (!isComplete && missingFieldList.length > 0) {
           setMissingFields(missingFieldList);
           setShowModal(true);
         } else {
           setShowModal(false);
         }
+      } else {
+        setShowModal(false);
       }
     } catch (error) {
       console.error("Error checking profile:", error);
+      setShowModal(false);
     }
   };
 

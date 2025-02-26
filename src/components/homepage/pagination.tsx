@@ -43,7 +43,6 @@ const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <div className="flex justify-center items-center mt-8 space-x-2">
-      {/* Previous button */}
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
@@ -59,7 +58,6 @@ const Pagination: React.FC<PaginationProps> = ({
         </svg>
       </button>
 
-      {/* Page numbers */}
       {getPageNumbers().map((page, index) => (
         page === '...' ? (
           <span key={`ellipsis-${index}`} className="px-4 py-2 text-gray-700">
@@ -82,7 +80,6 @@ const Pagination: React.FC<PaginationProps> = ({
         )
       ))}
 
-      {/* Next button */}
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
