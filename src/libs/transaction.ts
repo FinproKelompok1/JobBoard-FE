@@ -57,12 +57,37 @@ export async function getTransactionToken(id: string, amount: number) {
   }
 }
 
-export async function getUserTransaction(username: string) {
+export async function getUserTransaction({
+  page = 1,
+  limit = 10,
+  sort = "createdAt",
+  order = "desc",
+  status = "",
+  email = "",
+} = {}) {
   try {
-    const response = await axios.get(`/user-transactions/${username}`);
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+    const response = await axios.get("/user-transactions", {
+      params: { page, limit, sort, order, status, email },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    return response.data.userTransactions;
+    console.log("response", response);
+
+    return {
+      userTransactions: response.data.userTransactions ?? [],
+      totalPages: response.data.totalPages ?? 1,
+    };
   } catch (error) {
     console.error("Error get user transactions", error);
+    return {
+      userTransactions: [],
+      totalPages: 1,
+    };
   }
 }

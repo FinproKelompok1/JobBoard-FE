@@ -146,3 +146,14 @@ export interface IReview {
   salary: number;
   jobTitle: string;
 }
+
+export interface IUserTransaction {
+  id: string;
+  userId: number;
+  subscription: {
+    category: string;
+  };
+  amount: number;
+  status: string;
+  createdAt: string;
+}

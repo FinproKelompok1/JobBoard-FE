@@ -31,6 +31,8 @@ export default function ProfilePage() {
   if (error) return <div className="text-red-500">{error}</div>;
   if (!user) return <div>No user data found</div>;
 
+  console.log("user subs:", user.CurriculumVitae);
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto max-w-7xl px-4">
