@@ -25,7 +25,6 @@ export default function CompanyPreview({ companies }: CompanyPreviewProps) {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
           <h2 className="text-2xl font-bold text-[#0D3880] mb-2">
@@ -43,7 +42,6 @@ export default function CompanyPreview({ companies }: CompanyPreviewProps) {
         </Link>
       </div>
 
-      {/* Companies Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {previewCompanies.map((company) => (
           <div key={company.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6">

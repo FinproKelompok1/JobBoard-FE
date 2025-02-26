@@ -11,7 +11,6 @@ export default function GoogleCallback() {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        // Get code parameter from URL using browser's URLSearchParams API
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get("code");
 

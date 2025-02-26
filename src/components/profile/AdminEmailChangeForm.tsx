@@ -59,7 +59,6 @@ export default function AdminEmailSection({ email }: AdminEmailSectionProps) {
       </div>
       <p className="text-gray-600">{email}</p>
 
-      {/* Email Change Dialog */}
       <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>

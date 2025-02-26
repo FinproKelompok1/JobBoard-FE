@@ -14,7 +14,6 @@ export default function VerifyPage() {
   const [message, setMessage] = useState('');
   const [token, setToken] = useState<string | null>(null);
 
-  // Effect untuk mendapatkan token dari URL saat komponen dimount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
@@ -23,12 +22,10 @@ export default function VerifyPage() {
     }
   }, []);
 
-  // Effect untuk memverifikasi email setelah token didapatkan
   useEffect(() => {
     const verifyEmail = async () => {
       try {
         if (!token) {
-          // Skip verifikasi jika token belum diambil dari URL
           if (token === null && typeof window === 'undefined') return;
           
           setStatus('error');

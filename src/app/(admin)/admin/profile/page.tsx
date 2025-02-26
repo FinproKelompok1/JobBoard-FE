@@ -48,7 +48,6 @@ export default function AdminProfilePage() {
         <div className="mx-auto max-w-4xl">
           {profile && (
             <>
-              {/* Email Section - Add this before the AdminProfileForm */}
               <div className="mb-6 rounded-lg bg-white p-6 shadow">
                 <AdminEmailSection email={profile.email} />
               </div>
