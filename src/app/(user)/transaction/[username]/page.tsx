@@ -25,7 +25,7 @@ export default function UserTransaction() {
       const { data } = await getUserProfile();
       setUser(data);
     } catch {
-      console.log("Error fetch user profile");
+      console.error("Error fetch user profile");
     }
   };
 

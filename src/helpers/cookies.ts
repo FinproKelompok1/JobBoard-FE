@@ -15,7 +15,7 @@ export const getUserData = () => {
   try {
     const userStr = getCookie("user");
     if (!userStr) {
-      console.log("No user cookie found");
+      console.error("No user cookie found");
       return null;
     }
 

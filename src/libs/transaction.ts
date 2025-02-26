@@ -77,8 +77,6 @@ export async function getUserTransaction({
       },
     });
 
-    console.log("response", response);
-
     return {
       userTransactions: response.data.userTransactions ?? [],
       totalPages: response.data.totalPages ?? 1,

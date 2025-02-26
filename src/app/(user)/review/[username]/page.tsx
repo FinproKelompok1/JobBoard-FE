@@ -73,7 +73,9 @@ export default function CompanyReview() {
               </div>
             ))
           ) : (
-            <LoadingPage />
+            <p className="text-lg font-medium text-gray-500">
+              You don't have accepted jobs
+            </p>
           )}
 
           <div className="mt-3">

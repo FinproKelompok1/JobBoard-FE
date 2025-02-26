@@ -46,7 +46,7 @@ export default function Subscription() {
           const subscriptions = await getSubscriptions();
           setSubscriptions(subscriptions);
         } catch (error) {
-          console.log("Error getting subscriptions:", error);
+          console.error("Error getting subscriptions:", error);
         }
       };
 

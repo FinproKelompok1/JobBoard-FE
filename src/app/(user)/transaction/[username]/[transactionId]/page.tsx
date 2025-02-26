@@ -47,7 +47,7 @@ export default function TransactionDetail({
           return () => clearInterval(interval);
         }
       } catch (error) {
-        console.log("Error get transaction:", error);
+        console.error("Error get transaction:", error);
       }
     };
 

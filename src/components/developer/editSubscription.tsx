@@ -36,7 +36,7 @@ export default function EditSubscription({
         const subscription = await getSubscriptionById(subscriptionId);
         setSubscription(subscription);
       } catch (error) {
-        console.log("Error get subscription:", error);
+        console.error("Error get subscription:", error);
       } finally {
         setIsEditing(false);
       }
@@ -62,7 +62,7 @@ export default function EditSubscription({
       router.push("/developer/subscription");
       router.refresh();
     } catch (error) {
-      console.log("Error edit subscription", error);
+      console.error("Error edit subscription", error);
     }
   };
 

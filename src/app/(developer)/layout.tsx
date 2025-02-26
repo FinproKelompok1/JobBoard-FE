@@ -33,16 +33,16 @@ export default function DeveloperLayout({
 
       if (userObject.role === "none") {
         router.push("/auth/verify-oauth");
-        return; 
+        return;
       }
 
       if (userObject.role !== "developer") {
         router.push("/unauthorized");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
-  }, [router]); 
+  }, [router]);
 
   return <>{children}</>;
 }
