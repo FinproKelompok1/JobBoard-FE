@@ -8,14 +8,12 @@ import UseOpen from "@/hooks/useOpen";
 import { PiSignOutFill } from "react-icons/pi";
 import logOut from "@/helpers/logout";
 import { useEffect, useState } from "react";
-import useCookie from "@/hooks/useCookie";
 import { IUser } from "@/types/user";
 import Image from "next/image";
 
 export default function MobileNav() {
   const { open, hidden, menuHandler } = UseOpen();
   const [userH, setUserH] = useState<IUser | null>(null);
-  const user = useCookie("user");
 
   useEffect(() => {
     const checkUserCookie = () => {

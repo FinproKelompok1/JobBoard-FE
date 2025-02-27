@@ -2,7 +2,6 @@ import axios from "@/helpers/axios";
 import { toastErrAxios } from "@/helpers/toast";
 import { CurriculumVitae } from "@/types/profile";
 import { toast } from "react-toastify";
-import { getUserData } from "@/helpers/cookies";
 
 interface AdminRegisterData {
   companyName: string;

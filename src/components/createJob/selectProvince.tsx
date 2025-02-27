@@ -1,7 +1,6 @@
 import { ErrorMessage, Field, FormikProps } from "formik";
 import React, { useEffect, useState } from "react";
 import { FormValueJob } from "@/types/form";
-import axios from "@/helpers/axios";
 import { toastErrAxios } from "@/helpers/toast";
 
 interface IProvince {
