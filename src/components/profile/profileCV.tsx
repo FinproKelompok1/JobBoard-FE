@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Upload, Mail, Save } from "lucide-react";
 import { UserProfile, Gender, LastEdu } from "@/types/profile";
 import { changeEmail, UpdateProfile, uploadProfileImage } from "@/libs/auth";
@@ -11,9 +11,11 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import { changePassword } from "@/libs/changePassword";
 import { toastErrAxios } from "@/helpers/toast";
+import { checkIfOauthUser } from "@/libs/auth";
 
 interface ProfileEditFormProps {
   user: UserProfile;
@@ -47,6 +49,8 @@ export default function ProfileEditForm({
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
   const [provinceId, setProvinceId] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [isOauth, setIsOauth] = useState(false);
+  const [isOauthDialogOpen, setIsOauthDialogOpen] = useState(false);
 
   const [formData, setFormData] = useState<FormData>({
     fullname: user.fullname || "",
@@ -68,6 +72,19 @@ export default function ProfileEditForm({
     newPassword: "",
     confirmPassword: "",
   });
+
+  useEffect(() => {
+    const checkOauth = async () => {
+      try {
+        const isOauthUser = await checkIfOauthUser(user.email, false); 
+        setIsOauth(isOauthUser);
+      } catch (error) {
+        console.error("Error checking OAuth status:", error);
+      }
+    };
+
+    checkOauth();
+  }, [user.email]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -137,7 +154,8 @@ export default function ProfileEditForm({
         password: "",
       });
       setShowEmailDialog(false);
-    } catch {
+    } catch (e) {
+      toastErrAxios(e);
     } finally {
       setLoading(false);
     }
@@ -165,6 +183,14 @@ export default function ProfileEditForm({
       toastErrAxios(e);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleEmailButtonClick = () => {
+    if (isOauth) {
+      setIsOauthDialogOpen(true);
+    } else {
+      setShowEmailDialog(true);
     }
   };
 
@@ -243,12 +269,22 @@ export default function ProfileEditForm({
               />
               <button
                 type="button"
-                onClick={() => setShowEmailDialog(true)}
-                className="hover:bg-pink-50 rounded-lg px-3 py-2 text-[#E60278] transition-colors"
+                onClick={handleEmailButtonClick}
+                className={`rounded-lg px-3 py-2 transition-colors ${
+                  isOauth
+                    ? "text-gray-400 cursor-not-allowed"
+                    : "text-[#E60278] hover:bg-pink-50"
+                }`}
+                disabled={isOauth}
               >
                 <Mail className="h-4 w-4" />
               </button>
             </div>
+            {isOauth && (
+              <p className="mt-1 text-xs text-amber-600">
+                Email change is not available for social login accounts.
+              </p>
+            )}
           </div>
 
           <div>
@@ -441,6 +477,27 @@ export default function ProfileEditForm({
               </button>
             </div>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isOauthDialogOpen} onOpenChange={setIsOauthDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="text-[#0D3880]">Social Login Account</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-gray-700 mb-2">We&apos;ve detected that you signed up using a social login provider (Google or Facebook).</p>
+            <p className="text-gray-700 mb-2">Email change is not available for social login accounts.</p>
+            <p className="text-gray-700">To change your email, please update it in your Google or Facebook account settings, then use the updated email to log in.</p>
+          </div>
+          <DialogFooter>
+            <button
+              onClick={() => setIsOauthDialogOpen(false)}
+              className="bg-[#E60278] text-white py-2 px-4 rounded-lg hover:bg-[#E60278]/90 transition-colors"
+            >
+              I Understand
+            </button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

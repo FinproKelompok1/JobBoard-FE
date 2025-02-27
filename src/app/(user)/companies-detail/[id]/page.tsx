@@ -8,6 +8,8 @@ import { CompanyHeader } from '@/components/company/CompanyHeader';
 import { AboutSection } from '@/components/company/AboutSection';
 import { JobsList } from '@/components/company/JobList';
 import { ContactInfo } from '@/components/company/ContactInfo';
+import Link from 'next/link';
+import { IoIosArrowBack } from 'react-icons/io'; 
 
 export default function CompanyDetailPage({ params }: { params: { id: string } }) {
   const [company, setCompany] = useState<CompanyDetail | null>(null);
@@ -48,6 +50,16 @@ export default function CompanyDetailPage({ params }: { params: { id: string } }
   return (
     <div className="min-h-screen pt-16 bg-gradient-to-b from-gray-50 to-white">
       <div className="container mx-auto px-4 py-6">
+        <div className="mb-8">
+          <Link 
+            href="/jobs"
+            className="inline-flex items-center text-gray-600 hover:text-gray-900"
+          >
+            <IoIosArrowBack className="w-5 h-5 mr-2" />
+            Back to All Jobs
+          </Link>
+        </div>
+
         <CompanyHeader company={company} />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

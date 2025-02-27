@@ -253,3 +253,18 @@ export const verifyAdminEmailChange = async (token: string) => {
     throw error;
   }
 };
+
+export const checkIfOauthUser = async (
+  email: string,
+  isCompany: boolean = false,
+): Promise<boolean> => {
+  try {
+    const response = await axios.get(
+      `/auth/check-oauth-user?email=${encodeURIComponent(email)}&userType=${isCompany ? "admin" : "user"}`,
+    );
+    return response.data.isOauthUser;
+  } catch (error) {
+    console.error("Error checking OAuth status:", error);
+    return false;
+  }
+};
