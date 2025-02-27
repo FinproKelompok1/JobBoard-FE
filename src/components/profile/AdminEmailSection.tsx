@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,6 +9,7 @@ import { Mail } from "lucide-react";
 import axios from "@/helpers/axios";
 import { toast } from "react-toastify";
 import { toastErrAxios } from "@/helpers/toast";
+import { checkIfOauthUser } from "@/libs/auth"; 
 
 interface AdminEmailSectionProps {
   email: string;
@@ -17,10 +18,25 @@ interface AdminEmailSectionProps {
 export default function AdminEmailSection({ email }: AdminEmailSectionProps) {
   const [showEmailDialog, setShowEmailDialog] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isOauth, setIsOauth] = useState(false);
+  const [isOauthDialogOpen, setIsOauthDialogOpen] = useState(false);
   const [emailData, setEmailData] = useState({
     newEmail: "",
     password: "",
   });
+
+  useEffect(() => {
+    const checkOauth = async () => {
+      try {
+        const isOauthUser = await checkIfOauthUser(email, true); 
+        setIsOauth(isOauthUser);
+      } catch (error) {
+        console.error("Error checking OAuth status:", error);
+      }
+    };
+
+    checkOauth();
+  }, [email]);
 
   const handleDirectEmailChange = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,19 +79,37 @@ export default function AdminEmailSection({ email }: AdminEmailSectionProps) {
     }
   };
 
+  const handleEmailButtonClick = () => {
+    if (isOauth) {
+      setIsOauthDialogOpen(true);
+    } else {
+      setShowEmailDialog(true);
+    }
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-medium text-[#0D3880]">Email Address</h3>
         <button
-          onClick={() => setShowEmailDialog(true)}
-          className="hover:text-pink-700 flex items-center gap-1 font-medium text-[#E60278]"
+          onClick={handleEmailButtonClick}
+          className={`flex items-center gap-1 font-medium ${
+            isOauth
+              ? "text-gray-400 cursor-not-allowed"
+              : "text-[#E60278] hover:text-pink-700"
+          }`}
+          disabled={isOauth}
         >
           <Mail className="h-4 w-4" />
           Change Email
         </button>
       </div>
       <p className="mt-2 text-gray-600">{email}</p>
+      {isOauth && (
+        <p className="mt-1 text-xs text-amber-600">
+          Email change is not available for social login accounts.
+        </p>
+      )}
 
       <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
         <DialogContent className="sm:max-w-[425px]">
@@ -142,6 +176,27 @@ export default function AdminEmailSection({ email }: AdminEmailSectionProps) {
               </button>
             </div>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isOauthDialogOpen} onOpenChange={setIsOauthDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="text-[#0D3880]">Social Login Account</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-gray-700 mb-2">We&apos;ve detected that you signed up using a social login provider (Google).</p>
+            <p className="text-gray-700 mb-2">Email change is not available for social login accounts.</p>
+            <p className="text-gray-700">To change your email, please update it in your Google or Facebook account settings, then use the updated email to log in.</p>
+          </div>
+          <div className="flex justify-end">
+            <button
+              onClick={() => setIsOauthDialogOpen(false)}
+              className="bg-[#E60278] text-white py-2 px-4 rounded-lg hover:bg-[#E60278]/90 transition-colors"
+            >
+              I Understand
+            </button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
