@@ -16,6 +16,7 @@ import CreateCV from "../cv/createCV";
 import { SimpleDateFormatter } from "@/helpers/dateFormatter";
 import UpdateCV from "../cv/updateCV";
 import Link from "next/link";
+import { getCookie } from "@/helpers/cookies";
 
 export interface CvSectionProps {
   user: UserProfile;
@@ -27,6 +28,8 @@ export default function CvSection({ user, initialCV }: CvSectionProps) {
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isCreating, setIsCreating] = useState<boolean>(false);
+  const userCookie = getCookie("user");
+  const userObject = JSON.parse(`${userCookie}`);
   const cvData = {
     summary: initialCV?.summary,
     workExperience: initialCV?.experience,
@@ -96,53 +99,55 @@ export default function CvSection({ user, initialCV }: CvSectionProps) {
               Curriculum Vitae
             </h2>
           </div>
-          <div className="flex items-center gap-5">
-            {hasActiveSubscription ? (
-              !cvData.summary &&
-              !cvData.workExperience &&
-              !cvData.skill &&
-              !cvData.education ? (
-                <button
-                  onClick={() => setIsCreating(true)}
-                  className="flex items-center gap-2 rounded-lg border border-accent bg-accent px-4 py-2 font-medium text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/80"
-                >
-                  <Plus className="h-5 w-5" />
-                  <span>Create CV</span>
-                </button>
-              ) : (
-                <>
+          {userObject.role !== 'admin' && (
+            <div className="flex items-center gap-5">
+              {hasActiveSubscription ? (
+                !cvData.summary &&
+                  !cvData.workExperience &&
+                  !cvData.skill &&
+                  !cvData.education ? (
                   <button
-                    onClick={() => setIsEditing(true)}
-                    className="inline-flex items-center gap-2 rounded-lg border border-accent px-4 py-2 font-medium text-[#E60278] transition-all duration-300 ease-in-out hover:bg-accent hover:text-white"
-                  >
-                    <Edit className="h-5 w-5" />
-                    <span>Edit CV</span>
-                  </button>
-                  <button
-                    onClick={() =>
-                      handleDownloadCV(user.username, setIsDownloading)
-                    }
-                    disabled={isDownloading}
+                    onClick={() => setIsCreating(true)}
                     className="flex items-center gap-2 rounded-lg border border-accent bg-accent px-4 py-2 font-medium text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/80"
                   >
-                    <Download className="h-5 w-5" />
-                    {isDownloading ? "Downloading..." : "Download"}
+                    <Plus className="h-5 w-5" />
+                    <span>Create CV</span>
                   </button>
-                </>
-              )
-            ) : (
-              <p className="text-lg text-gray-700">
-                Please{" "}
-                <Link
-                  href="/subscription"
-                  className="text-accent hover:underline"
-                >
-                  subscribe
-                </Link>{" "}
-                to generate CV.
-              </p>
-            )}
-          </div>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => setIsEditing(true)}
+                      className="inline-flex items-center gap-2 rounded-lg border border-accent px-4 py-2 font-medium text-[#E60278] transition-all duration-300 ease-in-out hover:bg-accent hover:text-white"
+                    >
+                      <Edit className="h-5 w-5" />
+                      <span>Edit CV</span>
+                    </button>
+                    <button
+                      onClick={() =>
+                        handleDownloadCV(user.username, setIsDownloading)
+                      }
+                      disabled={isDownloading}
+                      className="flex items-center gap-2 rounded-lg border border-accent bg-accent px-4 py-2 font-medium text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/80"
+                    >
+                      <Download className="h-5 w-5" />
+                      {isDownloading ? "Downloading..." : "Download"}
+                    </button>
+                  </>
+                )
+              ) : (
+                <p className="text-lg text-gray-700">
+                  Please{" "}
+                  <Link
+                    href="/subscription"
+                    className="text-accent hover:underline"
+                  >
+                    subscribe
+                  </Link>{" "}
+                  to generate CV.
+                </p>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="rounded-xl border border-blue-100 bg-gradient-to-r from-blue-50 to-white p-6">

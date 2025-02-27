@@ -4,6 +4,7 @@ import { UserProfile, CurriculumVitae } from "@/types/profile";
 import { updateCV } from "@/libs/auth";
 import ApplicationsSection from "./applicationSection";
 import CvSection from "./cvSection";
+import { getCookie } from "@/helpers/cookies";
 
 interface TabbedSectionProps {
   user: UserProfile;
@@ -14,6 +15,8 @@ export default function TabbedSection({ user, onUpdate }: TabbedSectionProps) {
   const [activeTab, setActiveTab] = useState<"academic" | "applications">(
     "academic",
   );
+  const userCookie = getCookie("user");
+  const userObject = JSON.parse(`${userCookie}`);
 
   const handleCVSave = async (cvData: Omit<CurriculumVitae, "id">) => {
     try {
@@ -30,24 +33,24 @@ export default function TabbedSection({ user, onUpdate }: TabbedSectionProps) {
       <div className="flex border-b">
         <button
           onClick={() => setActiveTab("academic")}
-          className={`relative px-8 py-3 text-lg font-medium transition-colors ${
-            activeTab === "academic"
-              ? "border-b-2 border-[#0D3880] text-[#0D3880]"
-              : "text-gray-500 hover:text-gray-700"
-          }`}
+          className={`relative px-8 py-3 text-lg font-medium transition-colors ${activeTab === "academic"
+            ? "border-b-2 border-[#0D3880] text-[#0D3880]"
+            : "text-gray-500 hover:text-gray-700"
+            }`}
         >
           Curriculum Vitae
         </button>
-        <button
-          onClick={() => setActiveTab("applications")}
-          className={`relative px-8 py-3 text-lg font-medium transition-colors ${
-            activeTab === "applications"
+        {userObject.role !== 'admin' && (
+          <button
+            onClick={() => setActiveTab("applications")}
+            className={`relative px-8 py-3 text-lg font-medium transition-colors ${activeTab === "applications"
               ? "border-b-2 border-[#0D3880] text-[#0D3880]"
               : "text-gray-500 hover:text-gray-700"
-          }`}
-        >
-          Job Applications
-        </button>
+              }`}
+          >
+            Job Applications
+          </button>
+        )}
       </div>
 
       <div className="p-6">

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useAllJobs } from '@/hooks/useAllJobs'; 
+import { useAllJobs } from '@/hooks/useAllJobs';
 import JobFilter, { FilterParams } from '@/components/homepage/filter';
 import JobsList from '@/components/homepage/jobList';
 import Pagination from '@/components/homepage/pagination';
@@ -17,7 +17,7 @@ interface LocationState {
 }
 
 export default function AllJobsPage() {
-  const { jobs, isLoading, pagination, fetchJobs, changePage } = useAllJobs(3); 
+  const { jobs, isLoading, pagination, fetchJobs, changePage } = useAllJobs(3);
   const [userLocation, setUserLocation] = useState<LocationState | null>(null);
   const [isUsingLocation, setIsUsingLocation] = useState(false);
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
@@ -31,14 +31,14 @@ export default function AllJobsPage() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
-      
+
       const initialFilters = {
         searchTerm: urlParams.get('search') || '',
         category: urlParams.get('category') || '',
         province: urlParams.get('province') || '',
         city: urlParams.get('city') || ''
       };
-      
+
       setCurrentFilters(initialFilters);
       fetchJobs(initialFilters);
     }
@@ -48,21 +48,21 @@ export default function AllJobsPage() {
     const handleUrlChange = () => {
       if (typeof window !== 'undefined') {
         const urlParams = new URLSearchParams(window.location.search);
-        
+
         const updatedFilters = {
           searchTerm: urlParams.get('search') || currentFilters.searchTerm,
           category: urlParams.get('category') || currentFilters.category,
           province: urlParams.get('province') || currentFilters.province,
           city: urlParams.get('city') || currentFilters.city
         };
-        
+
         setCurrentFilters(updatedFilters);
         fetchJobs(updatedFilters);
       }
     };
 
     window.addEventListener('popstate', handleUrlChange);
-    
+
     return () => {
       window.removeEventListener('popstate', handleUrlChange);
     };
@@ -85,105 +85,105 @@ export default function AllJobsPage() {
 
     loadSavedLocation();
   }, []);
-  
+
   const handleFilter = (filters: FilterParams) => {
     const updatedFilters = { ...filters };
-    
+
     if (isUsingLocation && userLocation) {
       updatedFilters.city = userLocation.city;
       updatedFilters.province = userLocation.province;
     }
-    
+
     setCurrentFilters(updatedFilters);
-    fetchJobs(updatedFilters, 1); 
+    fetchJobs(updatedFilters, 1);
   };
-  
+
   const handlePageChange = (page: number) => {
     changePage(page, currentFilters);
-    
+
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
   };
-  
+
   const toggleLocationFilter = async () => {
     if (isUsingLocation) {
       setIsUsingLocation(false);
-      
+
       const updatedFilters = {
         ...currentFilters,
         city: '',
         province: ''
       };
-      
+
       setCurrentFilters(updatedFilters);
-      fetchJobs(updatedFilters, 1); 
+      fetchJobs(updatedFilters, 1);
       return;
     }
-    
+
     if (userLocation) {
       setIsUsingLocation(true);
-      
+
       const updatedFilters = {
         ...currentFilters,
         city: userLocation.city,
         province: userLocation.province
       };
-      
+
       setCurrentFilters(updatedFilters);
-      fetchJobs(updatedFilters, 1); 
+      fetchJobs(updatedFilters, 1);
     } else {
       setIsLoadingLocation(true);
-      
+
       try {
         if (!("geolocation" in navigator)) {
           throw new Error("Geolocation not supported");
         }
-        
+
         const position = await new Promise<GeolocationPosition>((resolve, reject) => {
           navigator.geolocation.getCurrentPosition(resolve, reject, {
             timeout: 10000
           });
         });
-        
+
         const response = await fetch(
           `https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}+${position.coords.longitude}&key=bcf87dd591a44c57b21a10bed03f5daa`
         );
-        
+
         const data = await response.json();
         if (data.results && data.results.length > 0) {
           const components = data.results[0].components;
-          
-          const cityName = components.city || components.town || components.county || 
-                         components.state_district || components.municipality;
+
+          const cityName = components.city || components.town || components.county ||
+            components.state_district || components.municipality;
           const provinceName = components.state || components.province || components.region;
-          
+
           if (cityName) {
             let formattedCity = cityName;
-            if (components.country_code === 'id' && 
-                !formattedCity.toUpperCase().startsWith('KOTA') &&
-                !formattedCity.toUpperCase().startsWith('KABUPATEN')) {
+            if (components.country_code === 'id' &&
+              !formattedCity.toUpperCase().startsWith('KOTA') &&
+              !formattedCity.toUpperCase().startsWith('KABUPATEN')) {
               formattedCity = `KOTA ${formattedCity}`;
             }
-            
+
             const location = {
               city: formattedCity.toUpperCase(),
               province: provinceName ? provinceName.toUpperCase() : ""
             };
-            
+
             setUserLocation(location);
             localStorage.setItem('userLocation', JSON.stringify(location));
             setIsUsingLocation(true);
-            
+
             const updatedFilters = {
               ...currentFilters,
               city: location.city,
               province: location.province
             };
-            
+
             setCurrentFilters(updatedFilters);
-            fetchJobs(updatedFilters, 1); 
+            fetchJobs(updatedFilters, 1);
             toast.success(`Showing jobs in ${location.city}`);
           } else {
             throw new Error("Couldn't determine your city");
@@ -202,11 +202,11 @@ export default function AllJobsPage() {
       }
     }
   };
-  
+
   if (isLoading || isLoadingLocation) {
     return <LoadingPage isLoading={true} />;
   }
-  
+
   return (
     <main className="min-h-screen bg-gray-50 py-12">
       <div className="container mx-auto px-4">
@@ -216,12 +216,12 @@ export default function AllJobsPage() {
               {isUsingLocation && userLocation ? 'Jobs Near You' : 'All Job Listings'}
             </h1>
             <p className="text-gray-600">
-              {isUsingLocation && userLocation 
-                ? `Showing jobs in ${userLocation.city}, ${userLocation.province}` 
+              {isUsingLocation && userLocation
+                ? `Showing jobs in ${userLocation.city}, ${userLocation.province}`
                 : 'Find career opportunities that match your skills and interests'}
             </p>
           </div>
-          
+
           <button
             onClick={toggleLocationFilter}
             className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded text-gray-700 flex items-center space-x-2"
@@ -239,29 +239,29 @@ export default function AllJobsPage() {
             )}
           </button>
         </div>
-        
-        <JobFilter 
+
+        <JobFilter
           onSearch={handleFilter}
           isHero={false}
           className="mb-8 p-4 bg-white rounded-lg shadow"
           initialFilters={currentFilters}
         />
-        
-        <JobsList 
+
+        <JobsList
           jobs={jobs}
           userLocation={isUsingLocation ? userLocation : null}
           CurrencyFormatter={CurrencyFormatter}
-          getCategoryIcon={getCategoryIcon} 
+          getCategoryIcon={getCategoryIcon}
         />
-        
+
         {pagination.totalPages > 1 && (
           <>
-            <Pagination 
+            <Pagination
               currentPage={pagination.currentPage}
               totalPages={pagination.totalPages}
               onPageChange={handlePageChange}
             />
-            
+
             <div className="text-center text-gray-500 mt-4">
               Showing {jobs.length} of {pagination.totalItems} jobs - Page {pagination.currentPage} of {pagination.totalPages}
             </div>

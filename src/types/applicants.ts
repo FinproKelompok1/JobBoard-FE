@@ -11,6 +11,7 @@ export interface IApplicants {
 
 interface IUser {
   avatar: string;
+  username: string;
   fullname: string;
   dob: string;
   lastEdu: string;

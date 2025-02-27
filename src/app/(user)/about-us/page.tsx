@@ -27,7 +27,7 @@ export default function AboutUs() {
       image: "/about/ts.jpg" 
     },
     {
-      name: "Hanif",
+      name: "Hanif Ahmad Rizqullah",
       role: "Fullstack",
       description: "Specialized in building robust and scalable backend systems.",
       instagram: "hanif",
@@ -35,7 +35,7 @@ export default function AboutUs() {
       image: "/about/hanif.jpg" 
     },
     {
-      name: "Wildan",
+      name: "Muhammad Wildan Sapoetro",
       role: "Fullstack",
       description: "Dedicated to creating intuitive and engaging user experiences.",
       instagram: "Wildan",

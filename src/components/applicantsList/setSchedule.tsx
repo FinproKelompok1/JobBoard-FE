@@ -96,12 +96,12 @@ export default function SetSchedule({ jobId, userId }: IProps) {
             <span>{formatDate(interviewOldDate)}</span>
             <span>{interviewOldTime}</span>
           </div>
-          <button onClick={menuHandler} className="absolute top-[0.8rem] -left-[1rem] text-xs transition duration-300 group-hover:opacity-100 opacity-0 px-2 py-1 bg-blueNavy text-white font-medium">Update</button>
-          <button onClick={handleDeleteSchedule} className="absolute top-[0.8rem] -right-[1rem] text-xs transition duration-300 group-hover:opacity-100 opacity-0 px-2 py-1 bg-red-500 text-white font-medium">Delete</button>
+          <button onClick={menuHandler} className="rounded-lg absolute top-[0.8rem] -left-[1rem] text-xs transition duration-300 group-hover:opacity-100 opacity-0 px-2 py-1 bg-blueNavy text-white font-medium">Update</button>
+          <button onClick={handleDeleteSchedule} className="rounded-lg absolute top-[0.8rem] -right-[1rem] text-xs transition duration-300 group-hover:opacity-100 opacity-0 px-2 py-1 bg-red-500 text-white font-medium">Delete</button>
         </div>
       )}
       <div className={`fixed ${hidden ? '' : 'hidden'} z-50 inset-0 bg-[rgba(0,0,0,0.5)]`}></div>
-      <div className={`${open ? 'scale-100' : 'scale-0'} w-[50%] py-5 px-6 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition duration-300 bg-white z-[60] ${hidden ? '' : 'hidden'}`}>
+      <div className={`${open ? 'scale-100' : 'scale-0'} rounded-lg w-[50%] py-5 px-6 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition duration-300 bg-white z-[60] ${hidden ? '' : 'hidden'}`}>
         <button type="button" onClick={menuHandler} className="w-fit text-[1.5rem] hover:text-red-500 mb-2"><IoMdClose /></button>
         <div className='flex flex-col'>
           <label htmlFor="interview_date" className='pb-2 font-semibold mt-4'>Interview date :</label>
@@ -112,7 +112,7 @@ export default function SetSchedule({ jobId, userId }: IProps) {
             min={minDate}
             onChange={(e) => setInterviewDate(e.target.value)}
             value={interviewDate}
-            className='shadow-md border focus:border-lightBlue focus:border-2 outline-none px-2 py-1'
+            className='shadow-md border focus:border-lightBlue focus:border-2 outline-none px-2 py-1 rounded-lg'
           />
         </div>
         <div className='flex flex-col'>
@@ -123,7 +123,7 @@ export default function SetSchedule({ jobId, userId }: IProps) {
             id='interview_time'
             onChange={(e) => setInterviewTime(e.target.value)}
             value={interviewTime}
-            className='shadow-md border focus:border-lightBlue focus:border-2 outline-none px-2 py-1'
+            className='shadow-md border focus:border-lightBlue focus:border-2 outline-none px-2 py-1 rounded-lg'
           />
         </div>
         {!interviewOldDate && !interviewOldTime ? (
@@ -140,7 +140,7 @@ export default function SetSchedule({ jobId, userId }: IProps) {
             type="button"
             disabled={(interviewDate == interviewOldDate && interviewTime == interviewOldTime) || isLoading}
             onClick={handleReschedule}
-            className={`${interviewDate == interviewOldDate && interviewTime == interviewOldTime ? 'disabled:cursor-not-allowed opacity-60 shadow-none' : 'hover:shadow-sm'} ${isLoading && 'disabled:cursor-not-allowed opacity-60 shadow-none'} shadow-md border border-lightBlue shadow-lightBlue font-[550] mt-8 py-2 transition duration-300 w-full`}
+            className={`${interviewDate == interviewOldDate && interviewTime == interviewOldTime ? 'disabled:cursor-not-allowed opacity-60 shadow-none' : 'hover:shadow-sm'} ${isLoading && 'disabled:cursor-not-allowed opacity-60 shadow-none'} shadow-md border rounded-lg border-lightBlue shadow-lightBlue font-[550] mt-8 py-2 transition duration-300 w-full`}
           >
             {isLoading ? 'LOADING...' : 'UPDATE'}
           </button>

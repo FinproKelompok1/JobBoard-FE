@@ -31,21 +31,6 @@ interface OauthData {
   username?: string;
 }
 
-axios.interceptors.request.use(
-  (config) => {
-    try {
-      const userData = getUserData();
-      if (userData?.token) {
-        config.headers.Authorization = `Bearer ${userData.token}`;
-      }
-      return config;
-    } catch {
-      return config;
-    }
-  },
-  (error) => Promise.reject(error),
-);
-
 export const authService = {
   login: async (data: LoginData) => {
     const response = await axios.post("/auth/login/user", data, {

@@ -20,7 +20,8 @@ export default function SetProvince({ formikProps, setProvinceId }: IProps) {
   useEffect(() => {
     const getProvince = async () => {
       try {
-        const { data }: { data: IProvince[] } = await axios.get('https://muhammadwildansapoetro.github.io/api-wilayah-indonesia/api/provinces.json')
+        const res = await fetch('https://muhammadwildansapoetro.github.io/api-wilayah-indonesia/api/provinces.json')
+        const data: IProvince[] = await res.json()
         if (formikProps.values.province) {
           const selectedProvince = data.find((item) => item.name === formikProps.values.province)
           if (selectedProvince) setProvinceId(selectedProvince.id)

@@ -3,23 +3,17 @@ import React, { useState, useEffect } from "react";
 import DesktopNavbar from "./DesktopNavbar";
 import MobileNavbar from "./MobileNavbar";
 import useCookie from "@/hooks/useCookie";
+import { IUser } from "@/types/user";
 
 interface NavbarProps {
   isHomePage: boolean;
-}
-
-interface User {
-  role: string;
-  username: string;
-  profilePicture?: string;
-  companyName?: string;
 }
 
 export default function Navbar({ isHomePage }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [userH, setUserH] = useState<User | null>(null);
+  const [userH, setUserH] = useState<IUser | null>(null);
   const user = useCookie("user");
 
   useEffect(() => {

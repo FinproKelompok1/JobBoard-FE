@@ -6,6 +6,7 @@ import useSWR from "swr";
 import BarChartGraphic from "./barChartGraphic";
 import { getToken } from "@/libs/token";
 import Image from "next/image";
+import LoadingPage from "../loading";
 
 export default function SalaryTrendGraphics() {
 
@@ -18,15 +19,13 @@ export default function SalaryTrendGraphics() {
   const token = getToken()
   const fetcher = (url: string) => getSalaryTrend(url, token!);
 
-  const { data } = useSWR<ISalaryTrend>("/analytics/salary-trends", fetcher, opt);
+  const { data, isLoading } = useSWR<ISalaryTrend>("/analytics/salary-trends", fetcher, opt);
 
-  if (!data) {
-    return (
-      <div className="text-center py-4 font-medium text-gray-600">Loading...</div>
-    )
+  if (isLoading) {
+    return <LoadingPage isLoading={isLoading} />
   }
 
-  if (Object.entries(data)[0][1].length <= 0) {
+  if ((data && Object.entries(data)[1][1].length <= 0) || !data) {
     return (
       <div className="mt-10 flex flex-col items-center">
         <h1 className="font-medium text-2xl">THERE IS NO APPLICANT&apos;S REVIEW</h1>

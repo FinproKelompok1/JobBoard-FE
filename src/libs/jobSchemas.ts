@@ -9,7 +9,9 @@ export const jobSchema = Yup.object().shape({
       "filesize",
       "the image is too large",
       (value) =>
-        !value || (value instanceof File && value.size <= 2 * 1024 * 1024),
+        !value ||
+        (value instanceof File && value.size <= 2 * 1024 * 1024) ||
+        typeof value === "string",
     )
     .test(
       "fileExtension",
@@ -19,7 +21,8 @@ export const jobSchema = Yup.object().shape({
         (value instanceof File &&
           ["image/jpeg", "image/png", "image/jpg", "image/webp"].includes(
             value.type,
-          )),
+          )) ||
+        typeof value === "string",
     )
     .nullable(),
   endDate: Yup.date().required("Deadline is required"),

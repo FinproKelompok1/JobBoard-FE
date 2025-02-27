@@ -9,6 +9,7 @@ import AgeGraphic from "@/components/demographic/age";
 import LocationGraphic from "@/components/demographic/location";
 import { getToken } from "@/libs/token";
 import Image from "next/image";
+import LoadingPage from "../loading";
 
 export default function DemographyGraphics() {
   const options = {
@@ -20,17 +21,13 @@ export default function DemographyGraphics() {
 
   const token = getToken();
   const fetcher = (url: string) => getDemography(url, token!);
-  const { data } = useSWR<IDemography>("/analytics/total-demographics", fetcher, options);
+  const { data, isLoading } = useSWR<IDemography>("/analytics/total-demographics", fetcher, options);
 
-  if (!data) {
-    return (
-      <div className="flex justify-center items-center h-64 text-lg font-semibold text-gray-600">
-        Loading...
-      </div>
-    );
+  if (isLoading) {
+    return <LoadingPage isLoading={isLoading} />
   }
 
-  if (Object.entries(data)[1][1].length <= 0) {
+  if ((data && Object.entries(data)[1][1].length <= 0) || !data) {
     return (
       <div className="mt-10 flex flex-col items-center">
         <h1 className="font-medium text-2xl">THERE IS NO APPLICANT DEMOGRAPHIC</h1>

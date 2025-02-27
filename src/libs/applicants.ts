@@ -3,20 +3,29 @@ import { toastErrAxios } from "@/helpers/toast";
 
 export async function getApplicants(url: string) {
   try {
-    const {data} = await axios.get(url)
-    return data.result
+    const { data } = await axios.get(url);
+    return data.result;
   } catch (err) {
-    toastErrAxios(err)
-    return 0
+    toastErrAxios(err);
+    return 0;
   }
 }
 
 export async function getTotalApplicants(url: string) {
   try {
-    const {data} = await axios.get(url)
-    return data.result
+    const { data } = await axios.get(url);
+    return data.result;
   } catch (err) {
-    toastErrAxios(err)
-    return 0
+    toastErrAxios(err);
+    return 0;
+  }
+}
+
+export async function getApplicantDetail(username: string) {
+  try {
+    const { data } = await axios.get(`/applicants/profile/${username}`);
+    return data.result;
+  } catch (err) {
+    toastErrAxios(err);
   }
 }

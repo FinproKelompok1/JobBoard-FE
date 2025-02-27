@@ -65,7 +65,7 @@ export default function ApplicantsTable({
     return (
       <>
         <div className="overflow-x-auto rounded-lg shadow-lg border border-gray-200 p-4 bg-white">
-          <table className="w-full border-collapse text-left min-w-[1200px]">
+          <table className="w-full border-collapse text-left min-w-[1300px]">
             <thead>
               <tr className="bg-gray-100 text-gray-600 text-sm uppercase tracking-wide">
                 <th className="p-3">Applicant</th>
@@ -97,14 +97,16 @@ export default function ApplicantsTable({
                         </div>
                         <div>
                           <div className="flex gap-2">
-                            <p>{item.user.fullname}</p>
+                            <Link href={`/admin/applicants/${item.user.username}`}>
+                              <p className="line-clamp-1 underline">{item.user.fullname}</p>
+                            </Link>
                             <span className="text-blueNavy font-medium">({age})</span>
                           </div>
-                          <p className="text-sm text-gray-500">{item.user.email}</p>
+                          <p className="text-sm text-gray-500 line-clamp-1">{item.user.email}</p>
                         </div>
                       </td>
-                      <td className="p-3">{eduFormatter(item.user.lastEdu)}</td>
-                      <td className="p-3">{formatDate(item.createdAt.split('T')[0])}</td>
+                      <td className="p-3 w-[200px]">{eduFormatter(item.user.lastEdu)}</td>
+                      <td className="p-3 w-[150px]">{formatDate(item.createdAt.split('T')[0])}</td>
                       <td className="p-3">{formatRupiahTanpaDesimal(item.expectedSalary)}</td>
                       <td className="p-3"><SetStatusApplicant {...props} /></td>
                       <td className="p-3 text-center">{item.selectionTestResult}</td>
@@ -117,18 +119,20 @@ export default function ApplicantsTable({
                           Preview
                         </Link>
                       </td>
-                      <td className="p-3 flex justify-center items-center gap-2">
-                        {item.status === 'processed' ? (
-                          <FcProcess className="text-xl" />
-                        ) : item.status === 'accepted' ? (
-                          <GoChecklist className="text-xl text-green-400" />
-                        ) : item.status === 'interviewed' ? (
-                          <SetSchedule userId={item.userId} jobId={jobId} />
-                        ) : !item.rejectedReview ? (
-                          <SetReviewRejection userId={item.userId} jobId={jobId} />
-                        ) : (
-                          <RxCrossCircled className="text-xl text-red-500" />
-                        )}
+                      <td className="w-[200px] text-center">
+                        <div className="flex justify-center">
+                          {item.status === 'processed' ? (
+                            <FcProcess className="text-xl" />
+                          ) : item.status === 'accepted' ? (
+                            <GoChecklist className="text-xl text-green-400" />
+                          ) : item.status === 'interviewed' ? (
+                            <SetSchedule userId={item.userId} jobId={jobId} />
+                          ) : !item.rejectedReview ? (
+                            <SetReviewRejection userId={item.userId} jobId={jobId} />
+                          ) : (
+                            <RxCrossCircled className="text-xl text-red-500" />
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );

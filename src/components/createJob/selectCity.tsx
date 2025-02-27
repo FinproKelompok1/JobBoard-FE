@@ -22,7 +22,8 @@ export default function SelectCity({ formikProps, provinceId }: IProps) {
     if (!provinceId) return
     const getCity = async () => {
       try {
-        const { data } = await axios.get(`https://muhammadwildansapoetro.github.io/api-wilayah-indonesia/api/regencies/${provinceId}.json`)
+        const res = await fetch(`https://muhammadwildansapoetro.github.io/api-wilayah-indonesia/api/regencies/${provinceId}.json`)
+        const data = await res.json()
         setCity(data)
       } catch (err) {
         toastErrAxios(err)

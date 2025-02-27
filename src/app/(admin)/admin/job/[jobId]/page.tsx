@@ -41,6 +41,13 @@ export default async function JobDetailPage({ params }: { params: { jobId: strin
                 <FaLocationDot className="text-red-500" />
                 <span>{jobDetail.location.city}, {jobDetail.location.province}</span>
               </div>
+              <div>
+                <span
+                  className={`${jobDetail.isTestActive ? 'bg-green-200 text-green-500' : 'bg-red-200 text-red-500'} rounded-full py-1 px-3 text-xs`}
+                >
+                  Preselection test {jobDetail.isTestActive ? 'active' : 'unactive'}
+                </span>
+              </div>
             </div>
 
             <div className="flex flex-wrap gap-2 mt-4">

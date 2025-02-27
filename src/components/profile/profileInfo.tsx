@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { User, Calendar, GraduationCap, Mail, Edit, Check, MapPin } from "lucide-react";
 import { UserProfile } from "@/types/profile";
@@ -8,6 +9,7 @@ import ProfileEditForm from "./profileCV";
 import TabbedSection from "./tabbedSection";
 import Image from "next/image";
 import Link from "next/link";
+import { getCookie } from "@/helpers/cookies";
 
 interface ProfileInfoProps {
   user: UserProfile;
@@ -16,6 +18,8 @@ interface ProfileInfoProps {
 
 export default function ProfileInfo({ user, onUpdate }: ProfileInfoProps) {
   const [showEditForm, setShowEditForm] = useState(false);
+  const userCookie = getCookie("user");
+  const userObject = JSON.parse(`${userCookie}`);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -133,12 +137,14 @@ export default function ProfileInfo({ user, onUpdate }: ProfileInfoProps) {
               </div>
             </div>
 
-            <button
-              onClick={() => setShowEditForm(true)}
-              className="hover:bg-pink-50 rounded-xl p-3 text-[#E60278] transition-colors"
-            >
-              <Edit className="h-6 w-6" />
-            </button>
+            {userObject.role !== 'admin' && (
+              <button
+                onClick={() => setShowEditForm(true)}
+                className="hover:bg-pink-50 rounded-xl p-3 text-[#E60278] transition-colors"
+              >
+                <Edit className="h-6 w-6" />
+              </button>
+            )}
           </div>
         </div>
 
