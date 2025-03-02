@@ -24,9 +24,9 @@ export async function deleteSubscription(id: number) {
   try {
     const response = await axios.delete(`/subscriptions/${id}`);
 
-    return response.data.message;
+    return response;
   } catch (error) {
-    console.error("Error get subscriptions:", error);
+    console.error(`Error delete subscription by ID ${id}`, error);
   }
 }
 

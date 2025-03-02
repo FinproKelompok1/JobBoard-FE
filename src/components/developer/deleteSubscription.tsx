@@ -38,10 +38,19 @@ export default function DeleteSubscription({
 
     try {
       setIsDeleting(true);
-      await deleteSubscription(deleteSubsId);
-      toast.success(`Subscription ID ${deleteSubsId} deleted successfully`);
-      window.location.reload();
+      const response = await deleteSubscription(deleteSubsId);
+
+      if (response && response.status === 200) {
+        toast.success(`Subscription ID ${deleteSubsId} deleted successfully`);
+        setDeleteSubsId(null);
+        window.location.reload();
+      } else {
+        throw new Error(
+          response?.data?.message || "Failed to delete subscription",
+        );
+      }
     } catch (error) {
+      console.error("Error delete subscription:", error);
       toastErrAxios(error);
     } finally {
       setIsDeleting(false);

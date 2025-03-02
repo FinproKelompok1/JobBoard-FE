@@ -1,3 +1,5 @@
+"use client";
+
 export const getCookie = (name: string) => {
   try {
     const value = document.cookie
