@@ -46,7 +46,7 @@ export default function MobileNav() {
         </div>
         <button
           onClick={menuHandler}
-          className="w-[35px] h-[35px] rounded-full cursor-pointer relative bg-yellow-200"
+          className="w-[35px] h-[35px] rounded-full cursor-pointer relative"
         >
           <Image
             className="rounded-full object-cover"

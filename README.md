@@ -1,4 +1,4 @@
-# Talent Bridge
+# Talent Bridge (Frontend)
 
 Most of poeple have trouble finding their dream job. Finding paper flyer for seeking job is no common over in this digital era. Talent Bridge is a job board web app getting role as an aggregator which is bringing togather jobseeker and employer. This platform assists jobseekers to find out their dream job, meanwhile company can recruite their demanded employee for their demanded role.
 
@@ -10,13 +10,17 @@ Most of poeple have trouble finding their dream job. Finding paper flyer for see
 - macOS, Windows (including WSL), and Linux are supported.
 - [npm](https://www.npmjs.com/get-npm)
 
+### Link to Backend
+
+- [Backend](https://github.com/FinproKelompok1/JobBoard-BE.git)
+
 ### Setup
 
 1. Clone the project repository:
 
    ```bash
-   git clone https://github.com/FinproKelompok1/JobBoard-FE.git finpro-fe
-   cd finpro-fe
+   git clone https://github.com/FinproKelompok1/JobBoard-FE.git finpro-frontend
+   cd finpro-frontend
    ```
 
 2. Install required packages and dependencies:

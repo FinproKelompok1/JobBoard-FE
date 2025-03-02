@@ -65,7 +65,12 @@ export default function EditJob({ job }: { job: IJob }) {
             oldValue = `${oldValue}T00:00:00Z`
           }
           if (newValue !== oldValue) {
-            formData.append(key, newValue!)
+            if (key === 'city') {
+              formData.append('city', values.city)
+              formData.append('province', values.province)
+            } else {
+              formData.append(key, newValue!)
+            }
           }
         }
       }
