@@ -13,7 +13,6 @@ export const handleDownloadCV = async (
 
     const response = await axios.get(`/cv/download/${username}`, {
       responseType: "blob",
-      withCredentials: true,
       headers: { Authorization: `Bearer ${token}` },
     });
 

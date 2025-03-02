@@ -23,7 +23,6 @@ export default function DownloadCertificate({
         `/user-assessments/download/${userAssessment.User.username}/${userAssessment.id}`,
         {
           responseType: "blob",
-          withCredentials: true,
           headers: { Authorization: `Bearer ${token}` },
         },
       );
