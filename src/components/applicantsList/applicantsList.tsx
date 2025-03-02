@@ -14,6 +14,7 @@ export default function ApplicantsList() {
   const [maxAge, setMaxAge] = useState<string>('')
   const [minSalary, setMinSalary] = useState<string>('')
   const [maxSalary, setMaxSalary] = useState<string>('')
+  const [status, setStatus] = useState<string>('')
 
   const resetSalary = () => {
     setMinSalary('')
@@ -34,6 +35,7 @@ export default function ApplicantsList() {
         setMaxAge={setMaxAge}
         setMinSalary={setMinSalary}
         setMaxSalary={setMaxSalary}
+        setStatus={setStatus}
       />
       <div className={`${(minSalary && maxSalary) || (minAge && maxAge) ? 'inline-flex flex-wrap' : 'hidden'} my-2 gap-2 items-center`}>
         {minSalary && maxSalary && (
@@ -59,6 +61,7 @@ export default function ApplicantsList() {
         max_age={maxAge}
         min_salary={minSalary}
         max_salary={maxSalary}
+        status={status}
       />
     </div>
   )

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { FormikProps } from "formik";
 import { FormValueJob } from "@/types/form";
@@ -28,6 +28,12 @@ export const BannerUploader: React.FC<BannerUploader> = ({
     }
   };
 
+  useEffect(() => {
+    if (!formik.values[name as keyof FormValueJob]) {
+      setPreviewUrl(null);
+    }
+  }, [formik.values[name as keyof FormValueJob]]);
+
   return (
     <div className={`flex w-full h-full flex-col gap-2`}>
       <input
@@ -37,7 +43,6 @@ export const BannerUploader: React.FC<BannerUploader> = ({
         className="hidden"
         ref={imgRef}
         onChange={handleChange}
-        onSubmit={() => setPreviewUrl(null)}
         accept="image/png, image/jpeg, image/jpg, image/webp"
       />
       {!previewUrl ? (

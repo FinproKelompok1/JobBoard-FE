@@ -14,7 +14,7 @@ export default function AgeRange({
   tempMaxAge,
 }: IProps) {
   return (
-    <div className="flex flex-col md:flex-row items-center gap-2 rounded-lg shadow-sm bg-white max-w-md">
+    <>
       <input
         type="number"
         min={0}
@@ -23,7 +23,7 @@ export default function AgeRange({
         placeholder="Min Age"
         value={tempMinAge}
         onChange={(e) => setTempMinAge(e.target.value)}
-        className="w-full md:w-auto flex-1 px-3 py-2 border text-xs border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full tablet:w-auto flex-1 px-3 py-2 border text-xs border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
       />
       <span className="text-gray-500">to</span>
       <input
@@ -34,7 +34,7 @@ export default function AgeRange({
         placeholder="Max Age"
         value={tempMaxAge}
         onChange={(e) => setTempMaxAge(e.target.value)}
-        className="w-full md:w-auto flex-1 px-3 py-2 border text-xs border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full tablet:w-auto flex-1 px-3 py-2 border text-xs border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
       />
       <button
         onClick={applyAge}
@@ -42,6 +42,6 @@ export default function AgeRange({
       >
         APPLY
       </button>
-    </div>
+    </>
   );
 }

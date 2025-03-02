@@ -25,6 +25,7 @@ interface IProps {
   max_age: string
   min_salary: string
   max_salary: string
+  status: string
 }
 
 interface ISWR {
@@ -40,7 +41,8 @@ export default function ApplicantsTable({
   min_age,
   max_age,
   min_salary,
-  max_salary
+  max_salary,
+  status
 }: IProps) {
   const { jobId } = useParams()
   const opt = {
@@ -55,7 +57,7 @@ export default function ApplicantsTable({
     isLoading,
     isValidating
   } = useSWR<ISWR>(
-    `/applicants/${jobId}?${sort}&${search}&${edu}&${min_age}&${max_age}&${min_salary}&${max_salary}&${page}`,
+    `/applicants/${jobId}?${sort}&${search}&${edu}&${min_age}&${max_age}&${min_salary}&${max_salary}&${page}&${status}`,
     getApplicants,
     opt
   );

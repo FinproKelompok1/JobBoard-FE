@@ -16,7 +16,7 @@ export default async function JobDetailPage({ params }: { params: { jobId: strin
       <div className="max-w-[940px] mx-auto pb-20 mt-4 px-6 lg:px-0">
         <GoBack />
         {jobDetail.banner && (
-          <div className="relative rounded-xl overflow-hidden aspect-[16/9] min-h-[15rem] border shadow-md">
+          <div className="relative rounded-xl overflow-hidden aspect-[16/9] min-h-[15rem] border shadow-md hidden sm:block">
             <Image src={jobDetail.banner} alt={jobDetail.title} fill className="object-cover" />
           </div>
         )}

@@ -23,7 +23,7 @@ export default function SalaryRange({
   };
 
   return (
-    <div className="flex flex-col md:flex-row items-center gap-2 rounded-lg shadow-sm bg-white max-w-md mx-auto">
+    <>
       <input
         type="text"
         name="min_salary"
@@ -49,6 +49,6 @@ export default function SalaryRange({
       >
         APPLY
       </button>
-    </div>
+    </>
   );
 }

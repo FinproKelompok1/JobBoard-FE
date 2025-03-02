@@ -6,6 +6,7 @@ import SalaryRange from "./salaryRange"
 import { FiFilter } from "react-icons/fi"
 import { IoMdClose } from "react-icons/io"
 import { TbArrowsSort } from "react-icons/tb"
+import { GrStatusInfo } from "react-icons/gr";
 
 interface IProps {
   setSearch: (param: string) => void
@@ -15,6 +16,7 @@ interface IProps {
   setMaxAge: (param: string) => void
   setMinSalary: (param: string) => void
   setMaxSalary: (param: string) => void
+  setStatus: (param: string) => void
 }
 
 export default function ApplicantFilter({
@@ -24,7 +26,8 @@ export default function ApplicantFilter({
   setMinAge,
   setMaxAge,
   setMinSalary,
-  setMaxSalary
+  setMaxSalary,
+  setStatus
 }: IProps) {
   const [text, setText] = useState<string>('')
   const [search] = useDebounce(text, 800)
@@ -54,6 +57,12 @@ export default function ApplicantFilter({
     e.preventDefault()
     const query = createQueryString('sort', sort)
     setSort(query)
+  }
+  
+  const handleStatus = (e: React.MouseEvent<HTMLAnchorElement>, status: string) => {
+    e.preventDefault()
+    const query = createQueryString('status', status)
+    setStatus(query)
   }
 
   const applyAge = () => {
@@ -94,14 +103,14 @@ export default function ApplicantFilter({
         type="text"
         placeholder="Search Name"
         name="name"
-        className="px-4 py-2 rounded-lg outline-none border"
+        className="px-4 py-2 text-xs sm:text-base rounded-lg outline-none border"
       />
       <div className="inline-flex items-center gap-2">
         <select
           onChange={handleEdu}
           name="last_edu"
           id="last_edu"
-          className="outline-none px-4 py-2 rounded-lg border cursor-pointer"
+          className="outline-none px-4 py-2 text-xs sm:text-base rounded-lg border cursor-pointer"
           value={tempEdu}
         >
           <option value="" disabled>filter by education</option>
@@ -119,15 +128,27 @@ export default function ApplicantFilter({
         <button tabIndex={0} role="button" className="p-2 rounded-full hover:bg-slate-200 transition duration-200">
           <TbArrowsSort />
         </button>
-        <ul tabIndex={0} className="dropdown-content menu bg-base-100 z-[1] w-[250px] p-2 shadow">
+        <ul tabIndex={0} className="dropdown-content menu bg-base-100 z-[1] p-2 shadow -left-10 md:-left-32 w-[160px]">
           <li><a onClick={(e) => handleSort(e, 'asc')}>By erliest appliement (first)</a></li>
           <li><a onClick={(e) => handleSort(e, 'desc')}>By erliest appliement (last)</a></li>
         </ul>
       </div>
       <div className="dropdown">
+        <button tabIndex={0} role="button" className="p-2 rounded-full hover:bg-slate-200 transition duration-200">
+          <GrStatusInfo />
+        </button>
+        <ul tabIndex={0} className="dropdown-content menu bg-base-100 z-[1] p-2 shadow -left-14 md:-left-28">
+          <li><a onClick={(e) => handleStatus(e, '')}>All</a></li>
+          <li><a onClick={(e) => handleStatus(e, 'processed')}>Processed</a></li>
+          <li><a onClick={(e) => handleStatus(e, 'interviewed')}>Interviewed</a></li>
+          <li><a onClick={(e) => handleStatus(e, 'rejected')}>Rejected</a></li>
+          <li><a onClick={(e) => handleStatus(e, 'accepted')}>Accepted</a></li>
+        </ul>
+      </div>
+      <div className="dropdown">
         <button tabIndex={0} role="button" className="p-2 rounded-full hover:bg-slate-200 transition duration-200"><FiFilter /></button>
-        <ul tabIndex={0} className="dropdown-content menu bg-base-100 z-[1] shadow">
-          <div className="flex items-center">
+        <ul tabIndex={0} className="dropdown-content menu bg-base-100 z-[1] shadow -left-10 md:-left-32">
+          <div className="flex flex-col tablet:flex-row items-center gap-2 rounded-lg shadow-sm bg-white">
             <SalaryRange
               setTempMinSalary={setTempMinSalary}
               setTempMaxSalary={setTempMaxSalary}
@@ -136,7 +157,7 @@ export default function ApplicantFilter({
               tempMaxSalary={tempMaxSalary}
             />
           </div>
-          <div className="flex items-center mt-4">
+          <div className="flex flex-col tablet:flex-row items-center gap-2 rounded-lg shadow-sm bg-white mt-2">
             <AgeRange
               setTempMinAge={setTempMinAge}
               setTempMaxAge={setTempMaxAge}
