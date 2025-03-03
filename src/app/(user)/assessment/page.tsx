@@ -37,6 +37,7 @@ export default function SkillAssessment() {
     }
     fetchData();
   }, []);
+
   if (loading) {
     return <LoadingPage />;
   }
@@ -50,11 +51,22 @@ export default function SkillAssessment() {
     );
   }
 
-  const isAssessmentLimit = userSubscription.some(
+  console.log("user subscription:", user.UserSubscription);
+  console.log("user subscription:", userSubscription);
+
+  const hasProfessionalSubscription = userSubscription.some(
     (userSubs) =>
-      userSubs.subscription.category === "standard" &&
-      userSubs.assessmentCount >= 2,
+      userSubs.subscription.category === "professional" && userSubs.isActive,
   );
+
+  const isAssessmentLimit =
+    !hasProfessionalSubscription &&
+    userSubscription.some(
+      (userSubs) =>
+        userSubs.subscription.category === "standard" &&
+        userSubs.isActive &&
+        userSubs.assessmentCount >= 2,
+    );
 
   return (
     <main className="min-h-screen bg-gray-50">

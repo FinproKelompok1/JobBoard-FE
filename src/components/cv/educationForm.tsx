@@ -79,7 +79,7 @@ export default function EducationForm({
             <input
               type="text"
               name="schoolName"
-              placeholder="School Name"
+              placeholder="School or University Name"
               value={formData.schoolName}
               onChange={handleChange}
               className="w-full rounded border p-2"
