@@ -1,16 +1,36 @@
+"use client";
+
 import CreateSubscription from "@/components/developer/createSubscription";
 import DeleteSubscription from "@/components/developer/deleteSubscription";
 import DeveloperSideBar from "@/components/developer/developerSideBar";
 import EditSubscription from "@/components/developer/editSubscription";
 import { CurrencyFormatter } from "@/helpers/currencryFormatter";
 import { stringToArray } from "@/helpers/stringToArray";
-import { getSubscriptions } from "@/libs/subscription";
 import { ISubscription } from "@/types/types";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { FaUsers } from "react-icons/fa";
+import axios from "@/helpers/axios";
+import LoadingPage from "@/components/loading";
 
-export default async function Subscription() {
-  const subscriptions: ISubscription[] = await getSubscriptions();
+export default function Subscription() {
+  const [subscriptions, setSubscriptions] = useState<ISubscription[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchSubscriptions = async () => {
+    try {
+      const response = await axios.get("/subscriptions");
+      setSubscriptions(response.data.subscriptions);
+    } catch (error) {
+      console.error("Error fetching subscriptions:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSubscriptions();
+  }, []);
 
   return (
     <main className="flex">
@@ -27,7 +47,9 @@ export default async function Subscription() {
         </div>
 
         <div className="mt-10">
-          {subscriptions.length === 0 ? (
+          {loading ? (
+            <LoadingPage />
+          ) : subscriptions.length === 0 ? (
             <div>
               <p className="text-xl text-primary">
                 There is no Subscription Plan yet.
