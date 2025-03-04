@@ -1,5 +1,6 @@
 "use client";
 
+import LoadingPage from "@/components/loading";
 import CreateReview from "@/components/review/createReview";
 import StarRating from "@/components/review/starRating";
 import { CurrencyFormatter } from "@/helpers/currencryFormatter";
@@ -10,14 +11,18 @@ import { useEffect, useState } from "react";
 
 export default function CompanyReview() {
   const [userData, setUserData] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        setLoading(true);
         const { data } = await getUserProfile();
         setUserData(data);
       } catch (error) {
         console.error("Failed get user data", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -43,7 +48,9 @@ export default function CompanyReview() {
 
       <div className="flex flex-col items-center justify-center">
         <div className="flex w-full flex-col items-center justify-center rounded-xl border border-gray-200 bg-white p-5 shadow-lg md:w-[450px]">
-          {acceptedJobs && acceptedJobs.length > 0 ? (
+          {loading ? (
+            <LoadingPage />
+          ) : acceptedJobs && acceptedJobs.length > 0 ? (
             acceptedJobs.map((data, index) => (
               <div key={index} className="flex flex-col justify-between gap-3">
                 <h1 className="text-2xl font-bold">
@@ -72,9 +79,12 @@ export default function CompanyReview() {
               </div>
             ))
           ) : (
-            <p className="text-lg font-medium text-gray-500">
-              You don&apos;t have accepted jobs
-            </p>
+            !loading &&
+            acceptedJobs?.length === 0 && (
+              <p className="text-lg font-medium text-gray-500">
+                You don&apos;t have accepted jobs
+              </p>
+            )
           )}
 
           <div className="mt-3">
