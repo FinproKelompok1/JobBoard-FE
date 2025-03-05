@@ -1,5 +1,6 @@
 "use client";
 
+import LoadingPage from "@/components/loading";
 import { toastErrAxios } from "@/helpers/toast";
 import { getUserProfile } from "@/libs/auth";
 import { UserProfile } from "@/types/profile";
@@ -8,13 +9,17 @@ import { useEffect, useState } from "react";
 
 export default function SuccessTransaction() {
   const [user, setUser] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchUserProfile = async () => {
     try {
+      setLoading(true);
       const { data } = await getUserProfile();
       setUser(data);
     } catch (error) {
       toastErrAxios(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -23,6 +28,10 @@ export default function SuccessTransaction() {
       fetchUserProfile();
     }
   }, []);
+
+  if (loading) {
+    return <LoadingPage />;
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-start bg-gray-50 p-5 text-center md:p-10">
