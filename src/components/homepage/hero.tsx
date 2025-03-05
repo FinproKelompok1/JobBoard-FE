@@ -47,7 +47,7 @@ export default function Hero() {
             </div>
             
             <div className="bg-[#E60278]/90 backdrop-blur-sm p-6 rounded-lg hover:bg-[#E60278] transition-all cursor-pointer border border-white/10">
-              <h3 className="text-[#FFFFFF] text-2xl font-bold mb-2">Create Profile</h3>
+              <h3 className="text-[#FFFFFF] text-2xl font-bold mb-2">Generate Your CV</h3>
               <p className="text-[#FFFFFF]/90">Showcase Your Skills</p>
             </div>
             

@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { toast } from "react-toastify";
 
 interface AdminProfileFormProps {
   initialData: AdminProfile;
@@ -74,25 +75,32 @@ export default function AdminProfileForm({
     }));
   };
 
-  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 2 * 1024 * 1024) {
-        alert("File size should be less than 2MB");
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setLogoPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-      setFormData((prev) => ({
-        ...prev,
-        logo: file,
-      }));
+ const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (file) {
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Hanya file JPG, JPEG, dan PNG yang diperbolehkan.");
+      return;
     }
-  };
+
+    const maxSize = 1 * 1024 * 1024;
+    if (file.size > maxSize) {
+      toast.error("Ukuran file tidak boleh melebihi 1 MB.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setLogoPreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+    setFormData((prev) => ({
+      ...prev,
+      logo: file,
+    }));
+  }
+};
 
   const handleDescriptionChange = (content: string) => {
     setFormData((prev) => ({
@@ -193,15 +201,15 @@ export default function AdminProfileForm({
                   </div>
                 )}
               </div>
-              {editMode.logo && (
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleLogoChange}
-                  className="hidden"
-                  id="logo-upload"
-                />
-              )}
+        {editMode.logo && (
+  <input
+    type="file"
+    accept=".jpg,.jpeg,.png,image/jpeg,image/jpg,image/png"
+    onChange={handleLogoChange}
+    className="hidden"
+    id="logo-upload"
+  />
+)}
               {editMode.logo && (
                 <label
                   htmlFor="logo-upload"
@@ -228,7 +236,7 @@ export default function AdminProfileForm({
                 Upload a high-quality image of your company logo
               </p>
               <p className="mt-2 text-xs text-gray-400">
-                Recommended: Square image, 400x400px, max 2MB
+                Recommended: Square image, 400x400px, max 1MB, format: JPG, JPEG, PNG
               </p>
             </div>
           </div>

@@ -19,12 +19,8 @@ export default function SocialAuth() {
 
   return (
     <>
-      <div className="relative my-6">
+      <div className="relative my-3">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-gray-300"></div>
-        </div>
-        <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-white text-gray-500">or continue with</span>
         </div>
       </div>
 
@@ -33,10 +29,10 @@ export default function SocialAuth() {
           type="button"
           onClick={() => handleSocialLogin('google')}
           disabled={isLoading.google}
-          className="flex items-center gap-2 px-4 py-2 border rounded-md hover:bg-gray-50"
+          className="flex items-center gap-2 px-4 py-2 border border-white/30 rounded-md bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors"
         >
           <FcGoogle className="w-5 h-5" />
-          <span>{isLoading.google ? 'Loading...' : 'Google'}</span>
+          <span className="text-white">{isLoading.google ? 'Loading...' : 'Google'}</span>
         </button>
       </div>
     </>
