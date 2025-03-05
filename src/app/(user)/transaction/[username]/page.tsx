@@ -1,5 +1,6 @@
 "use client";
 
+import LoadingPage from "@/components/loading";
 import { CurrencyFormatter } from "@/helpers/currencryFormatter";
 import DateFormatter from "@/helpers/dateFormatter";
 import { getUserProfile } from "@/libs/auth";
@@ -19,6 +20,7 @@ export default function UserTransaction() {
   const [sortCreateAt, setSortCreateAt] = useState<"asc" | "desc">("asc");
   const [statusFilter, setStatusFilter] = useState("");
   const [user, setUser] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true); // Loading state
 
   const fetchUserProfile = async () => {
     try {
@@ -35,13 +37,19 @@ export default function UserTransaction() {
 
   useEffect(() => {
     async function fetchTransactions() {
-      const { userTransactions, totalPages } = await getUserTransaction({
-        page,
-        status: statusFilter,
-        order: sortCreateAt,
-      });
-      setUserTransactions(userTransactions);
-      setTotalPages(totalPages);
+      setLoading(true);
+      try {
+        const { userTransactions, totalPages } = await getUserTransaction({
+          page,
+          status: statusFilter,
+          order: sortCreateAt,
+        });
+        setUserTransactions(userTransactions);
+        setTotalPages(totalPages);
+      } catch (error) {
+        console.error("Error fetching transactions", error);
+      }
+      setLoading(false);
     }
 
     fetchTransactions();
@@ -58,6 +66,8 @@ export default function UserTransaction() {
       ? new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
+
+  if (loading) return <LoadingPage />;
 
   return (
     <main className="min-h-screen md:bg-gray-50">

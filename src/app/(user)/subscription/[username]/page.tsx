@@ -20,7 +20,7 @@ export default function UserSubscription({
   params: { username: string };
 }) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<{ [key: string]: boolean }>({});
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const [userSubscription, setUserSubscription] = useState<IUserSubscription[]>(
     [],
@@ -43,18 +43,20 @@ export default function UserSubscription({
 
   const today = dayjs();
 
-  const handleSubscribe = async () => {
+  const handleSubscribe = async (subscriptionId: number, price: number) => {
+    setIsLoading((prev) => ({ ...prev, [subscriptionId]: true }));
     try {
-      setIsLoading(true);
       const { data } = await axios.post("/transactions", {
-        subscriptionId: userSubscription && userSubscription[0].subscriptionId,
-        amount: userSubscription && userSubscription[0].subscription.price,
+        subscriptionId,
+        amount: price,
       });
 
       toast.success(data.message);
-      router.push(`/transaction/${data.transactionId}`);
+      router.push(`/transaction/${params.username}/${data.transactionId}`);
     } catch (error) {
       toastErrAxios(error);
+    } finally {
+      setIsLoading((prev) => ({ ...prev, [subscriptionId]: false }));
     }
   };
 
@@ -169,22 +171,34 @@ export default function UserSubscription({
                             Your subscription almost expires
                           </p>
                           <button
-                            onClick={() => handleSubscribe()}
-                            disabled={isLoading}
+                            onClick={() =>
+                              handleSubscribe(
+                                item.subscriptionId,
+                                item.subscription.price,
+                              )
+                            }
+                            disabled={isLoading[item.subscriptionId]}
                             className="w-full rounded-md bg-primary py-2 text-center font-medium text-white transition duration-300 ease-in-out hover:bg-primary/80 disabled:cursor-not-allowed disabled:bg-primary/80"
                           >
-                            {isLoading ? "Renewing..." : "Renew Subscription"}
+                            {isLoading[item.subscriptionId]
+                              ? "Renewing..."
+                              : "Renew Subscription"}
                           </button>
                         </div>
                       )}
                     </>
                   ) : (
                     <button
-                      onClick={() => handleSubscribe()}
-                      disabled={isLoading}
+                      onClick={() =>
+                        handleSubscribe(
+                          item.subscriptionId,
+                          item.subscription.price,
+                        )
+                      }
+                      disabled={isLoading[item.subscriptionId]}
                       className="rounded-md bg-accent py-2 text-center font-medium text-white transition duration-300 ease-in-out hover:bg-accent disabled:cursor-not-allowed disabled:bg-red-300"
                     >
-                      {isLoading
+                      {isLoading[item.subscriptionId]
                         ? "Activating..."
                         : "Activate Your Subscription"}
                     </button>

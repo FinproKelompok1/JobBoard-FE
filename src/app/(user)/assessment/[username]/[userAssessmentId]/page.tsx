@@ -1,5 +1,6 @@
 "use client";
 
+import LoadingPage from "@/components/loading";
 import axios from "@/helpers/axios";
 import DateFormatter from "@/helpers/dateFormatter";
 import { toastErrAxios } from "@/helpers/toast";
@@ -113,81 +114,80 @@ export default function UserAssessmentForm({
     }
   };
 
-  return (
-    userAssessment &&
-    assessmentQuestions && (
-      <main className="min-h-screen w-screen">
-        <div className="sticky top-0 border-b border-gray-300 bg-white p-5">
-          <div className="flex flex-col items-center justify-center gap-5">
-            <h1 className="text-3xl font-bold text-primary">
-              {userAssessment.assessment.title}
-            </h1>
-            <div className="flex flex-col md:items-center">
-              <p className="text-lg">
-                Please finish the assessment before{" "}
-                <span className="font-semibold">
-                  {DateFormatter(userAssessment.endTime)}
-                </span>
-              </p>
-              <p className="text-lg font-semibold text-red-500">
-                Time Remaining: {timeLeft}
-              </p>
-            </div>
+  return userAssessment && assessmentQuestions ? (
+    <main className="min-h-screen w-screen">
+      <div className="sticky top-0 border-b border-gray-300 bg-white p-5">
+        <div className="flex flex-col items-center justify-center gap-5">
+          <h1 className="text-3xl font-bold text-primary">
+            {userAssessment.assessment.title}
+          </h1>
+          <div className="flex flex-col md:items-center">
+            <p className="text-lg">
+              Please finish the assessment before{" "}
+              <span className="font-semibold">
+                {DateFormatter(userAssessment.endTime)}
+              </span>
+            </p>
+            <p className="text-lg font-semibold text-red-500">
+              Time Remaining: {timeLeft}
+            </p>
           </div>
         </div>
+      </div>
 
-        <div className="flex items-center justify-center p-5 md:p-10">
-          <div className="flex w-fit max-w-7xl flex-col gap-10">
-            {assessmentQuestions.map((question, index) => (
-              <div key={question.id}>
-                <p className="text-lg font-bold">
-                  {index + 1}. {question.question}
-                </p>
-                <form className="mt-2 space-y-2">
-                  {question.options.map((option, optionIndex) => (
-                    <label
-                      key={optionIndex}
-                      className={`flex w-fit cursor-pointer gap-2 rounded-xl border px-2 py-1 ${answer[question.id] === option ? "bg-accent/90 font-medium text-white" : "hover:bg-accent/10"}`}
-                    >
-                      <input
-                        type="radio"
-                        name={`question-${index}`}
-                        value={option}
-                        checked={answer[question.id] === option}
-                        onChange={() => handleChange(question.id, option)}
-                      />
-                      {option}
-                    </label>
-                  ))}
-                </form>
-              </div>
-            ))}
-
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="confirmation"
-                checked={isChecked}
-                onChange={() => setIsChecked(!isChecked)}
-                className="size-4"
-              />
-              <label htmlFor="confirmation" className="ml-2 font-medium">
-                Please check and confirm that all the answers are correct.{" "}
-              </label>
+      <div className="flex items-center justify-center p-5 md:p-10">
+        <div className="flex w-fit max-w-7xl flex-col gap-10">
+          {assessmentQuestions.map((question, index) => (
+            <div key={question.id}>
+              <p className="text-lg font-bold">
+                {index + 1}. {question.question}
+              </p>
+              <form className="mt-2 space-y-2">
+                {question.options.map((option, optionIndex) => (
+                  <label
+                    key={optionIndex}
+                    className={`flex w-fit cursor-pointer gap-2 rounded-xl border px-2 py-1 ${answer[question.id] === option ? "bg-accent/90 font-medium text-white" : "hover:bg-accent/10"}`}
+                  >
+                    <input
+                      type="radio"
+                      name={`question-${index}`}
+                      value={option}
+                      checked={answer[question.id] === option}
+                      onChange={() => handleChange(question.id, option)}
+                    />
+                    {option}
+                  </label>
+                ))}
+              </form>
             </div>
+          ))}
 
-            <div className="mb-5 flex justify-end">
-              <button
-                onClick={handleSubmitAnswer}
-                disabled={isSubmitting || !isChecked}
-                className="w-full rounded-md bg-accent px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/50 md:w-fit"
-              >
-                {isSubmitting ? "Submitting..." : "Submit Answer"}
-              </button>
-            </div>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="confirmation"
+              checked={isChecked}
+              onChange={() => setIsChecked(!isChecked)}
+              className="size-4"
+            />
+            <label htmlFor="confirmation" className="ml-2 font-medium">
+              Please check and confirm that all the answers are correct.{" "}
+            </label>
+          </div>
+
+          <div className="mb-5 flex justify-end">
+            <button
+              onClick={handleSubmitAnswer}
+              disabled={isSubmitting || !isChecked}
+              className="w-full rounded-md bg-accent px-4 py-2 font-semibold text-white transition-all duration-300 ease-in-out hover:bg-accent/80 disabled:cursor-not-allowed disabled:bg-accent/50 md:w-fit"
+            >
+              {isSubmitting ? "Submitting..." : "Submit Answer"}
+            </button>
           </div>
         </div>
-      </main>
-    )
+      </div>
+    </main>
+  ) : (
+    <LoadingPage />
   );
 }

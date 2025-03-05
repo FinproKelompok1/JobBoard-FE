@@ -1,5 +1,6 @@
 "use client";
 
+import LoadingPage from "@/components/loading";
 import { CurrencyFormatter } from "@/helpers/currencryFormatter";
 import DateFormatter from "@/helpers/dateFormatter";
 import { toastErrAxios } from "@/helpers/toast";
@@ -81,7 +82,7 @@ export default function TransactionDetail({
         <h1 className="w-full text-center text-3xl font-bold text-primary">
           Transaction Detail
         </h1>
-        {transaction && (
+        {transaction ? (
           <div className="mt-5 w-screen overflow-x-auto rounded-xl bg-white p-5 sm:w-fit md:border md:shadow-lg">
             <table>
               <tbody>
@@ -169,6 +170,8 @@ export default function TransactionDetail({
               </button>
             )}
           </div>
+        ) : (
+          <LoadingPage />
         )}
       </div>
     </main>

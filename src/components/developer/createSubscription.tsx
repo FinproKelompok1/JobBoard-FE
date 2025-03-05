@@ -3,7 +3,6 @@
 import axios from "@/helpers/axios";
 import { ISubscriptionForm } from "@/types/types";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
@@ -29,7 +28,6 @@ export default function CreateSubscription() {
   const [isCreating, setIsCreating] = useState<boolean>(false);
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const router = useRouter();
 
   const handleCreateSubscription = async (
     values: ISubscriptionForm,
@@ -41,7 +39,7 @@ export default function CreateSubscription() {
 
       toast.success(data.message);
       resetForm();
-      router.refresh();
+      window.location.reload();
     } catch (error) {
       toastErrAxios(error);
     } finally {
