@@ -63,9 +63,12 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
    setIsLoggedIn(true);
    const checkApplicationStatus = async () => {
      try {
+       console.log("Checking application status for job:", params.id);
        const result = await checkUserApplication(params.id);
+       console.log("Application status result:", result);
        setHasApplied(result);
-     } catch  {
+     } catch (error) {
+       console.error("Error checking application status:", error);
        setHasApplied(false);
      }
    };
@@ -115,15 +118,15 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
        </div>
 
       <ApplyButton
-  jobId={params.id}
-  jobTitle={job.title}
-  companyName={job.admin.companyName}
-  location={`${job.location.city}, ${job.location.province}`}
-  isTestActive={job.isTestActive} 
-  hasApplied={hasApplied}
-  isLoggedIn={isLoggedIn}
-  onApply={handleApply}
-/>
+        jobId={params.id}
+        jobTitle={job.title}
+        companyName={job.admin.companyName}
+        location={`${job.location.city}, ${job.location.province}`}
+        isTestActive={job.isTestActive} 
+        hasApplied={hasApplied}
+        isLoggedIn={isLoggedIn}
+        onApply={handleApply}
+      />
 
        {relatedJobs.length > 0 && (
          <RelatedJobs jobs={relatedJobs} />
