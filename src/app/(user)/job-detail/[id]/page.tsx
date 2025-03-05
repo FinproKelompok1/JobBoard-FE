@@ -114,13 +114,16 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
          </div>
        </div>
 
-       <ApplyButton
-         jobId={params.id} 
-         isTestActive={job.isTestActive} 
-         hasApplied={hasApplied}
-         isLoggedIn={isLoggedIn}
-         onApply={handleApply}
-       />
+      <ApplyButton
+  jobId={params.id}
+  jobTitle={job.title}
+  companyName={job.admin.companyName}
+  location={`${job.location.city}, ${job.location.province}`}
+  isTestActive={job.isTestActive} 
+  hasApplied={hasApplied}
+  isLoggedIn={isLoggedIn}
+  onApply={handleApply}
+/>
 
        {relatedJobs.length > 0 && (
          <RelatedJobs jobs={relatedJobs} />

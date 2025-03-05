@@ -3,14 +3,20 @@ type ShareData = {
   jobUrl: string;
   companyName: string;
   location: string;
+  customMessage?: string;
 };
 
 export const buildShareMessage = ({
   jobTitle,
   companyName,
   location,
+  customMessage,
 }: ShareData): string => {
-  return `Cek lowongan ini: ${jobTitle} di ${companyName} (${location})`;
+  const defaultMessage = `Take a look at this job opportunity: ${jobTitle} di ${companyName} (${location})`;
+
+  return customMessage
+    ? `${customMessage}\n\n${defaultMessage}`
+    : defaultMessage;
 };
 
 export const buildShareUrl = (platform: string, data: ShareData): string => {
@@ -27,9 +33,6 @@ export const buildShareUrl = (platform: string, data: ShareData): string => {
 
     case "whatsapp":
       return `whatsapp://send?text=${encodedMessage}%0A${encodedUrl}`;
-
-    case "email":
-      return `mailto:?subject=${encodedMessage}&body=${encodedUrl}`;
 
     default:
       return "";

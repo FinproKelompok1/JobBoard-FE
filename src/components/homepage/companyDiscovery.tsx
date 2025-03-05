@@ -73,7 +73,7 @@ export default function CompanyDiscovery() {
   return (
     <section className="py-8 bg-gray-50">
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-4 gap-4 sm:gap-0">
           <div>
             <h2 className="text-2xl font-bold text-[#0D3880] mb-1">
               Top Employers
@@ -92,7 +92,7 @@ export default function CompanyDiscovery() {
           )}
         </div>
 
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-3">
           {limitedCompanies.map((company) => (
             <CompanyCard key={company.id} company={company} />
           ))}

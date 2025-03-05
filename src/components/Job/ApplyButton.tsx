@@ -3,6 +3,9 @@ import { useState, useEffect, useRef } from 'react';
 
 interface ApplyButtonProps {
   jobId: string;
+  jobTitle: string;
+  companyName: string;
+  location: string;
   isTestActive: boolean;
   hasApplied: boolean;
   isLoggedIn: boolean;
@@ -11,6 +14,9 @@ interface ApplyButtonProps {
 }
 
 export function ApplyButton({ 
+  jobTitle,
+  companyName,
+  location,
   hasApplied, 
   isLoggedIn,
   onApply,
@@ -50,13 +56,13 @@ export function ApplyButton({
 
   return (
     <div ref={buttonRef} className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-4 z-50">
-      <div className="container mx-auto flex justify-end items-center gap-4">
+      <div className="container mx-auto flex justify-between items-start md:items-center md:flex-row flex-col gap-4">
         <div>
           <ShareButton 
-            jobTitle="Programmer"
+            jobTitle={jobTitle}
             jobUrl={window.location.href}
-            companyName="Bagaskara"
-            location="KOTA BANDUNG, JAWA BARAT"
+            companyName={companyName}
+            location={location}
           />
         </div>
         <button 

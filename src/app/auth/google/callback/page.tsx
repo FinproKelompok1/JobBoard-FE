@@ -19,7 +19,7 @@ export default function GoogleCallback() {
           return;
         }
 
-        const backendUrl = `http://localhost:8000/api/auth/google/callback`;
+        const backendUrl = `${process.env.NEXT_PUBLIC_BASE_URL_BE}/auth/google/callback`;
         const fullUrl = `${backendUrl}?code=${code}`;
 
         const response = await axios.get(fullUrl);

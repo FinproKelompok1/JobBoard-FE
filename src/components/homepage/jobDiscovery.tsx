@@ -11,6 +11,7 @@ import { Job } from "@/types/jobdis";
 interface LocationState {
   city: string;
   province: string;
+  timestamp?: number; 
 }
 
 interface DiscoverParams {
@@ -19,6 +20,16 @@ interface DiscoverParams {
   sort?: string;
   order?: string;
   limit?: number;
+}
+
+const LOCATION_EXPIRY_MS = 24 * 60 * 60 * 1000;
+
+function normalizeLocationString(str: string): string {
+  return str
+    .replace(/\s+/g, ' ')      
+    .replace(/ CITY$/i, '')    
+    .trim()
+    .toUpperCase();
 }
 
 async function discoverJobs(params?: DiscoverParams): Promise<Job[]> {
@@ -36,6 +47,7 @@ async function discoverJobs(params?: DiscoverParams): Promise<Job[]> {
     const queryString = queryParams.toString();
     const url = `/discover${queryString ? `?${queryString}` : ""}`;
 
+    console.log("Discovering jobs with URL:", url);
     const response = await axios.get(url);
     return response.data.result || [];
   } catch (error) {
@@ -73,21 +85,32 @@ export default function DiscoverySection() {
     setIsLoading(true);
     
     try {
+      const normalizedCity = normalizeLocationString(location.city);
+      const normalizedProvince = normalizeLocationString(location.province);
+      
+      console.log("Fetching jobs with normalized location:", { 
+        city: normalizedCity, 
+        province: normalizedProvince 
+      });
+      
       const locationJobs = await discoverJobs({
-        city: location.city,
-        province: location.province,
+        city: normalizedCity,
+        province: normalizedProvince,
         limit: 3
       });
       
       if (locationJobs.length === 0) {
+        console.log("No jobs found with normalized location, showing all jobs instead");
         setNoJobsFound(true);
         await fetchLatestJobs();
       } else {
+        console.log(`Found ${locationJobs.length} jobs with normalized location`);
         setJobs(locationJobs);
         setNoJobsFound(false);
         setIsLoading(false);
       }
-    } catch {
+    } catch (error) {
+      console.error("Error fetching jobs by location:", error);
       await fetchLatestJobs();
     }
   }, [fetchLatestJobs]);
@@ -96,6 +119,11 @@ export default function DiscoverySection() {
     setShowPrompt(false);
     
     if (!useLocation) {
+      localStorage.setItem('locationPreference', JSON.stringify({
+        preferNotToUse: true,
+        timestamp: Date.now()
+      }));
+      
       await fetchLatestJobs();
       return;
     }
@@ -113,13 +141,15 @@ export default function DiscoverySection() {
       });
       
       const response = await fetch(
-        `https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}+${position.coords.longitude}&key=bcf87dd591a44c57b21a10bed03f5daa`
+        `https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}+${position.coords.longitude}&key=bcf87dd591a44c57b21a10bed03f5daa&language=id`
       );
       
       const data = await response.json();
+      console.log("OpenCage API response:", data);
       
       if (data.results && data.results.length > 0) {
         const components = data.results[0].components;
+        console.log("Location components:", components);
         
         const cityName = components.city || components.town || components.county || 
                         components.state_district || components.municipality;
@@ -129,17 +159,22 @@ export default function DiscoverySection() {
         if (cityName) {
           let formattedCity = cityName;
           
-          if (components.country_code === 'id' && 
-              !formattedCity.toUpperCase().startsWith('KOTA') &&
-              !formattedCity.toUpperCase().startsWith('KABUPATEN')) {
-            formattedCity = `KOTA ${formattedCity}`;
+          if (components.country_code === 'id') {
+            const lowerCity = formattedCity.toLowerCase();
+            if (!lowerCity.startsWith('kota') && !lowerCity.startsWith('kabupaten')) {
+              const isKabupaten = components.county && 
+                                components.county.toLowerCase().includes(lowerCity);
+              formattedCity = isKabupaten ? `Kabupaten ${formattedCity}` : `Kota ${formattedCity}`;
+            }
           }
           
           const location = {
             city: formattedCity.toUpperCase(),
-            province: provinceName ? provinceName.toUpperCase() : ""
+            province: provinceName ? provinceName.toUpperCase() : "",
+            timestamp: Date.now() 
           };
           
+          console.log("Setting user location:", location);
           setUserLocation(location);
           localStorage.setItem('userLocation', JSON.stringify(location));
           await fetchJobsByLocation(location);
@@ -148,19 +183,47 @@ export default function DiscoverySection() {
       }
       
       await fetchLatestJobs();
-    } catch {
+    } catch (error) {
+      console.error("Error getting location:", error);
       await fetchLatestJobs();
     }
   };
   
   useEffect(() => {
     const checkSavedLocation = async () => {
-      const savedLocation = localStorage.getItem('userLocation');
+      const locationPref = localStorage.getItem('locationPreference');
+      if (locationPref) {
+        try {
+          const pref = JSON.parse(locationPref);
+          const now = Date.now();
+          const isExpired = !pref.timestamp || (now - pref.timestamp > LOCATION_EXPIRY_MS);
+          
+          if (!isExpired && pref.preferNotToUse) {
+            setShowPrompt(false);
+            await fetchLatestJobs();
+            return;
+          } else if (isExpired) {
+            localStorage.removeItem('locationPreference');
+          }
+        } catch {
+          localStorage.removeItem('locationPreference');
+        }
+      }
       
+      const savedLocation = localStorage.getItem('userLocation');
       if (savedLocation) {
         try {
           const location = JSON.parse(savedLocation);
           if (location && location.city && location.province) {
+            const now = Date.now();
+            const isExpired = !location.timestamp || (now - location.timestamp > LOCATION_EXPIRY_MS);
+            
+            if (isExpired) {
+              console.log("Location data expired, showing prompt");
+              setShowPrompt(true);
+              return;
+            }
+            
             setUserLocation(location);
             setShowPrompt(false);
             await fetchJobsByLocation(location);

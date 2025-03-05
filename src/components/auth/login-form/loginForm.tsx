@@ -1,12 +1,14 @@
 "use client"
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { Formik, Form, FormikHelpers } from 'formik';
 import FormInput from '../shared/formInput';
 import SocialAuth from '../shared/socialAuth';
 import { validationSchema } from './validation';
 import { authService } from '@/libs/auth';
 import UserTypeToggle from '../shared/userTypeToggle';
+import { FaExclamationCircle } from 'react-icons/fa';
 
 interface LoginValues {
   email: string;
@@ -71,80 +73,116 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-pink-50">
-      <div className="w-full max-w-lg p-8 mx-4">
-        <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-[#0D3880] mb-2">Welcome Back</h2>
-            <p className="text-gray-600">Sign in to continue to your account</p>
-          </div>
-
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-700 rounded-xl text-sm">
-              <div className="flex items-center">
-                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
-                {error}
+    <div className="min-h-screen flex flex-col lg:flex-row relative">
+      <div className="absolute inset-0">
+        <Image 
+          src="/login.jpg" 
+          alt="Professional working" 
+          fill
+          style={{ objectFit: 'cover' }}
+          priority
+        />
+        <div className="absolute inset-0 bg-[#000000]/70"></div>
+      </div>
+      
+      <div className="relative z-10 w-full lg:w-1/2 p-6 md:p-12 flex items-center">
+        <div className="w-full max-w-2xl mx-auto lg:mx-0">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white text-center lg:text-left">
+            TalentBridge connects professionals with their ideal careers
+          </h1>
+          <p className="text-white/90 text-lg md:text-xl mt-4 md:mt-6 text-center lg:text-left">
+            Bridging Dreams to Reality
+          </p>
+        </div>
+      </div>
+      
+      <div className="relative z-10 w-full lg:w-1/2 flex items-center justify-center p-4 md:p-6">
+        <div className="w-full max-w-md lg:max-w-[400px] backdrop-blur-md bg-white/10 rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+          <div className="px-4 md:px-6 py-6">
+            <h2 className="text-2xl font-bold text-white">Welcome Back</h2>
+            <p className="text-white/80 text-sm mb-4">Sign in to access your TalentBridge account</p>
+            
+            {error && (
+              <div className="mb-4 p-2 bg-red-500/20 backdrop-blur-sm border border-red-500/30 text-white rounded-lg text-xs">
+                <div className="flex items-center">
+                  <FaExclamationCircle className="w-4 h-4 mr-2 text-red-200" />
+                  {error}
+                </div>
               </div>
-            </div>
-          )}
-
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-          >
-            {({ values, setFieldValue }) => (
-              <Form className="space-y-6">
-                <UserTypeToggle
-                  isCompany={values.isCompany}
-                  setFieldValue={setFieldValue}
-                />
-                
-                <div className="space-y-4">
-                  <FormInput
-                    label="Email"
-                    name="email"
-                    type="email"
-                  />
-                  <FormInput
-                    label="Password"
-                    name="password"
-                    type="password"
-                  />
-                </div>
-
-                <div className="flex justify-end text-sm">
-                  <a 
-                    href="/auth/forgot-password" 
-                    className="text-[#E60278] hover:text-[#E60278]/80 transition-colors font-medium"
-                  >
-                    Forgot password?
-                  </a>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full bg-[#E60278] text-white py-3 px-4 rounded-xl font-medium hover:bg-[#E60278]/90 transition-all transform hover:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-[#E60278] focus:ring-offset-2"
-                >
-                  Sign in
-                </button>
-
-                <SocialAuth />
-                
-                <p className="text-sm text-center text-gray-600 pt-4">
-                  Don&apos;t have an account?{' '}
-                  <a 
-                    href="/auth/register" 
-                    className="text-[#E60278] hover:text-[#E60278]/80 transition-colors font-medium"
-                  >
-                    Sign up
-                  </a>
-                </p>
-              </Form>
             )}
-          </Formik>
+
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={handleSubmit}
+            >
+              {({ values, setFieldValue }) => (
+                <Form className="space-y-4">
+                  <UserTypeToggle
+                    isCompany={values.isCompany}
+                    setFieldValue={setFieldValue}
+                  />
+                  
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-white text-sm mb-1">Email</label>
+                      <FormInput
+                        label=""
+                        name="email"
+                        type="email"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-white text-sm mb-1">Password</label>
+                      <FormInput
+                        label=""
+                        name="password"
+                        type="password"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between text-sm">
+                    <a 
+                      href="/auth/forgot-password" 
+                      className="text-sm text-[#E60278] hover:text-[#E60278]/80 transition-colors"
+                    >
+                      Forgot Password?
+                    </a>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full bg-[#E60278] text-white py-2 rounded-lg font-medium hover:bg-[#E60278]/90 transition-all"
+                  >
+                    Sign in
+                  </button>
+
+                  <div className="relative py-1">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-white/20"></div>
+                    </div>
+                    <div className="relative flex justify-center">
+                      <span className="px-2 backdrop-blur-md bg-white/10 text-xs text-white/70">Or</span>
+                    </div>
+                  </div>
+
+                  <SocialAuth />
+                  
+                  <p className="text-xs text-center text-white/80">
+                    Don&apos;t have an account?{' '}
+                    <a 
+                      href="/auth/register" 
+                      className="text-[#E60278] hover:text-[#E60278]/80 transition-colors"
+                    >
+                      Sign up
+                    </a>
+                  </p>
+                </Form>
+              )}
+            </Formik>
+          </div>
         </div>
       </div>
     </div>

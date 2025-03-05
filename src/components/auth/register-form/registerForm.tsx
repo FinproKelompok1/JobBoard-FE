@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import FormInput from '../shared/formInput';
 import SocialAuth from '../shared/socialAuth';
@@ -9,6 +10,7 @@ import { adminValidationSchema, userValidationSchema } from './validation';
 import { authService } from '@/libs/auth';
 import UserType from '../verify/userType';
 import { Bounce, toast } from 'react-toastify';
+import { FaExclamationCircle } from 'react-icons/fa';
 
 interface FormValues {
   email: string;
@@ -85,69 +87,128 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-lg w-full bg-white p-8 rounded-lg shadow-sm">
-        <div className="mx-auto">
-          <h2 className="text-2xl font-bold text-[#0D3880] mb-8">Get Started Now</h2>
-
-          {error && (
-            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
-              {error}
-            </div>
-          )}
-
-          <UserType userType={userType} setUserType={setUserType} />
-          <Formik
-            initialValues={initialValues}
-            validationSchema={userType === 'admin' ? adminValidationSchema : userValidationSchema}
-            onSubmit={handleSubmit}
-          >
-            {() => (
-              <Form className="space-y-4" key={userType === 'admin' ? 'admin' : 'user'}>
-                {userType === 'admin' ? (
-                  <>
-                    <FormInput label="Company Name" name="companyName" type="text" />
-                    <FormInput label="Phone Number" name="phoneNumber" type="tel" />
-                  </>
-                ) : (
-                  <FormInput label="Username" name="username" type="text" />
-                )}
-
-                <FormInput label="Email address" name="email" type="email" />
-                <FormInput label="Password" name="password" type="password" />
-
-                <div className="flex items-center">
-                  <Field
-                    type="checkbox"
-                    name="terms"
-                    className="h-4 w-4 text-[#E60278] rounded"
-                  />
-                  <label className="ml-2 text-sm text-gray-600">
-                    I agree to the Terms & Policy
-                  </label>
-                </div>
-                <ErrorMessage
-                  name="terms"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-
-                <button
-                  type="submit"
-                  className="w-full bg-[#E60278] text-white py-2 px-4 rounded-md hover:bg-[#E60278]/90 transition-colors"
-                >
-                  Sign up
-                </button>
-
-                <SocialAuth />
-              </Form>
-            )}
-          </Formik>
-
-          <p className="text-sm text-center text-gray-600 mt-6">
-            Have an account?{' '}
-            <a href="/auth/login" className="text-[#E60278] hover:underline">Sign in</a>
+    <div className="min-h-screen flex flex-col lg:flex-row relative">
+      <div className="absolute inset-0">
+        <Image 
+          src="/login.jpg" 
+          alt="Professional working" 
+          fill
+          style={{ objectFit: 'cover' }}
+          priority
+        />
+        <div className="absolute inset-0 bg-[#000000]/70"></div>
+      </div>
+      
+      <div className="relative z-10 w-full lg:w-1/2 p-6 md:p-12 flex items-center">
+        <div className="w-full max-w-2xl mx-auto lg:mx-0">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white text-center lg:text-left">
+            TalentBridge connects professionals with their ideal careers
+          </h1>
+          <p className="text-white/90 text-lg md:text-xl mt-4 md:mt-6 text-center lg:text-left">
+            Bridging Dreams to Reality
           </p>
+        </div>
+      </div>
+      
+      <div className="relative z-10 w-full lg:w-1/2 flex items-center justify-center p-4 md:p-6">
+        <div className="w-full max-w-md lg:max-w-[450px] backdrop-blur-md bg-white/10 rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+          <div className="px-4 md:px-6 py-6">
+            <h2 className="text-2xl font-bold text-white">Get Started Now</h2>
+            <p className="text-white/80 text-sm mb-4">Create your TalentBridge account</p>
+            
+            {error && (
+              <div className="mb-4 p-2 bg-red-500/20 backdrop-blur-sm border border-red-500/30 text-white rounded-lg text-xs">
+                <div className="flex items-center">
+                  <FaExclamationCircle className="w-4 h-4 mr-2 text-red-200" />
+                  {error}
+                </div>
+              </div>
+            )}
+
+            <UserType userType={userType} setUserType={setUserType} />
+
+            <Formik
+              initialValues={initialValues}
+              validationSchema={userType === 'admin' ? adminValidationSchema : userValidationSchema}
+              onSubmit={handleSubmit}
+            >
+              {() => (
+                <Form className="space-y-4" key={userType === 'admin' ? 'admin' : 'user'}>
+                  {userType === 'admin' ? (
+                    <>
+                      <div>
+                        <label className="block text-white text-sm mb-1">Company Name</label>
+                        <FormInput label="" name="companyName" type="text" />
+                      </div>
+                      <div>
+                        <label className="block text-white text-sm mb-1">Phone Number</label>
+                        <FormInput label="" name="phoneNumber" type="tel" />
+                      </div>
+                    </>
+                  ) : (
+                    <div>
+                      <label className="block text-white text-sm mb-1">Username</label>
+                      <FormInput label="" name="username" type="text" />
+                    </div>
+                  )}
+
+                  <div>
+                    <label className="block text-white text-sm mb-1">Email address</label>
+                    <FormInput label="" name="email" type="email" />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-white text-sm mb-1">Password</label>
+                    <FormInput label="" name="password" type="password" />
+                  </div>
+
+                  <div className="flex items-center">
+                    <Field
+                      type="checkbox"
+                      name="terms"
+                      className="h-4 w-4 bg-transparent border-white/30 text-[#E60278] focus:ring-[#E60278] rounded"
+                    />
+                    <label className="ml-2 text-sm text-white/80">
+                      I agree to the Terms & Policy
+                    </label>
+                  </div>
+                  <ErrorMessage
+                    name="terms"
+                    component="div"
+                    className="text-red-300 text-xs"
+                  />
+
+                  <button
+                    type="submit"
+                    className="w-full bg-[#E60278] text-white py-2 rounded-lg font-medium hover:bg-[#E60278]/90 transition-all"
+                  >
+                    Sign up
+                  </button>
+
+                  <div className="relative py-1">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-white/20"></div>
+                    </div>
+                    <div className="relative flex justify-center">
+                      <span className="px-2 backdrop-blur-md bg-white/10 text-xs text-white/70">Or</span>
+                    </div>
+                  </div>
+
+                  <SocialAuth />
+                  
+                  <p className="text-xs text-center text-white/80">
+                    Have an account?{' '}
+                    <a 
+                      href="/auth/login" 
+                      className="text-[#E60278] hover:text-[#E60278]/80 transition-colors"
+                    >
+                      Sign in
+                    </a>
+                  </p>
+                </Form>
+              )}
+            </Formik>
+          </div>
         </div>
       </div>
     </div>
