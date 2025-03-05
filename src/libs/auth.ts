@@ -34,26 +34,11 @@ interface OauthData {
 export const authService = {
   login: async (data: LoginData) => {
     try {
-      const response = await axios.post("/auth/login/user", data, {
-        withCredentials: true,
-      });
+      const response = await axios.post("/auth/login/user", data, {});
 
-      const domain =
-        window.location.hostname === "localhost"
-          ? ""
-          : "; domain=" + window.location.hostname;
-      document.cookie =
-        "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT" + domain;
-
+      document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
       if (response.data.user) {
-        const secure = window.location.protocol === "https:" ? "; secure" : "";
-        const sameSite = "; SameSite=Lax";
-
-        document.cookie = `user=${JSON.stringify({
-          ...response.data?.user,
-          token: response.data.token,
-          role: "user",
-        })}; path=/${domain}${secure}${sameSite}`;
+        document.cookie = `user=${JSON.stringify({ ...response.data?.user, token: response.data.token, role: "user" })}; path=/`;
       }
 
       return response;
@@ -71,22 +56,9 @@ export const authService = {
     try {
       const response = await axios.post("/auth/login/admin", data);
 
-      const domain =
-        window.location.hostname === "localhost"
-          ? ""
-          : "; domain=" + window.location.hostname;
-      document.cookie =
-        "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT" + domain;
-
+      document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
       if (response.data.admin) {
-        const secure = window.location.protocol === "https:" ? "; secure" : "";
-        const sameSite = "; SameSite=Lax";
-
-        document.cookie = `user=${JSON.stringify({
-          ...response.data?.admin,
-          token: response.data.token,
-          role: "admin",
-        })}; path=/${domain}${secure}${sameSite}`;
+        document.cookie = `user=${JSON.stringify({ ...response.data?.admin, token: response.data.token, role: "admin" })}; path=/`;
       }
 
       return response;
@@ -104,21 +76,9 @@ export const authService = {
     try {
       const response = await axios.post("/auth/developer/login", data);
 
-      const domain =
-        window.location.hostname === "localhost"
-          ? ""
-          : "; domain=" + window.location.hostname;
-      document.cookie =
-        "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT" + domain;
-
+      document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
       if (response.data.user) {
-        const secure = window.location.protocol === "https:" ? "; secure" : "";
-        const sameSite = "; SameSite=Lax";
-
-        document.cookie = `user=${JSON.stringify({
-          ...response.data?.user,
-          token: response.data.token,
-        })}; path=/${domain}${secure}${sameSite}`;
+        document.cookie = `user=${JSON.stringify({ ...response.data?.user, token: response.data.token })}; path=/`;
       }
 
       return response;
@@ -141,24 +101,10 @@ export const authService = {
         username: data?.username,
       });
 
-      const domain =
-        window.location.hostname === "localhost"
-          ? ""
-          : "; domain=" + window.location.hostname;
-      document.cookie =
-        "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT" + domain;
-
+      document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
       if (response.data.user) {
-        const secure = window.location.protocol === "https:" ? "; secure" : "";
-        const sameSite = "; SameSite=Lax";
-
-        document.cookie = `user=${JSON.stringify({
-          ...response.data?.user,
-          token: response.data.token,
-          role: data.type,
-        })}; path=/${domain}${secure}${sameSite}`;
+        document.cookie = `user=${JSON.stringify({ ...response.data?.user, token: response.data.token, role: data.type })}; path=/`;
       }
-
       return response;
     } catch (error) {
       toastErrAxios(error);
@@ -218,14 +164,6 @@ export const authService = {
   logout: async () => {
     try {
       const response = await axios.post("/auth/logout");
-
-      const domain =
-        window.location.hostname === "localhost"
-          ? ""
-          : "; domain=" + window.location.hostname;
-      document.cookie =
-        "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT" + domain;
-
       toast.success("You have been successfully logged out.");
       return response;
     } catch (error) {
