@@ -38,9 +38,22 @@ export const authService = {
         withCredentials: true,
       });
 
-      document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+      const domain =
+        window.location.hostname === "localhost"
+          ? ""
+          : "; domain=" + window.location.hostname;
+      document.cookie =
+        "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT" + domain;
+
       if (response.data.user) {
-        document.cookie = `user=${JSON.stringify({ ...response.data?.user, token: response.data.token, role: "user" })}; path=/`;
+        const secure = window.location.protocol === "https:" ? "; secure" : "";
+        const sameSite = "; SameSite=Lax";
+
+        document.cookie = `user=${JSON.stringify({
+          ...response.data?.user,
+          token: response.data.token,
+          role: "user",
+        })}; path=/${domain}${secure}${sameSite}`;
       }
 
       return response;
@@ -58,9 +71,22 @@ export const authService = {
     try {
       const response = await axios.post("/auth/login/admin", data);
 
-      document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+      const domain =
+        window.location.hostname === "localhost"
+          ? ""
+          : "; domain=" + window.location.hostname;
+      document.cookie =
+        "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT" + domain;
+
       if (response.data.admin) {
-        document.cookie = `user=${JSON.stringify({ ...response.data?.admin, token: response.data.token, role: "admin" })}; path=/`;
+        const secure = window.location.protocol === "https:" ? "; secure" : "";
+        const sameSite = "; SameSite=Lax";
+
+        document.cookie = `user=${JSON.stringify({
+          ...response.data?.admin,
+          token: response.data.token,
+          role: "admin",
+        })}; path=/${domain}${secure}${sameSite}`;
       }
 
       return response;
@@ -78,9 +104,21 @@ export const authService = {
     try {
       const response = await axios.post("/auth/developer/login", data);
 
-      document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+      const domain =
+        window.location.hostname === "localhost"
+          ? ""
+          : "; domain=" + window.location.hostname;
+      document.cookie =
+        "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT" + domain;
+
       if (response.data.user) {
-        document.cookie = `user=${JSON.stringify({ ...response.data?.user, token: response.data.token })}; path=/`;
+        const secure = window.location.protocol === "https:" ? "; secure" : "";
+        const sameSite = "; SameSite=Lax";
+
+        document.cookie = `user=${JSON.stringify({
+          ...response.data?.user,
+          token: response.data.token,
+        })}; path=/${domain}${secure}${sameSite}`;
       }
 
       return response;
@@ -103,10 +141,24 @@ export const authService = {
         username: data?.username,
       });
 
-      document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+      const domain =
+        window.location.hostname === "localhost"
+          ? ""
+          : "; domain=" + window.location.hostname;
+      document.cookie =
+        "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT" + domain;
+
       if (response.data.user) {
-        document.cookie = `user=${JSON.stringify({ ...response.data?.user, token: response.data.token, role: data.type })}; path=/`;
+        const secure = window.location.protocol === "https:" ? "; secure" : "";
+        const sameSite = "; SameSite=Lax";
+
+        document.cookie = `user=${JSON.stringify({
+          ...response.data?.user,
+          token: response.data.token,
+          role: data.type,
+        })}; path=/${domain}${secure}${sameSite}`;
       }
+
       return response;
     } catch (error) {
       toastErrAxios(error);
@@ -166,6 +218,14 @@ export const authService = {
   logout: async () => {
     try {
       const response = await axios.post("/auth/logout");
+
+      const domain =
+        window.location.hostname === "localhost"
+          ? ""
+          : "; domain=" + window.location.hostname;
+      document.cookie =
+        "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT" + domain;
+
       toast.success("You have been successfully logged out.");
       return response;
     } catch (error) {
