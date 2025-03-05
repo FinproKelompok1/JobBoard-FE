@@ -12,7 +12,6 @@ import { getUserSubscription } from "@/libs/subscription";
 import Link from "next/link";
 import LoadingPage from "@/components/loading";
 import { toastErrAxios } from "@/helpers/toast";
-import { UserProfile } from "@/types/profile";
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 export default function UserSubscription({
@@ -26,7 +25,6 @@ export default function UserSubscription({
   const [userSubscription, setUserSubscription] = useState<IUserSubscription[]>(
     [],
   );
-  const [user, setUser] = useState<UserProfile | null>(null);
 
   useEffect(() => {
     const fetchUserSubscription = async () => {
@@ -54,7 +52,7 @@ export default function UserSubscription({
       });
 
       toast.success(data.message);
-      router.push(`/transaction/${user?.username}/${data.transactionId}`);
+      router.push(`/transaction/${params.username}/${data.transactionId}`);
     } catch (error) {
       toastErrAxios(error);
     } finally {
