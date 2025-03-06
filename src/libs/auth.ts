@@ -37,8 +37,13 @@ export const authService = {
       const response = await axios.post("/auth/login/user", data, {});
 
       document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+      document.cookie =
+        "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+
       if (response.data.user) {
         document.cookie = `user=${JSON.stringify({ ...response.data?.user, token: response.data.token, role: "user" })}; path=/`;
+
+        document.cookie = `token=${response.data.token}; path=/`;
       }
 
       return response;
@@ -57,10 +62,14 @@ export const authService = {
       const response = await axios.post("/auth/login/admin", data);
 
       document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+      document.cookie =
+        "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+
       if (response.data.admin) {
         document.cookie = `user=${JSON.stringify({ ...response.data?.admin, token: response.data.token, role: "admin" })}; path=/`;
-      }
 
+        document.cookie = `token=${response.data.token}; path=/`;
+      }
       return response;
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 401) {
@@ -102,8 +111,13 @@ export const authService = {
       });
 
       document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+      document.cookie =
+        "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+
       if (response.data.user) {
         document.cookie = `user=${JSON.stringify({ ...response.data?.user, token: response.data.token, role: data.type })}; path=/`;
+
+        document.cookie = `token=${response.data.token}; path=/`;
       }
       return response;
     } catch (error) {
