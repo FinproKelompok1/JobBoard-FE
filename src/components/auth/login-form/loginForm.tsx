@@ -9,6 +9,7 @@ import { validationSchema } from './validation';
 import { authService } from '@/libs/auth';
 import UserTypeToggle from '../shared/userTypeToggle';
 import { FaExclamationCircle } from 'react-icons/fa';
+import { FaSpinner } from 'react-icons/fa';
 
 interface LoginValues {
   email: string;
@@ -116,7 +117,7 @@ export default function LoginForm() {
               validationSchema={validationSchema}
               onSubmit={handleSubmit}
             >
-              {({ values, setFieldValue }) => (
+              {({ values, setFieldValue, isSubmitting }) => (
                 <Form className="space-y-4">
                   <UserTypeToggle
                     isCompany={values.isCompany}
@@ -154,9 +155,17 @@ export default function LoginForm() {
 
                   <button
                     type="submit"
-                    className="w-full bg-[#E60278] text-white py-2 rounded-lg font-medium hover:bg-[#E60278]/90 transition-all"
+                    disabled={isSubmitting}
+                    className={`w-full bg-[#E60278] text-white py-2 rounded-lg font-medium transition-all ${isSubmitting ? 'opacity-80' : 'hover:bg-[#E60278]/90'}`}
                   >
-                    Sign in
+                    {isSubmitting ? (
+                      <span className="flex items-center justify-center">
+                        <FaSpinner className="w-4 h-4 mr-2 animate-spin" />
+                        Signing in...
+                      </span>
+                    ) : (
+                      'Sign in'
+                    )}
                   </button>
 
                   <div className="relative py-1">

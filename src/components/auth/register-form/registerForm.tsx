@@ -10,7 +10,7 @@ import { adminValidationSchema, userValidationSchema } from './validation';
 import { authService } from '@/libs/auth';
 import UserType from '../verify/userType';
 import { Bounce, toast } from 'react-toastify';
-import { FaExclamationCircle } from 'react-icons/fa';
+import { FaExclamationCircle, FaSpinner } from 'react-icons/fa';
 
 interface FormValues {
   email: string;
@@ -132,7 +132,7 @@ export default function RegisterForm() {
               validationSchema={userType === 'admin' ? adminValidationSchema : userValidationSchema}
               onSubmit={handleSubmit}
             >
-              {() => (
+              {({ isSubmitting }) => (
                 <Form className="space-y-4" key={userType === 'admin' ? 'admin' : 'user'}>
                   {userType === 'admin' ? (
                     <>
@@ -180,9 +180,17 @@ export default function RegisterForm() {
 
                   <button
                     type="submit"
-                    className="w-full bg-[#E60278] text-white py-2 rounded-lg font-medium hover:bg-[#E60278]/90 transition-all"
+                    disabled={isSubmitting}
+                    className={`w-full bg-[#E60278] text-white py-2 rounded-lg font-medium transition-all ${isSubmitting ? 'opacity-80' : 'hover:bg-[#E60278]/90'}`}
                   >
-                    Sign up
+                    {isSubmitting ? (
+                      <span className="flex items-center justify-center">
+                        <FaSpinner className="w-4 h-4 mr-2 animate-spin" />
+                        Creating account...
+                      </span>
+                    ) : (
+                      'Sign up'
+                    )}
                   </button>
 
                   <div className="relative py-1">

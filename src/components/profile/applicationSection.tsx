@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Briefcase, Calendar, AlertCircle, Star, Clock } from 'lucide-react';
+import { Briefcase, Calendar, AlertCircle, Star, Clock, CheckCircle2 } from 'lucide-react';
 import { JobApplication, JobApplicationStatus } from '@/types/profile';
 import { formatDate } from '@/helpers/dateFormatter';
 import { formatRupiahTanpaDesimal } from '@/helpers/formatCurrency';
@@ -24,18 +24,27 @@ export default function ApplicationsSection({ applications }: ApplicationsSectio
   const [selectedJob, setSelectedJob] = useState<JobApplication | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const getStatusColor = (status: JobApplicationStatus): string => {
+  const getStatusColor = (status: JobApplicationStatus, isTaken: boolean): string => {
     const colors: Record<JobApplicationStatus, string> = {
       rejected: 'bg-rose-50 text-rose-600',
-      accepted: 'bg-emerald-50 text-emerald-600 cursor-pointer hover:bg-emerald-100',
+      accepted: isTaken 
+        ? 'bg-emerald-100 text-emerald-700' 
+        : 'bg-emerald-50 text-emerald-600 cursor-pointer hover:bg-emerald-100',
       processed: 'bg-amber-50 text-amber-600',
       interviewed: 'bg-blue-50 text-blue-600'
     };
     return colors[status];
   };
 
+  const getStatusText = (status: JobApplicationStatus, isTaken: boolean): string => {
+    if (status === JobApplicationStatus.accepted && isTaken) {
+      return 'You already accepted this job';
+    }
+    return status.charAt(0).toUpperCase() + status.slice(1);
+  };
+
   const handleStatusClick = (application: JobApplication): void => {
-    if (application.status === JobApplicationStatus.accepted) {
+    if (application.status === JobApplicationStatus.accepted && !application.isTaken) {
       setSelectedJob(application);
       setShowTakeJobModal(true);
     }
@@ -111,10 +120,10 @@ export default function ApplicationsSection({ applications }: ApplicationsSectio
                     {application.job.admin.companyName}
                   </span>
                   <span 
-                    className={`px-3 py-1 rounded-full text-sm ${getStatusColor(application.status)}`}
+                    className={`px-3 py-1 rounded-full text-sm ${getStatusColor(application.status, application.isTaken)}`}
                     onClick={() => handleStatusClick(application)}
                   >
-                    {application.status.charAt(0).toUpperCase() + application.status.slice(1)}
+                    {getStatusText(application.status, application.isTaken)}
                   </span>
                 </div>
               </div>
@@ -128,6 +137,19 @@ export default function ApplicationsSection({ applications }: ApplicationsSectio
                 </div>
               </div>
             </div>
+
+            {application.status === JobApplicationStatus.accepted && application.isTaken && (
+              <div className="mt-4 p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+                <div className="flex items-center">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 mr-3" />
+                  <div>
+                    <span className="text-emerald-700 font-medium">
+                      Congratulations! You&apos;ve accepted this job offer.
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {application.status === JobApplicationStatus.interviewed && application.interview && (
               <div className="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-100">

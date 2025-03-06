@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { Formik, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import FormInput from './formInput';
 import { resetPassword } from '@/libs/changePassword';
 import { toast } from 'react-toastify';
-import { LockKeyhole, CheckCircle, ArrowLeft } from 'lucide-react';
+import { LockKeyhole, CheckCircle, ArrowLeft, ShieldCheck } from 'lucide-react';
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
@@ -89,11 +90,21 @@ export default function ResetPasswordForm() {
 
   if (token === null) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50">
-        <div className="w-full max-w-md p-8">
-          <div className="bg-white p-8 rounded-xl shadow-lg text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0D3880] mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading...</p>
+      <div className="min-h-screen flex items-center justify-center relative">
+        <div className="absolute inset-0">
+          <Image 
+            src="/login.jpg" 
+            alt="Background" 
+            fill
+            style={{ objectFit: 'cover' }}
+            priority
+          />
+          <div className="absolute inset-0 bg-[#000000]/70"></div>
+        </div>
+        <div className="relative z-10 w-full max-w-md p-8">
+          <div className="backdrop-blur-md bg-white/10 p-8 rounded-xl shadow-lg text-center border border-white/20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto"></div>
+            <p className="mt-4 text-white/80">Loading...</p>
           </div>
         </div>
       </div>
@@ -105,28 +116,45 @@ export default function ResetPasswordForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50">
-      <div className="w-full max-w-md p-8">
-        <div className="bg-white p-8 rounded-xl shadow-lg relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-40 h-40 bg-blue-50 rounded-full -mr-20 -mt-20 z-0" />
-          <div className="absolute bottom-0 left-0 w-32 h-32 bg-pink-50 rounded-full -ml-16 -mb-16 z-0" />
-
-          <div className="relative z-10">
-            <div className="text-center mb-8">
-              <div className="inline-block p-3 bg-blue-50 rounded-full mb-4">
-                <LockKeyhole className="w-8 h-8 text-[#0D3880]" />
+    <div className="min-h-screen flex items-center justify-center relative">
+      {/* Full background image */}
+      <div className="absolute inset-0">
+        <Image 
+          src="/login.jpg" 
+          alt="Background" 
+          fill
+          style={{ objectFit: 'cover' }}
+          priority
+        />
+        <div className="absolute inset-0 bg-[#000000]/70"></div>
+      </div>
+      
+      <div className="relative z-10 w-full max-w-md mx-4">
+        <div className="backdrop-blur-md bg-white/10 rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+          {/* Header Bar */}
+          <div className="bg-[#0D3880]/80 backdrop-blur-sm py-2 px-4 flex items-center justify-center">
+            <div className="flex items-center space-x-2">
+              <ShieldCheck className="h-4 w-4 text-white" />
+              <p className="text-white text-sm font-semibold">SECURE PASSWORD RESET</p>
+            </div>
+          </div>
+          
+          <div className="p-6 md:p-8">
+            <div className="text-center mb-6">
+              <div className="inline-block p-3 bg-[#0D3880]/20 backdrop-blur-sm border border-[#0D3880]/30 rounded-full mb-4">
+                <LockKeyhole className="w-8 h-8 text-white" />
               </div>
-              <h2 className="text-3xl font-bold text-[#0D3880] mb-3">Reset Password</h2>
-              <p className="text-gray-600">
+              <h2 className="text-2xl font-bold text-white mb-2">Reset Password</h2>
+              <p className="text-white/70 text-sm">
                 Please enter and confirm your new password below.
               </p>
             </div>
 
             {resetSuccess ? (
               <div className="text-center py-8">
-                <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">Password Reset Successful!</h3>
-                <p className="text-gray-600 mb-4">Redirecting you to login...</p>
+                <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-white mb-2">Password Reset Successful!</h3>
+                <p className="text-white/70 mb-4">Redirecting you to login...</p>
               </div>
             ) : (
               <Formik
@@ -134,19 +162,30 @@ export default function ResetPasswordForm() {
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
               >
-                <Form className="space-y-6">
-                  <FormInput
-                    label="New Password"
-                    name="password"
-                    type="password"
-                    placeholder="Enter new password"
-                  />
-                  <FormInput
-                    label="Confirm New Password"
-                    name="confirmPassword"
-                    type="password"
-                    placeholder="Confirm new password"
-                  />
+                <Form className="space-y-5">
+                  <div>
+                    <label className="block text-white/80 text-sm mb-1">New Password</label>
+                    <div className="relative">
+                      <FormInput
+                        label=""
+                        name="password"
+                        type="password"
+                        placeholder="Enter new password"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-white/80 text-sm mb-1">Confirm New Password</label>
+                    <div className="relative">
+                      <FormInput
+                        label=""
+                        name="confirmPassword"
+                        type="password"
+                        placeholder="Confirm new password"
+                      />
+                    </div>
+                  </div>
 
                   <button
                     type="submit"
@@ -168,10 +207,10 @@ export default function ResetPasswordForm() {
               </Formik>
             )}
 
-            <div className="mt-8 text-center">
+            <div className="mt-6 text-center">
               <a 
                 href="/auth/login" 
-                className="inline-flex items-center text-sm text-gray-600 hover:text-[#E60278] transition-colors"
+                className="inline-flex items-center text-sm text-white/80 hover:text-white transition-colors"
               >
                 <ArrowLeft className="w-4 h-4 mr-1" />
                 Back to Login
