@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import Image from 'next/image';
 import UserTypeToggle from './UserType';
 import { forgotPassword } from '@/libs/changePassword';
 import { checkIfOauthUser } from '@/libs/auth'; 
@@ -13,6 +14,7 @@ import {
   DialogTitle,
   DialogFooter
 } from '@/components/ui/dialog'; 
+import { ArrowLeft, Mail, AlertTriangle } from 'lucide-react';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email address').required('Email is required'),
@@ -73,95 +75,132 @@ export default function ForgotPasswordForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-lg w-full bg-white p-8 rounded-lg shadow-sm">
-        <div className="mx-auto">
-          <h2 className="text-2xl font-bold text-[#0D3880] mb-6">Forgot Password</h2>
-          <p className="text-gray-600 mb-8">Enter your email address and we&apos;ll send you instructions to reset your password.</p>
-          
-          <Formik 
-            initialValues={initialValues} 
-            validationSchema={validationSchema} 
-            onSubmit={handleSubmit}
-          >
-            {({ values, setFieldValue, handleBlur: formikHandleBlur }) => {
-              const handleCompanyToggle = async (isCompany: boolean) => {
-                setFieldValue('isCompany', isCompany);
-                if (values.email && isTouched) {
-                  await checkOauthStatus(values.email, isCompany);
-                }
-              };
+    <div className="min-h-screen flex items-center justify-center relative">
+      {/* Full background image */}
+      <div className="absolute inset-0">
+        <Image 
+          src="/login.jpg" 
+          alt="Background" 
+          fill
+          style={{ objectFit: 'cover' }}
+          priority
+        />
+        <div className="absolute inset-0 bg-[#000000]/70"></div>
+      </div>
+      
+      <div className="relative z-10 w-full max-w-md mx-4">
+        <div className="backdrop-blur-md bg-white/10 rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+          <div className="p-6 md:p-8">
+            <div className="text-center mb-6">
+              <div className="inline-block p-3 bg-[#0D3880]/20 backdrop-blur-sm border border-[#0D3880]/30 rounded-full mb-4">
+                <Mail className="w-6 h-6 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-white mb-2">Forgot Password</h2>
+              <p className="text-white/70 text-sm">
+                Enter your email address and we&apos;ll send you instructions to reset your password.
+              </p>
+            </div>
 
-              return (
-                <Form className="space-y-4">
-                  <UserTypeToggle 
-                    isCompany={values.isCompany} 
-                    setFieldValue={(field, value) => {
-                      if (field === 'isCompany') {
-                        handleCompanyToggle(value);
-                      } else {
-                        setFieldValue(field, value);
-                      }
-                    }}
-                  />
-                  
-                  <div className="space-y-1">
+            <Formik 
+              initialValues={initialValues} 
+              validationSchema={validationSchema} 
+              onSubmit={handleSubmit}
+            >
+              {({ values, setFieldValue, handleBlur: formikHandleBlur }) => {
+                const handleCompanyToggle = async (isCompany: boolean) => {
+                  setFieldValue('isCompany', isCompany);
+                  if (values.email && isTouched) {
+                    await checkOauthStatus(values.email, isCompany);
+                  }
+                };
+
+                return (
+                  <Form className="space-y-5">
+                    <UserTypeToggle 
+                      isCompany={values.isCompany} 
+                      setFieldValue={(field, value) => {
+                        if (field === 'isCompany') {
+                          handleCompanyToggle(value);
+                        } else {
+                          setFieldValue(field, value);
+                        }
+                      }}
+                    />
+                    
                     <div className="space-y-1">
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                        Email
-                      </label>
-                      <Field
-                        id="email"
-                        name="email"
-                        type="email"
-                        placeholder="Enter your email"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[#E60278] focus:border-[#E60278]"
-                        onBlur={async (e: React.FocusEvent<HTMLInputElement>) => {
-                          formikHandleBlur(e);
-                          if (e.target.value) {
-                            setIsTouched(true);
-                            await checkOauthStatus(e.target.value, values.isCompany);
-                          }
-                        }}
-                      />
+                      <div className="space-y-1">
+                        <label htmlFor="email" className="block text-sm font-medium text-white/80">
+                          Email
+                        </label>
+                        <div className="relative">
+                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
+                          <Field
+                            id="email"
+                            name="email"
+                            type="email"
+                            placeholder="Enter your email"
+                            className="w-full pl-10 pr-3 py-2.5 bg-white/10 backdrop-blur-md border border-white/30 rounded-md text-white placeholder:text-white/40 focus:outline-none focus:ring-[#E60278] focus:border-[#E60278]"
+                            onBlur={async (e: React.FocusEvent<HTMLInputElement>) => {
+                              formikHandleBlur(e);
+                              if (e.target.value) {
+                                setIsTouched(true);
+                                await checkOauthStatus(e.target.value, values.isCompany);
+                              }
+                            }}
+                          />
+                        </div>
+                      </div>
+                      
+                      {isOauth && isTouched && (
+                        <div className="flex items-start mt-2 p-2 bg-amber-500/20 backdrop-blur-sm border border-amber-500/30 rounded-md">
+                          <AlertTriangle className="h-4 w-4 text-amber-400 mt-0.5 mr-2 flex-shrink-0" />
+                          <p className="text-amber-200 text-sm">
+                            This email is associated with a social login account. Password reset is not available.
+                          </p>
+                        </div>
+                      )}
                     </div>
                     
-                    {isOauth && isTouched && (
-                      <p className="text-amber-600 text-sm">
-                        This email is associated with a social login account. Password reset is not available.
-                      </p>
-                    )}
-                  </div>
-                  
-                  <button
-                    type="submit"
-                    disabled={loading || (isOauth && isTouched)}
-                    className={`w-full py-2 px-4 rounded-md transition-colors
-                      ${
-                        isOauth && isTouched
-                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                          : 'bg-[#E60278] text-white hover:bg-[#E60278]/90'
-                      } 
-                      ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
-                    onClick={async (e) => {
-                      if (isOauth && isTouched) {
-                        e.preventDefault();
-                        setIsOauthDialogOpen(true);
-                      }
-                    }}
-                  >
-                    {loading ? 'Sending Instructions...' : 'Send Reset Instructions'}
-                  </button>
-                </Form>
-              );
-            }}
-          </Formik>
-          
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              Remember your password?{' '}
-              <a href="/auth/login" className="text-[#E60278] hover:underline">Back to Login</a>
-            </p>
+                    <button
+                      type="submit"
+                      disabled={loading || (isOauth && isTouched)}
+                      className={`w-full py-2.5 px-4 rounded-md transition-colors
+                        ${
+                          isOauth && isTouched
+                            ? 'bg-gray-500/30 text-white/50 backdrop-blur-sm cursor-not-allowed'
+                            : 'bg-[#E60278] text-white hover:bg-[#E60278]/90'
+                        } 
+                        ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                      onClick={async (e) => {
+                        if (isOauth && isTouched) {
+                          e.preventDefault();
+                          setIsOauthDialogOpen(true);
+                        }
+                      }}
+                    >
+                      {loading ? (
+                        <span className="flex items-center justify-center">
+                          <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                          Sending Instructions...
+                        </span>
+                      ) : (
+                        'Send Reset Instructions'
+                      )}
+                    </button>
+                  </Form>
+                );
+              }}
+            </Formik>
+            
+            <div className="mt-6 text-center">
+              <a 
+                href="/auth/login" 
+                className="inline-flex items-center text-sm text-white/80 hover:text-white transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4 mr-1" />
+                Remember your password? Back to Login
+              </a>
+            </div>
           </div>
         </div>
       </div>

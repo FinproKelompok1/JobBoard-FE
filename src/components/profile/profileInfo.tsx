@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { User, Calendar, GraduationCap, Mail, Edit, Check, MapPin } from "lucide-react";
+import React, { useState } from "react";
+import { User, Calendar, GraduationCap, Mail, Edit, Check, MapPin, Home } from "lucide-react";
 import { UserProfile } from "@/types/profile";
 import { formatDate } from "@/helpers/dateFormatter";
 import { eduFormatter } from "@/helpers/educationFormatter";
@@ -118,6 +118,23 @@ export default function ProfileInfo({ user, onUpdate }: ProfileInfoProps) {
                       <p className="text-sm text-gray-500">Education</p>
                       <p className="text-gray-700">
                         {eduFormatter(user.lastEdu)}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {user.location && user.location.city && (
+                  <div className="flex items-center rounded-lg bg-gray-50 p-3">
+                    <Home className="mr-3 h-5 w-5 text-[#E60278]" />
+                    <div>
+                      <p className="text-sm text-gray-500">Domicile</p>
+                      <p className="text-gray-700">
+                        {user.location.city.split(' ')
+                          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                          .join(' ')}
+                        {user.location.province && `, ${user.location.province.split(' ')
+                          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                          .join(' ')}`}
                       </p>
                     </div>
                   </div>

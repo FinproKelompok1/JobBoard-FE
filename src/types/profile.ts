@@ -41,6 +41,7 @@ export interface JobApplication {
   interview?: Interview;
   rejectedReview?: string;
   selectionTestResult?: number;
+  isTaken: boolean;
 }
 
 export interface CurriculumVitae {
@@ -49,6 +50,14 @@ export interface CurriculumVitae {
   experience: string;
   skill: string;
   education: string;
+}
+
+export interface Location {
+  id: number;
+  city: string;
+  province: string;
+  latitude: number;
+  longitude: number;
 }
 
 export interface UserProfile {
@@ -63,6 +72,8 @@ export interface UserProfile {
   lastEdu: LastEdu | null;
   province: string | null;
   city: string | null;
+  domicileId: number | null;
+  location: Location | null;
   CurriculumVitae: CurriculumVitae[];
   JobApplication: JobApplication[];
   createdAt: string;
@@ -86,4 +97,5 @@ export interface FormValueProfile {
   lastEdu: string;
   province: string;
   city: string;
+  domicileId: number | string;
 }
