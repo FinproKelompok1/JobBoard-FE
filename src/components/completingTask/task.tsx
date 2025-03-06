@@ -1,9 +1,9 @@
 'use client'
 
 import { IPreselectionQuestion } from "@/types/preselection";
-import { Form, Formik, FormikProps } from "formik";
-import { FormValueCompletingTask } from "@/types/form";
-import { completingTaskInitialValue, completingTaskSchema } from "@/libs/completingTaskSchema";
+import { Form, Formik, FormikErrors, FormikProps } from "formik";
+import { FormValueCompletingTask, IAnswer } from "@/types/form";
+import { completingTaskSchema } from "@/libs/completingTaskSchema";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { toastErrAxios } from "@/helpers/toast";
@@ -17,6 +17,14 @@ export default function Task({ data }: { data: IPreselectionQuestion[] }) {
   const [isLoading, SetIsLoading] = useState<boolean>(false);
   const { id: jobId } = useParams();
   const router = useRouter();
+
+  const completingTaskInitialValue: FormValueCompletingTask = {
+    answer: data.map((item) => ({
+      id: item.id,
+      correctAnswer: item.correctAnswer,
+      selectedOption: null,
+    })),
+  };
 
   const handleAdd = async (answer: FormValueCompletingTask) => {
     try {
@@ -60,6 +68,15 @@ export default function Task({ data }: { data: IPreselectionQuestion[] }) {
                       correctAnswer={item.correctAnswer}
                       formikProps={props}
                     />
+                    {props.errors.answer &&
+                      props.errors.answer[idx] &&
+                      typeof props.errors.answer[idx] === "object" &&
+                      "selectedOption" in props.errors.answer[idx] && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {(props.errors.answer[idx] as FormikErrors<IAnswer>).selectedOption}
+                        </p>
+                      )}
+
                   </div>
                 );
               })}

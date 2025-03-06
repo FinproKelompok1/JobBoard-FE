@@ -27,8 +27,8 @@ export interface FormValueCompletingTask {
   answer: IAnswer[];
 }
 
-interface IAnswer {
+export interface IAnswer {
   id: number;
   correctAnswer: number;
-  selectedOption: number;
+  selectedOption: number | null;
 }
