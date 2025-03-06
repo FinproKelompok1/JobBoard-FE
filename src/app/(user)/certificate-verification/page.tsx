@@ -5,6 +5,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 
 export default function CertificateVerification() {
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const [certificateId, setCertificateId] = useState<string>("");
 
@@ -13,6 +14,7 @@ export default function CertificateVerification() {
     const userAssessmentId = splitinput.pop();
 
     if (userAssessmentId && !isNaN(Number(userAssessmentId))) {
+      setLoading(true);
       router.push(`/certificate-verification/${certificateId}`);
     } else {
       toast.error(
@@ -48,7 +50,7 @@ export default function CertificateVerification() {
               onClick={handleVerify}
               className="rounded-lg bg-accent px-4 py-2 font-semibold tracking-widest text-white"
             >
-              Verify
+              {loading ? "Verifying..." : "Verify"}
             </button>
           </div>
         </div>

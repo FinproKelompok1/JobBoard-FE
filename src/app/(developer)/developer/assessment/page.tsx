@@ -1,12 +1,32 @@
+"use client";
+
 import CreateAssessment from "@/components/developer/createAssessment";
 import DeveloperSideBar from "@/components/developer/developerSideBar";
 import StatusToggle from "@/components/developer/statusToggle";
-import { getAssessments } from "@/libs/assessment";
 import { IAssessment } from "@/types/types";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import axios from "@/helpers/axios";
+import LoadingPage from "@/components/loading";
 
-export default async function Assessment() {
-  const assessments: IAssessment[] = await getAssessments();
+export default function Assessment() {
+  const [assessments, setSssessments] = useState<IAssessment[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchAssessments = async () => {
+    try {
+      const response = await axios.get("/assessments");
+      setSssessments(response.data.assessments);
+    } catch (error) {
+      console.error("Error fetching assessments:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAssessments();
+  }, []);
 
   return (
     <main className="flex">
@@ -23,7 +43,9 @@ export default async function Assessment() {
         </div>
 
         <div className="mt-10">
-          {assessments.length === 0 ? (
+          {loading ? (
+            <LoadingPage />
+          ) : assessments.length === 0 ? (
             <div>
               <p className="text-xl text-primary">
                 There is no Skill Assessment yet.
