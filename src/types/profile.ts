@@ -5,7 +5,7 @@ export enum Gender {
   male = "male",
 }
 
-interface Interview {
+export interface Interview {
   startTime: string;
   jobId: string;
   userId: number;
@@ -76,6 +76,7 @@ export interface UserProfile {
   location: Location | null;
   CurriculumVitae: CurriculumVitae[];
   JobApplication: JobApplication[];
+  Interview: Interview[];
   createdAt: string;
   Review: IReview[];
   UserAssessment: IUserAssessment[];

@@ -9,6 +9,7 @@ interface ApplyButtonProps {
   isTestActive: boolean;
   hasApplied: boolean;
   isLoggedIn: boolean;
+  endDate: string; 
   onApply: () => void;
   footerSelector?: string; 
 }
@@ -19,11 +20,14 @@ export function ApplyButton({
   location,
   hasApplied, 
   isLoggedIn,
+  endDate, 
   onApply,
   footerSelector = 'footer' 
 }: ApplyButtonProps) {
   const [isVisible, setIsVisible] = useState(true);
   const buttonRef = useRef(null);
+  
+  const isDeadlinePassed = new Date(endDate) < new Date();
 
   useEffect(() => {
     const footer = document.querySelector(footerSelector);
@@ -44,13 +48,25 @@ export function ApplyButton({
     return () => observer.disconnect();
   }, [footerSelector]);
 
-  const buttonStyle = isLoggedIn && hasApplied 
-    ? 'bg-gray-400 text-white cursor-not-allowed opacity-50'
-    : 'bg-blue-600 text-white hover:bg-blue-700';
+  const getButtonStyle = () => {
+    if (isDeadlinePassed) {
+      return 'bg-gray-400 text-white cursor-not-allowed opacity-50';
+    } else if (isLoggedIn && hasApplied) {
+      return 'bg-gray-400 text-white cursor-not-allowed opacity-50';
+    } else {
+      return 'bg-blue-600 text-white hover:bg-blue-700';
+    }
+  };
 
-  const buttonText = isLoggedIn && hasApplied 
-    ? 'Already Applied'
-    : 'Apply Now';
+  const getButtonText = () => {
+    if (isDeadlinePassed) {
+      return 'Deadline Passed';
+    } else if (isLoggedIn && hasApplied) {
+      return 'Already Applied';
+    } else {
+      return 'Apply Now';
+    }
+  };
 
   if (!isVisible) return null;
 
@@ -67,10 +83,10 @@ export function ApplyButton({
         </div>
         <button 
           onClick={onApply}
-          disabled={isLoggedIn && hasApplied}
-          className={`px-8 py-3 rounded-lg ${buttonStyle}`}
+          disabled={isDeadlinePassed || (isLoggedIn && hasApplied)}
+          className={`px-8 py-3 rounded-lg ${getButtonStyle()}`}
         >
-          {buttonText}
+          {getButtonText()}
         </button>
       </div>
     </div>

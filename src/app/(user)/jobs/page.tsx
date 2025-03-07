@@ -210,35 +210,35 @@ export default function AllJobsPage() {
   return (
     <main className="min-h-screen bg-gray-50 py-12">
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-[#0D3880] mb-2">
-              {isUsingLocation && userLocation ? 'Jobs Near You' : 'All Job Listings'}
-            </h1>
-            <p className="text-gray-600">
-              {isUsingLocation && userLocation
-                ? `Showing jobs in ${userLocation.city}, ${userLocation.province}`
-                : 'Find career opportunities that match your skills and interests'}
-            </p>
-          </div>
+        <div className="flex justify-between items-center mb-8 flex-col sm:flex-row gap-4">
+  <div>
+    <h1 className="text-3xl font-bold text-[#0D3880] mb-2">
+      {isUsingLocation && userLocation ? 'Jobs Near You' : 'All Job Listings'}
+    </h1>
+    <p className="text-gray-600">
+      {isUsingLocation && userLocation
+        ? `Showing jobs in ${userLocation.city}, ${userLocation.province}`
+        : 'Find career opportunities that match your skills and interests'}
+    </p>
+  </div>
 
-          <button
-            onClick={toggleLocationFilter}
-            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded text-gray-700 flex items-center space-x-2"
-          >
-            {isUsingLocation ? (
-              <>
-                <X className="h-4 w-4" />
-                <span>Show All Jobs</span>
-              </>
-            ) : (
-              <>
-                <MapPin className="h-4 w-4" />
-                <span>Show Nearby Jobs</span>
-              </>
-            )}
-          </button>
-        </div>
+  <button
+    onClick={toggleLocationFilter}
+    className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded text-gray-700 flex items-center space-x-2 w-full sm:w-auto justify-center"
+  >
+    {isUsingLocation ? (
+      <>
+        <X className="h-4 w-4" />
+        <span>Show All Jobs</span>
+      </>
+    ) : (
+      <>
+        <MapPin className="h-4 w-4" />
+        <span>Show Nearby Jobs</span>
+      </>
+    )}
+  </button>
+</div>
 
         <JobFilter
           onSearch={handleFilter}

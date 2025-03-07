@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Briefcase, Calendar, AlertCircle, Star, Clock, CheckCircle2 } from 'lucide-react';
 import { JobApplication, JobApplicationStatus } from '@/types/profile';
 import { formatDate } from '@/helpers/dateFormatter';
+import DateFormatter from '@/helpers/dateFormatter';
 import { formatRupiahTanpaDesimal } from '@/helpers/formatCurrency';
 import axios from '@/helpers/axios';
 import { toast } from 'react-toastify';
@@ -84,6 +85,7 @@ export default function ApplicationsSection({ applications }: ApplicationsSectio
     }
   };
 
+
   if (!applications || applications.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
@@ -151,14 +153,34 @@ export default function ApplicationsSection({ applications }: ApplicationsSectio
               </div>
             )}
 
-            {application.status === JobApplicationStatus.interviewed && application.interview && (
+            {application.interview && (
               <div className="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-100">
                 <div className="flex items-center">
                   <Clock className="w-5 h-5 text-[#0D3880] mr-3" />
                   <div>
                     <span className="text-[#0D3880] font-medium">Interview Schedule: </span>
+                    {application.interview.startTime ? (
+                      <span className="text-blue-600">
+                        {DateFormatter(application.interview.startTime)}
+                      </span>
+                    ) : (
+                      <span className="text-blue-600">
+                        Check your email for interview details.
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {application.status === JobApplicationStatus.interviewed && !application.interview && (
+              <div className="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-100">
+                <div className="flex items-center">
+                  <Clock className="w-5 h-5 text-[#0D3880] mr-3" />
+                  <div>
+                    <span className="text-[#0D3880] font-medium">Interview Status: </span>
                     <span className="text-blue-600">
-                      {formatDate(application.interview.startTime)}
+                      Check your email for interview details.
                     </span>
                   </div>
                 </div>
