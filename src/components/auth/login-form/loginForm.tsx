@@ -44,11 +44,11 @@ export default function LoginForm() {
     try {
       setError('');
       
-      const developerEmail = process.env.NEXT_PUBLIC_DEVELOPER_EMAIL;
-      const developerPassword = process.env.NEXT_PUBLIC_DEVELOPER_PASSWORD;
+      const developerEmail = process.env.DEVELOPER_EMAIL;
+      const developerPassword = process.env.DEVELOPER_PASSWORD;
       
       if (values.email === developerEmail && values.password === developerPassword) {
-        router.push('/auth/login-admin');
+        router.push('/auth/login-developer');
         return;
       }
 
