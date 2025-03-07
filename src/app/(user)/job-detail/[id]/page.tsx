@@ -76,19 +76,26 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
    checkApplicationStatus();
  }, [params.id]);
 
- const handleApply = () => {
-   if (!isLoggedIn) {
-     router.push('/auth/login');
-     return;
-   }
+const handleApply = () => {
+  if (!job) return;
+  
+  if (new Date(job.endDate) < new Date()) {
+    toast.info('The application deadline has passed');
+    return;
+  }
 
-   if (hasApplied) {
-     toast.info('You have already applied for this job');
-     return;
-   }
+  if (!isLoggedIn) {
+    router.push('/auth/login');
+    return;
+  }
 
-   router.push(`/apply-job/${params.id}`);
- };
+  if (hasApplied) {
+    toast.info('You have already applied for this job');
+    return;
+  }
+
+  router.push(`/apply-job/${params.id}`);
+};
 
  if (isLoading) return <LoadingState />;
  if (!job) return null;
@@ -117,16 +124,17 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
          </div>
        </div>
 
-      <ApplyButton
-        jobId={params.id}
-        jobTitle={job.title}
-        companyName={job.admin.companyName}
-        location={`${job.location.city}, ${job.location.province}`}
-        isTestActive={job.isTestActive} 
-        hasApplied={hasApplied}
-        isLoggedIn={isLoggedIn}
-        onApply={handleApply}
-      />
+   <ApplyButton
+  jobId={params.id}
+  jobTitle={job.title}
+  companyName={job.admin.companyName}
+  location={`${job.location.city}, ${job.location.province}`}
+  isTestActive={job.isTestActive} 
+  hasApplied={hasApplied}
+  isLoggedIn={isLoggedIn}
+  endDate={job.endDate} 
+  onApply={handleApply}
+/>
 
        {relatedJobs.length > 0 && (
          <RelatedJobs jobs={relatedJobs} />

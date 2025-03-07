@@ -7,6 +7,7 @@ import { getCategoryIcon } from '@/helpers/category';
 import axios from "@/helpers/axios";
 import { toastErrAxios } from "@/helpers/toast";
 import { Job } from "@/types/jobdis";
+import LocationPrompt from '@/components/homepage/locationPrompt'; 
 
 interface LocationState {
   city: string;
@@ -22,7 +23,7 @@ interface DiscoverParams {
   limit?: number;
 }
 
-const LOCATION_EXPIRY_MS = 24 * 60 * 60 * 1000;
+const LOCATION_EXPIRY_MS = 24 * 60 * 60 * 1000; 
 
 function normalizeLocationString(str: string): string {
   return str
@@ -58,7 +59,7 @@ async function discoverJobs(params?: DiscoverParams): Promise<Job[]> {
 
 export default function DiscoverySection() {
   const [userLocation, setUserLocation] = useState<LocationState | null>(null);
-  const [showPrompt, setShowPrompt] = useState(true);
+  const [showPrompt, setShowPrompt] = useState(false); 
   const [jobs, setJobs] = useState<Job[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [noJobsFound, setNoJobsFound] = useState(false);
@@ -190,26 +191,11 @@ export default function DiscoverySection() {
   };
   
   useEffect(() => {
-    const checkSavedLocation = async () => {
-      const locationPref = localStorage.getItem('locationPreference');
-      if (locationPref) {
-        try {
-          const pref = JSON.parse(locationPref);
-          const now = Date.now();
-          const isExpired = !pref.timestamp || (now - pref.timestamp > LOCATION_EXPIRY_MS);
-          
-          if (!isExpired && pref.preferNotToUse) {
-            setShowPrompt(false);
-            await fetchLatestJobs();
-            return;
-          } else if (isExpired) {
-            localStorage.removeItem('locationPreference');
-          }
-        } catch {
-          localStorage.removeItem('locationPreference');
-        }
-      }
-      
+    const shouldShowPrompt = !sessionStorage.getItem('locationPromptShown');
+    
+    if (shouldShowPrompt) {
+      setShowPrompt(true);
+    } else {
       const savedLocation = localStorage.getItem('userLocation');
       if (savedLocation) {
         try {
@@ -219,14 +205,12 @@ export default function DiscoverySection() {
             const isExpired = !location.timestamp || (now - location.timestamp > LOCATION_EXPIRY_MS);
             
             if (isExpired) {
-              console.log("Location data expired, showing prompt");
               setShowPrompt(true);
               return;
             }
             
             setUserLocation(location);
-            setShowPrompt(false);
-            await fetchJobsByLocation(location);
+            fetchJobsByLocation(location);
             return;
           }
         } catch {
@@ -234,86 +218,66 @@ export default function DiscoverySection() {
         }
       }
       
-      setShowPrompt(true);
-    };
-    
-    checkSavedLocation();
-  }, [fetchJobsByLocation]);
+      fetchLatestJobs();
+    }
+  }, [fetchJobsByLocation, fetchLatestJobs]);
 
   const handleViewMoreJobs = () => {
     window.location.href = '/jobs';
   };
   
-  return (
-    <section className="py-12 bg-gray-50">
-      <div className="container mx-auto px-4">
-        {showPrompt ? (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                Job Search
-              </h2>
-              <p className="text-gray-600 mb-6">
-                Would you like to see jobs near your location or browse all jobs?
-              </p>
-              <div className="flex justify-between space-x-4">
-                <button
-                  onClick={() => handleLocationChoice(false)}
-                  className="px-4 py-3 text-gray-600 border border-gray-300 rounded hover:bg-gray-100 transition-colors flex-1"
-                >
-                  All Jobs
-                </button>
-                <button
-                  onClick={() => handleLocationChoice(true)}
-                  className="px-4 py-3 bg-[#0D3880] text-white rounded hover:bg-[#0D3880]/90 transition-colors flex-1"
-                >
-                  Jobs Near Me
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className="flex justify-between items-center mb-8">
+return (
+  <section className="py-12 bg-gray-50">
+    <div className="container mx-auto px-4">
+      {showPrompt && (
+        <LocationPrompt onAllow={handleLocationChoice} />
+      )}
+      
+      {!showPrompt && (
+        <>
+          <div className="mb-8 relative">
+            <div className="flex flex-col md:flex-row md:justify-between md:items-center">
               <div>
                 <h2 className="text-2xl font-bold text-[#0D3880] mb-2">
                   {userLocation && !noJobsFound ? 'Jobs Near You' : 'All Jobs'}
                 </h2>
-                <p className="text-gray-600">
+                <p className="text-gray-600 mb-4">
                   {userLocation && !noJobsFound 
                     ? `Showing jobs in ${userLocation.city}, ${userLocation.province}`
                     : 'Explore job opportunities'}
                 </p>
               </div>
-              
-              <button
-                onClick={handleViewMoreJobs}
-                className="px-4 py-2 bg-[#0D3880] text-white rounded hover:bg-[#0D3880]/90 transition-colors"
-              >
-                View All Jobs
-              </button>
-            </div>
-
-            {noJobsFound && userLocation && (
-              <div className="mb-4 p-4 bg-blue-50 text-blue-800 rounded-md">
-                <p>No jobs found in {userLocation.city}, {userLocation.province}.</p>
-                <p>Showing all available jobs instead.</p>
+              <div className="md:absolute md:right-0 md:top-0">
+                <button
+                  onClick={handleViewMoreJobs}
+                  className="px-4 py-2 bg-[#0D3880] text-white rounded hover:bg-[#0D3880]/90 transition-colors"
+                >
+                  View All
+                </button>
               </div>
-            )}
+            </div>
+          </div>
 
-            {isLoading ? (
-              <LoadingState />
-            ) : (
-              <JobsList 
-                jobs={jobs}
-                userLocation={userLocation && !noJobsFound ? userLocation : null}
-                CurrencyFormatter={CurrencyFormatter}
-                getCategoryIcon={getCategoryIcon}
-              />
-            )}
-          </>
-        )}
-      </div>
-    </section>
-  );
+          {noJobsFound && userLocation && (
+            <div className="mb-4 p-4 bg-blue-50 text-blue-800 rounded-md">
+              <p>No jobs found in {userLocation.city}, {userLocation.province}.</p>
+              <p>Showing all available jobs instead.</p>
+            </div>
+          )}
+
+          {isLoading ? (
+            <LoadingState />
+          ) : (
+            <JobsList 
+              jobs={jobs}
+              userLocation={userLocation && !noJobsFound ? userLocation : null}
+              CurrencyFormatter={CurrencyFormatter}
+              getCategoryIcon={getCategoryIcon}
+            />
+          )}
+        </>
+      )}
+    </div>
+  </section>
+);
 }

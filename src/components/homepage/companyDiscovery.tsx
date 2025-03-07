@@ -87,7 +87,7 @@ export default function CompanyDiscovery() {
               onClick={handleViewAllCompanies}
               className="px-4 py-2 bg-[#0D3880] text-white rounded hover:bg-[#0D3880]/90 transition-colors"
             >
-              View All Companies
+              View All
             </button>
           )}
         </div>
