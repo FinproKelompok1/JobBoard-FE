@@ -44,8 +44,11 @@ export default function LoginForm() {
     try {
       setError('');
       
-      if (values.email === 'developer@gmail.com' && values.password === 'developer') {
-        router.push('/auth/login-admin');
+      const developerEmail = process.env.DEVELOPER_EMAIL;
+      const developerPassword = process.env.DEVELOPER_PASSWORD;
+      
+      if (values.email === developerEmail && values.password === developerPassword) {
+        router.push('/auth/login-developer');
         return;
       }
 
